@@ -1,0 +1,73 @@
+[gd_scene load_steps=9 format=3 uid="uid://bddatxiwhrt7b"]
+
+[ext_resource type="PackedScene" uid="uid://cruro5nbk2ds" path="res://source/actors/player/player.tscn" id="1_fnffb"]
+[ext_resource type="Material" uid="uid://bxjk8g7oqv63i" path="res://assets/materials/light.tres" id="1_iddo6"]
+[ext_resource type="Texture2D" uid="uid://q1xumeifxf2b" path="res://assets/skyfinal.png" id="1_vip8k"]
+[ext_resource type="Texture2D" uid="uid://bnxaqtlvuwu43" path="res://assets/crosshairs/crosshair001.png" id="3_aeo84"]
+[ext_resource type="Material" uid="uid://b5m5fyxd5eph1" path="res://assets/materials/green.tres" id="3_q4sx3"]
+
+[sub_resource type="PanoramaSkyMaterial" id="PanoramaSkyMaterial_n8ane"]
+panorama = ExtResource("1_vip8k")
+
+[sub_resource type="Sky" id="Sky_ym78n"]
+sky_material = SubResource("PanoramaSkyMaterial_n8ane")
+
+[sub_resource type="Environment" id="Environment_em4tc"]
+background_mode = 2
+sky = SubResource("Sky_ym78n")
+
+[node name="World" type="Node3D"]
+
+[node name="Actors" type="Node3D" parent="."]
+
+[node name="Player" parent="Actors" instance=ExtResource("1_fnffb")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.46917, 0)
+
+[node name="Terrain" type="Node3D" parent="."]
+
+[node name="Ground" type="CSGBox3D" parent="Terrain"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.5, 0)
+material_override = ExtResource("1_iddo6")
+use_collision = true
+size = Vector3(100, 1, 100)
+metadata/_edit_lock_ = true
+
+[node name="CSGBox3D" type="CSGBox3D" parent="Terrain"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, 0)
+material_override = ExtResource("3_q4sx3")
+use_collision = true
+
+[node name="Environment" type="Node3D" parent="."]
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="Environment"]
+transform = Transform3D(1, 0, 0, 0, 0.866025, 0.5, 0, -0.5, 0.866025, 0, 0, 0)
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="Environment"]
+environment = SubResource("Environment_em4tc")
+
+[node name="UserInterface" type="Control" parent="."]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="MarginContainer" type="MarginContainer" parent="UserInterface"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="CenterContainer" type="CenterContainer" parent="UserInterface/MarginContainer"]
+layout_mode = 2
+
+[node name="Crosshair" type="TextureRect" parent="UserInterface/MarginContainer/CenterContainer"]
+custom_minimum_size = Vector2(48, 48)
+layout_mode = 2
+texture = ExtResource("3_aeo84")
+expand_mode = 1
