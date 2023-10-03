@@ -3,8 +3,8 @@
 [ext_resource type="PackedScene" uid="uid://cruro5nbk2ds" path="res://source/actors/player/player.tscn" id="1_fnffb"]
 [ext_resource type="Material" uid="uid://bxjk8g7oqv63i" path="res://assets/materials/light.tres" id="1_iddo6"]
 [ext_resource type="Texture2D" uid="uid://q1xumeifxf2b" path="res://assets/skyfinal.png" id="1_vip8k"]
+[ext_resource type="Material" uid="uid://cms78nc73istx" path="res://assets/materials/orange.tres" id="3_5gc0g"]
 [ext_resource type="Texture2D" uid="uid://bnxaqtlvuwu43" path="res://assets/crosshairs/crosshair001.png" id="3_aeo84"]
-[ext_resource type="Material" uid="uid://b5m5fyxd5eph1" path="res://assets/materials/green.tres" id="3_q4sx3"]
 
 [sub_resource type="PanoramaSkyMaterial" id="PanoramaSkyMaterial_n8ane"]
 panorama = ExtResource("1_vip8k")
@@ -34,8 +34,14 @@ metadata/_edit_lock_ = true
 
 [node name="CSGBox3D" type="CSGBox3D" parent="Terrain"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, 0)
-material_override = ExtResource("3_q4sx3")
+material_override = ExtResource("3_5gc0g")
 use_collision = true
+
+[node name="CSGBox3D2" type="CSGBox3D" parent="Terrain"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4.58254, 2, -3.3106)
+material_override = ExtResource("3_5gc0g")
+use_collision = true
+size = Vector3(3, 1, 3)
 
 [node name="Environment" type="Node3D" parent="."]
 
