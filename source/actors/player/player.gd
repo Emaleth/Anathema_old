@@ -31,8 +31,10 @@ var footstep_sounds := [
 @onready var footsteps_audio := $FootstepsAudio
 @onready var breathing_audio := $Head/BreathingAudio
 @onready var footstep_timer := $FootstepTimer
+@onready var animation_player := $AnimationPlayer
 
 var head_tilt := 0.0
+var head_tilt_degrees := 5.0
 
 func _ready():
 	Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
@@ -49,6 +51,7 @@ func _physics_process(delta):
 		crouching = false
 		
 	if Input.is_action_pressed("jump") and is_on_floor():
+		animation_player.play("jump")
 		velocity.y = JUMP_VELOCITY
 
 	var input_dir = Input.get_vector("move_left", "move_right", "move_forward", "move_backward")
@@ -62,7 +65,7 @@ func _physics_process(delta):
 
 	move_and_slide()
 	
-	camera.rotation_degrees.z = lerp(camera.rotation_degrees.z, 5.0 * clamp(head_tilt, -1.0, 1.0), 0.1)
+	camera.rotation_degrees.z = lerp(camera.rotation_degrees.z, head_tilt_degrees * sign(head_tilt), 0.1)
 	head_tilt = 0.0
 
 	if crouching:
@@ -88,7 +91,6 @@ func _input(event):
 		if abs(event.relative.x) > 5.0:
 			head_tilt = -event.relative.x
 		camera.rotation_degrees.x = clamp(camera.rotation_degrees.x, -90, 90)
-
 
 
 func footsteps():
