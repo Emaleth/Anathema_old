@@ -3,16 +3,14 @@ extends CharacterBody3D
 
 const RUNNING_SPEED = 5.0
 const CROUCHING_SPEED = 2.0
-const SPRINTING_SPEED = 2.0
+const SPRINTING_SPEED = 10.0
 const JUMP_VELOCITY = 4.5
 const STANDING_HEAD_HEIGHT := 1.55
 const CROUCHING_HEAD_HEIGHT := 1.0
 
 var crouching := false
-var can_jump := true
-var can_stand := true
 
-var current_speed := 5
+var current_speed := 5.0
 var gravity = ProjectSettings.get_setting("physics/3d/default_gravity")
 var step_time := 1.0
 var footstep_sounds := [
@@ -43,7 +41,7 @@ func _ready():
 func _physics_process(delta):
 	if not is_on_floor():
 		velocity.y -= gravity * delta
-
+		
 	if Input.is_action_pressed("crouch") and is_on_floor():
 		crouching = true
 	else:
@@ -69,10 +67,13 @@ func _physics_process(delta):
 		$CrouchingCollisionShape.set_deferred("disabled", false)
 	else:
 		if not $Head/RayCast3D.is_colliding():
-			current_speed = RUNNING_SPEED
 			head.position.y = lerp(head.position.y, STANDING_HEAD_HEIGHT, 0.3)
 			$StandingCollisionShape.set_deferred("disabled", false)
 			$CrouchingCollisionShape.set_deferred("disabled", true)
+			if Input.is_action_pressed("sprint") and is_on_floor():
+				current_speed = SPRINTING_SPEED
+			else:
+				current_speed = RUNNING_SPEED
 		
 func _input(event):
 	if event is InputEventMouseMotion:

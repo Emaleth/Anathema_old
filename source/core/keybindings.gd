@@ -7,6 +7,7 @@ var key_bindings : Dictionary = {
 	"move_right" : KEY_D,
 	"jump" : KEY_SPACE,
 	"crouch" : KEY_C,
+	"sprint" : KEY_SHIFT
 }
 
 var mouse_bindings : Dictionary = {
