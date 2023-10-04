@@ -4,15 +4,9 @@ extends CharacterBody3D
 const SPEED = 5.0
 const JUMP_VELOCITY = 4.5
 
-# Get the gravity from the project settings to be synced with RigidBody nodes.
+var current_speed := 5
 var gravity = ProjectSettings.get_setting("physics/3d/default_gravity")
-var mouse_sensitivity := 0.01
-@onready var camera := $Camera3D
-@onready var footsteps_audio := $FootstepsAudio
-
-
-var travelled_distance := 0
-var step_lenght := 2.0
+var step_time := 0.05
 var footstep_sounds := [
 	preload("res://assets/sounds/footsteps/footstep00.ogg"),
 	preload("res://assets/sounds/footsteps/footstep01.ogg"),
@@ -26,43 +20,48 @@ var footstep_sounds := [
 	preload("res://assets/sounds/footsteps/footstep07.ogg"),
 ]
 
+@onready var head := $Head
+@onready var footsteps_audio := $FootstepsAudio
+@onready var breathing_audio := $Head/BreathingAudio
+@onready var footstep_timer := $FootstepTimer
+
+
+
 func _ready():
 	Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
-	
+	footstep_timer.timeout.connect(footsteps)
+
+
 func _physics_process(delta):
-	# Add the gravity.
 	if not is_on_floor():
 		velocity.y -= gravity * delta
 
-	# Handle Jump.
-	if Input.is_action_just_pressed("jump") and is_on_floor():
+	if Input.is_action_pressed("jump") and is_on_floor():
 		velocity.y = JUMP_VELOCITY
 
-	# Get the input direction and handle the movement/deceleration.
-	# As good practice, you should replace UI actions with custom gameplay actions.
 	var input_dir = Input.get_vector("move_left", "move_right", "move_forward", "move_backward")
 	var direction = (transform.basis * Vector3(input_dir.x, 0, input_dir.y)).normalized()
 	if direction:
 		velocity.x = direction.x * SPEED
 		velocity.z = direction.z * SPEED
-		footsteps()
 	else:
 		velocity.x = move_toward(velocity.x, 0, SPEED)
 		velocity.z = move_toward(velocity.z, 0, SPEED)
 
 	move_and_slide()
 
+
 func _input(event):
 	if event is InputEventMouseMotion:
-		rotate_y(event.relative.x * mouse_sensitivity * -1)
+		rotate_y(event.relative.x * Settings.mouse_sensitivity * -1)
 		rotation_degrees.y = wrap(rotation_degrees.y, -180, 180)
-		camera.rotate_x(event.relative.y * mouse_sensitivity * -1)
-		camera.rotation_degrees.x = clamp(camera.rotation_degrees.x, -90, 90)
+		head.rotate_x(event.relative.y * Settings.mouse_sensitivity * -1)
+		head.rotation_degrees.x = clamp(head.rotation_degrees.x, -90, 90)
+
 
 func footsteps():
-	if is_on_floor():
-		travelled_distance += velocity.length()
-		if travelled_distance >= step_lenght:
-			travelled_distance = 0.0
-			footsteps_audio.stream = footstep_sounds.pick_random()
-			footsteps_audio.play()
+	if is_on_floor() && velocity.length() > 0.0:
+		footsteps_audio.stream = footstep_sounds.pick_random()
+		footsteps_audio.play()
+	footstep_timer.start(step_time * current_speed)
+

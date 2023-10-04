@@ -2,7 +2,8 @@
 extends EditorScript
 
 var autoloads : Dictionary = {
-	"Keybindings" : "res://core/keybindings.gd",
+	"Keybindings" : "res://source/core/keybindings.gd",
+	"Settings" : "res://source/core/settings.gd",
 }
 
 
