@@ -13,7 +13,7 @@ config_version=5
 config/name="Anathema"
 run/main_scene="res://world.tscn"
 config/features=PackedStringArray("4.1", "Forward Plus")
-boot_splash/image="res://assets/splatter.png"
+boot_splash/image="res://assets/textures/splatter.png"
 config/icon="res://icon.svg"
 
 [autoload]

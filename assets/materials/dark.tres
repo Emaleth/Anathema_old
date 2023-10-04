@@ -1,8 +1,9 @@
 [gd_resource type="StandardMaterial3D" load_steps=2 format=3 uid="uid://ccjbygewnki37"]
 
-[ext_resource type="Texture2D" uid="uid://bdq02h2fux0ec" path="res://assets/textures/dark.png" id="1_lbkbs"]
+[ext_resource type="Texture2D" uid="uid://cbra71e3epp3i" path="res://addons/kenney_prototype_textures/dark/texture_07.png" id="1_lxstk"]
 
 [resource]
-albedo_texture = ExtResource("1_lbkbs")
+albedo_texture = ExtResource("1_lxstk")
 uv1_triplanar = true
+uv1_world_triplanar = true
 texture_filter = 0

@@ -1,3 +1,3 @@
 extends Node
 
-var mouse_sensitivity := 0.01
+var mouse_sensitivity := 0.007
