@@ -27,11 +27,12 @@ var footstep_sounds := [
 ]
 
 @onready var head := $Head
+@onready var camera := $Head/Camera3D
 @onready var footsteps_audio := $FootstepsAudio
 @onready var breathing_audio := $Head/BreathingAudio
 @onready var footstep_timer := $FootstepTimer
 
-
+var head_tilt := 0.0
 
 func _ready():
 	Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
@@ -60,6 +61,10 @@ func _physics_process(delta):
 		velocity.z = move_toward(velocity.z, 0, current_speed)
 
 	move_and_slide()
+	
+	camera.rotation_degrees.z = lerp(camera.rotation_degrees.z, 5.0 * clamp(head_tilt, -1.0, 1.0), 0.1)
+	head_tilt = 0.0
+
 	if crouching:
 		current_speed = CROUCHING_SPEED
 		head.position.y = lerp(head.position.y, CROUCHING_HEAD_HEIGHT, 0.3)
@@ -79,8 +84,11 @@ func _input(event):
 	if event is InputEventMouseMotion:
 		rotate_y(event.relative.x * Settings.mouse_sensitivity * -1)
 		rotation_degrees.y = wrap(rotation_degrees.y, -180, 180)
-		head.rotate_x(event.relative.y * Settings.mouse_sensitivity * -1)
-		head.rotation_degrees.x = clamp(head.rotation_degrees.x, -90, 90)
+		camera.rotate_x(event.relative.y * Settings.mouse_sensitivity * -1)
+		if abs(event.relative.x) > 5.0:
+			head_tilt = -event.relative.x
+		camera.rotation_degrees.x = clamp(camera.rotation_degrees.x, -90, 90)
+
 
 
 func footsteps():
