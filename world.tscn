@@ -3,8 +3,8 @@
 [ext_resource type="PackedScene" uid="uid://cruro5nbk2ds" path="res://source/actors/player/player.tscn" id="1_fnffb"]
 [ext_resource type="Material" uid="uid://bxjk8g7oqv63i" path="res://assets/materials/light.tres" id="1_iddo6"]
 [ext_resource type="Material" uid="uid://cms78nc73istx" path="res://assets/materials/orange.tres" id="3_5gc0g"]
-[ext_resource type="Texture2D" uid="uid://bnxaqtlvuwu43" path="res://assets/crosshairs/crosshair001.png" id="3_aeo84"]
 [ext_resource type="Texture2D" uid="uid://q1xumeifxf2b" path="res://assets/textures/skyfinal.png" id="4_2glq5"]
+[ext_resource type="Texture2D" uid="uid://ck4au80p8sdyc" path="res://assets/crosshairs/crosshair003.png" id="5_mlso6"]
 
 [sub_resource type="PanoramaSkyMaterial" id="PanoramaSkyMaterial_n8ane"]
 panorama = ExtResource("4_2glq5")
@@ -75,5 +75,5 @@ layout_mode = 2
 [node name="Crosshair" type="TextureRect" parent="UserInterface/MarginContainer/CenterContainer"]
 custom_minimum_size = Vector2(32, 32)
 layout_mode = 2
-texture = ExtResource("3_aeo84")
+texture = ExtResource("5_mlso6")
 expand_mode = 1

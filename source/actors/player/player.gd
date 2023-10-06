@@ -42,25 +42,33 @@ var footstep_sounds := [
 @onready var feet_raycast := $RayCast3D
 @onready var viewport_size : Vector2 = get_viewport().size
 
-var head_tilt := 0.0
 var last_in_air_velocity := 0.0
-
+var mouse_motion_event_relative_x := 0.0
+var mouse_motion_event_relative_y := 0.0
+var direction := Vector3.ZERO
+@export var crouched := false
 
 func _ready():
 	Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
 
 
 func _physics_process(delta):
+	get_direction()
 	check_is_on_floor(delta)
+	rotate_camera()
+	rotate_player()
 	tilt_head()
 	footsteps()
+	reset_mouse_motion_event_relative()
 
 	if not is_on_floor():
 		velocity.y -= gravity * delta
 
 	if Input.is_action_pressed("crouch") and is_on_floor():
 		crouching = true
+		if not crouched: animation_player.play("crouch")
 	else:
+		if crouched: animation_player.play("stand")
 		crouching = false
 
 	if Input.is_action_pressed("jump") and grounded:
@@ -72,8 +80,6 @@ func _physics_process(delta):
 	if is_on_floor() and last_in_air_velocity < 0:
 		animation_player.play("land")
 		last_in_air_velocity = 0
-	var input_dir = Input.get_vector("move_left", "move_right", "move_forward", "move_backward")
-	var direction = (transform.basis * Vector3(input_dir.x, 0, input_dir.y)).normalized()
 	if direction:
 		velocity.x = direction.x * current_speed
 		velocity.z = direction.z * current_speed
@@ -98,12 +104,22 @@ func _physics_process(delta):
 			else:
 				current_speed = RUNNING_SPEED
 
+
 func _input(event):
 	if event is InputEventMouseMotion:
-		rotate_camera(event.relative.y)
-		rotate_player(event.relative.x)
-		if abs(event.relative.x / viewport_size.x) > Settings.head_tilt_deadzone:
-			head_tilt = -event.relative.x
+		mouse_motion_event_relative_x = event.relative.x
+		mouse_motion_event_relative_y = event.relative.y
+
+
+func get_direction():
+	direction = Vector3.ZERO
+	var input_dir = Input.get_vector("move_left", "move_right", "move_forward", "move_backward")
+	direction = (transform.basis * Vector3(input_dir.x, 0, input_dir.y)).normalized()
+
+
+func reset_mouse_motion_event_relative():
+		mouse_motion_event_relative_x = 0
+		mouse_motion_event_relative_y = 0
 
 
 func check_is_on_floor(delta):
@@ -124,16 +140,19 @@ func footsteps():
 			last_step_position = Vector2(position.x, position.z)
 
 
-func rotate_camera(event_relative_y : float):
-	head.rotate_x(event_relative_y * Settings.mouse_sensitivity * -1)
+func rotate_camera():
+	head.rotate_x(mouse_motion_event_relative_y * Settings.mouse_sensitivity * -1)
 	head.rotation_degrees.x = clamp(head.rotation_degrees.x, -90, 90)
 
 
-func rotate_player(event_relative_x : float):
-	rotate_y(event_relative_x * Settings.mouse_sensitivity * -1)
+func rotate_player():
+	rotate_y(mouse_motion_event_relative_x * Settings.mouse_sensitivity * -1)
 	rotation_degrees.y = wrap(rotation_degrees.y, -180, 180)
 
 
 func tilt_head():
+	var head_tilt := 0.0
+	if abs(mouse_motion_event_relative_x / viewport_size.x) > Settings.head_tilt_deadzone:
+		head_tilt = -mouse_motion_event_relative_x
 	head.rotation_degrees.z = lerp(head.rotation_degrees.z, HEAD_TILT_DEGREES * sign(head_tilt), 0.1)
-	head_tilt = 0.0
+
