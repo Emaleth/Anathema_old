@@ -1,6 +1,7 @@
-[gd_scene load_steps=12 format=3 uid="uid://cruro5nbk2ds"]
+[gd_scene load_steps=14 format=3 uid="uid://cruro5nbk2ds"]
 
 [ext_resource type="Script" path="res://source/actors/player/player.gd" id="1_k454m"]
+[ext_resource type="Material" uid="uid://ccjbygewnki37" path="res://assets/materials/dark.tres" id="2_py1g5"]
 [ext_resource type="Material" uid="uid://b5m5fyxd5eph1" path="res://assets/materials/green.tres" id="2_qg5ep"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_sq2cy"]
@@ -10,6 +11,9 @@ height = 1.8
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_ej0bd"]
 radius = 0.3
 height = 1.25
+
+[sub_resource type="BoxMesh" id="BoxMesh_1jcpn"]
+size = Vector3(0.1, 0.1, 0.5)
 
 [sub_resource type="Animation" id="Animation_ftmxe"]
 length = 0.001
@@ -74,6 +78,46 @@ tracks/4/keys = {
 "values": [true]
 }
 
+[sub_resource type="Animation" id="Animation_sv4iq"]
+resource_name = "crouch"
+length = 0.2
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("MeshInstance3D:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.2),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Vector3(0, 0.9, 0), Vector3(0, 0.625, 0)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("MeshInstance3D:mesh:height")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.2),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [1.8, 1.25]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath(".:crouched")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0.2),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+
 [sub_resource type="Animation" id="Animation_ofuhs"]
 resource_name = "jump"
 length = 0.3
@@ -128,46 +172,6 @@ tracks/1/keys = {
 "transitions": PackedFloat32Array(1, 1, 1),
 "update": 0,
 "values": [Vector3(0, 0, 0), Vector3(-0.0872665, 0, 0), Vector3(0, 0, 0)]
-}
-
-[sub_resource type="Animation" id="Animation_sv4iq"]
-resource_name = "crouch"
-length = 0.2
-tracks/0/type = "value"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath("MeshInstance3D:position")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0, 0.2),
-"transitions": PackedFloat32Array(1, 1),
-"update": 0,
-"values": [Vector3(0, 0.9, 0), Vector3(0, 0.625, 0)]
-}
-tracks/1/type = "value"
-tracks/1/imported = false
-tracks/1/enabled = true
-tracks/1/path = NodePath("MeshInstance3D:mesh:height")
-tracks/1/interp = 1
-tracks/1/loop_wrap = true
-tracks/1/keys = {
-"times": PackedFloat32Array(0, 0.2),
-"transitions": PackedFloat32Array(1, 1),
-"update": 0,
-"values": [1.8, 1.25]
-}
-tracks/2/type = "value"
-tracks/2/imported = false
-tracks/2/enabled = true
-tracks/2/path = NodePath(".:crouched")
-tracks/2/interp = 1
-tracks/2/loop_wrap = true
-tracks/2/keys = {
-"times": PackedFloat32Array(0.2),
-"transitions": PackedFloat32Array(1),
-"update": 1,
-"values": [true]
 }
 
 [sub_resource type="Animation" id="Animation_fx4sc"]
@@ -243,7 +247,7 @@ emission_angle_enabled = true
 emission_angle_degrees = 90.0
 
 [node name="Head" type="Marker3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.55, 0)
 
 [node name="BreathingAudio" type="AudioStreamPlayer3D" parent="Head"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.0152214, 0)
@@ -254,6 +258,23 @@ emission_angle_enabled = true
 
 [node name="RayCast3D" type="RayCast3D" parent="Head"]
 target_position = Vector3(0, 0.8, 0)
+
+[node name="RayCast3D2" type="RayCast3D" parent="Head"]
+target_position = Vector3(0, 0, -1000)
+
+[node name="RightHand" type="Marker3D" parent="Head"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.4, -0.25, -0.6)
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Head/RightHand"]
+material_override = ExtResource("2_py1g5")
+mesh = SubResource("BoxMesh_1jcpn")
+
+[node name="LeftHand" type="Marker3D" parent="Head"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.4, -0.25, -0.6)
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Head/LeftHand"]
+material_override = ExtResource("2_py1g5")
+mesh = SubResource("BoxMesh_1jcpn")
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
 libraries = {

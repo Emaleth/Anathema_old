@@ -17,6 +17,7 @@ var time_since_grounded := 0.0
 var current_speed := 0.0
 var gravity : float = ProjectSettings.get_setting("physics/3d/default_gravity")
 var last_step_position := Vector2.ZERO
+var weapon_sway_amount := 3.0
 
 var footstep_sounds := [
 	preload("res://assets/sounds/footsteps/footstep00.ogg"),
@@ -41,6 +42,8 @@ var footstep_sounds := [
 @onready var head_raycast := $Head/RayCast3D
 @onready var feet_raycast := $RayCast3D
 @onready var viewport_size : Vector2 = get_viewport().size
+@onready var right_hand := $Head/RightHand
+@onready var left_hand := $Head/LeftHand
 
 var last_in_air_velocity := 0.0
 var mouse_motion_event_relative_x := 0.0
@@ -58,6 +61,7 @@ func _physics_process(delta):
 	rotate_camera()
 	rotate_player()
 	tilt_head()
+	weapon_sway()
 	footsteps()
 	reset_mouse_motion_event_relative()
 
@@ -144,6 +148,26 @@ func rotate_camera():
 	head.rotate_x(mouse_motion_event_relative_y * Settings.mouse_sensitivity * -1)
 	head.rotation_degrees.x = clamp(head.rotation_degrees.x, -90, 90)
 
+func weapon_sway():
+	var hand_tilt_x := 0.0
+	var hand_tilt_y := 0.0
+	var hand_tilt_z := 0.0
+	if abs(mouse_motion_event_relative_y / viewport_size.y) > Settings.hand_tilt_deadzone:
+		hand_tilt_x = -mouse_motion_event_relative_y
+	if abs(mouse_motion_event_relative_x / viewport_size.x) > Settings.hand_tilt_deadzone:
+		hand_tilt_y = -mouse_motion_event_relative_x
+		hand_tilt_z = -mouse_motion_event_relative_x
+
+	for hand in [right_hand, left_hand]:
+		# X AXIS
+		hand.rotation_degrees.x = lerp(hand.rotation_degrees.x, sign(hand_tilt_x) * weapon_sway_amount, 0.1)
+		hand.rotation_degrees.x = clamp(hand.rotation_degrees.x, -25, 25)
+		# Y AXIS
+		hand.rotation_degrees.y = lerp(hand.rotation_degrees.y, sign(hand_tilt_y) * weapon_sway_amount, 0.1)
+		hand.rotation_degrees.y = clamp(hand.rotation_degrees.y, -25, 25)
+		# > AXIS
+		hand.rotation_degrees.z = lerp(hand.rotation_degrees.z, sign(hand_tilt_z) * weapon_sway_amount, 0.3)
+		hand.rotation_degrees.z = clamp(hand.rotation_degrees.z, -25, 25)
 
 func rotate_player():
 	rotate_y(mouse_motion_event_relative_x * Settings.mouse_sensitivity * -1)
