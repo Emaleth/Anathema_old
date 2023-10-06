@@ -152,21 +152,24 @@ func weapon_sway():
 	var hand_tilt_x := 0.0
 	var hand_tilt_y := 0.0
 	var hand_tilt_z := 0.0
+
 	if abs(mouse_motion_event_relative_y / viewport_size.y) > Settings.hand_tilt_deadzone:
 		hand_tilt_x = -mouse_motion_event_relative_y
 	if abs(mouse_motion_event_relative_x / viewport_size.x) > Settings.hand_tilt_deadzone:
 		hand_tilt_y = -mouse_motion_event_relative_x
 		hand_tilt_z = -mouse_motion_event_relative_x
 
+	var sway_direction = 1 if Settings.weapon_sway_lead else -1
+
 	for hand in [right_hand, left_hand]:
 		# X AXIS
-		hand.rotation_degrees.x = lerp(hand.rotation_degrees.x, sign(hand_tilt_x) * weapon_sway_amount, 0.1)
+		hand.rotation_degrees.x = lerp(hand.rotation_degrees.x, sign(hand_tilt_x * sway_direction) * weapon_sway_amount, 0.1)
 		hand.rotation_degrees.x = clamp(hand.rotation_degrees.x, -25, 25)
 		# Y AXIS
-		hand.rotation_degrees.y = lerp(hand.rotation_degrees.y, sign(hand_tilt_y) * weapon_sway_amount, 0.1)
+		hand.rotation_degrees.y = lerp(hand.rotation_degrees.y, sign(hand_tilt_y * sway_direction) * weapon_sway_amount, 0.1)
 		hand.rotation_degrees.y = clamp(hand.rotation_degrees.y, -25, 25)
 		# > AXIS
-		hand.rotation_degrees.z = lerp(hand.rotation_degrees.z, sign(hand_tilt_z) * weapon_sway_amount, 0.3)
+		hand.rotation_degrees.z = lerp(hand.rotation_degrees.z, sign(hand_tilt_z * sway_direction) * weapon_sway_amount, 0.3)
 		hand.rotation_degrees.z = clamp(hand.rotation_degrees.z, -25, 25)
 
 func rotate_player():

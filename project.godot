@@ -25,3 +25,7 @@ Settings="*res://source/core/settings.gd"
 [editor_plugins]
 
 enabled=PackedStringArray("res://addons/debug_menu/plugin.cfg")
+
+[rendering]
+
+environment/defaults/default_environment="res://environment.tres"
