@@ -257,9 +257,6 @@ emission_angle_enabled = true
 [node name="Camera3D" type="Camera3D" parent="Head"]
 
 [node name="RayCast3D" type="RayCast3D" parent="Head"]
-target_position = Vector3(0, 0.8, 0)
-
-[node name="RayCast3D2" type="RayCast3D" parent="Head"]
 target_position = Vector3(0, 0, -1000)
 
 [node name="RightHand" type="Marker3D" parent="Head"]
@@ -288,3 +285,6 @@ target_position = Vector3(0, -0.1, 0)
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.9, 0)
 material_override = ExtResource("2_qg5ep")
 mesh = SubResource("CapsuleMesh_ekk3i")
+
+[node name="RayCast3D2" type="RayCast3D" parent="."]
+target_position = Vector3(0, 1.8, 0)
