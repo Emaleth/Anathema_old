@@ -7,8 +7,7 @@ const SPRINTING_SPEED = 10.0
 const JUMP_VELOCITY = 4.5
 const STANDING_HEAD_HEIGHT := 1.55
 const CROUCHING_HEAD_HEIGHT := 1.0
-const HEAD_TILT_MOUSE_DEGREES := 25.0
-const HEAD_TILT_STRIFE_DEGREES := 5.0
+const HEAD_TILT_DEGREES := 25.0
 const JUMP_GRACE_PERIOD := 1.0
 const STEP_LENGHT := 1.5
 
@@ -21,7 +20,6 @@ var current_speed := 0.0
 var gravity : float = ProjectSettings.get_setting("physics/3d/default_gravity")
 var last_step_position := Vector2.ZERO
 var weapon_sway_amount := 3.0
-var input_dir := Vector2.ZERO
 var jumped := false
 
 var footstep_sounds := [
@@ -123,7 +121,7 @@ func _input(event):
 
 func get_direction():
 	direction = Vector3.ZERO
-	input_dir = Vector2.ZERO
+	var input_dir := Vector2.ZERO
 	input_dir = Input.get_vector("move_left", "move_right", "move_forward", "move_backward")
 	direction = (transform.basis * Vector3(input_dir.x, 0, input_dir.y)).normalized()
 
@@ -188,10 +186,7 @@ func rotate_player():
 
 func tilt_head():
 	var head_tilt := 0.0
-	var head_tilt_strife := 0.0
 	if abs(mouse_motion_event_relative_x / viewport_size.x) > head_tilt_deadzone:
 		head_tilt = -mouse_motion_event_relative_x
-	if input_dir.x != 0.0:
-		head_tilt_strife = -input_dir.x
-	camera.rotation_degrees.z = lerp(camera.rotation_degrees.z, HEAD_TILT_MOUSE_DEGREES * sign(head_tilt), 0.1)
-	camera.rotation_degrees.z = lerp(camera.rotation_degrees.z, HEAD_TILT_STRIFE_DEGREES * sign(head_tilt_strife), 0.1)
+	camera.rotation_degrees.z = lerp(camera.rotation_degrees.z, HEAD_TILT_DEGREES * sign(head_tilt), 0.1)
+
