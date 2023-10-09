@@ -5,9 +5,10 @@ const RUNNING_SPEED = 5.0
 const CROUCHING_SPEED = 2.0
 const SPRINTING_SPEED = 10.0
 const JUMP_VELOCITY = 4.5
-const STANDING_HEAD_HEIGHT := 1.55
-const CROUCHING_HEAD_HEIGHT := 1.0
+const STANDING_HEAD_HEIGHT := 0.75
+const CROUCHING_HEAD_HEIGHT := 0.2
 const HEAD_TILT_DEGREES := 25.0
+const UPPER_BODY_TILT_DEGREES := 27.0
 const JUMP_GRACE_PERIOD := 1.0
 const STEP_LENGHT := 1.5
 
@@ -35,24 +36,26 @@ var footstep_sounds := [
 	preload("res://assets/sounds/footsteps/footstep07.ogg"),
 ]
 
-@onready var head := $Head
-@onready var camera := $Head/Camera3D
+@onready var head := $UpperBody/Head
+@onready var camera := $UpperBody/Head/Camera3D
 @onready var footsteps_audio := $FootstepsAudio
-@onready var breathing_audio := $Head/BreathingAudio
+@onready var breathing_audio := $UpperBody/Head/BreathingAudio
 @onready var animation_player := $AnimationPlayer
 @onready var standing_collision_shape := $StandingCollisionShape
 @onready var crouching_collision_shape := $CrouchingCollisionShape
 @onready var head_raycast := $RayCast3D2
 @onready var feet_raycast := $RayCast3D
 @onready var viewport_size : Vector2 = get_viewport().size
-@onready var right_hand := $Head/RightHand
-@onready var left_hand := $Head/LeftHand
+@onready var right_hand := $UpperBody/Head/RightHand
+@onready var left_hand := $UpperBody/Head/LeftHand
+@onready var upper_body := $UpperBody
 
 var last_in_air_velocity := 0.0
 var mouse_motion_event_relative_x := 0.0
 var mouse_motion_event_relative_y := 0.0
 var direction := Vector3.ZERO
 @export var crouched := false
+var tilt := 0.0
 
 func _ready():
 	Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
@@ -60,10 +63,12 @@ func _ready():
 
 func _physics_process(delta):
 	get_direction()
+	get_tilt()
 	check_is_on_floor(delta)
 	rotate_camera()
 	rotate_player()
 	tilt_head()
+	tilt_upper_body()
 	weapon_sway()
 	footsteps()
 	reset_mouse_motion_event_relative()
@@ -126,6 +131,11 @@ func get_direction():
 	direction = (transform.basis * Vector3(input_dir.x, 0, input_dir.y)).normalized()
 
 
+func get_tilt():
+	tilt = 0.0
+	tilt = Input.get_action_strength("tilt_left") - Input.get_action_strength("tilt_right")
+
+
 func reset_mouse_motion_event_relative():
 		mouse_motion_event_relative_x = 0
 		mouse_motion_event_relative_y = 0
@@ -154,7 +164,7 @@ func footsteps():
 
 
 func rotate_camera():
-	head.rotate_x(mouse_motion_event_relative_y * Settings.mouse_sensitivity * -1)
+	head.rotation.x += mouse_motion_event_relative_y * Settings.mouse_sensitivity * -1
 	head.rotation_degrees.x = clamp(head.rotation_degrees.x, -90, 90)
 
 func weapon_sway():
@@ -180,7 +190,7 @@ func weapon_sway():
 		hand.rotation_degrees.z = clamp(hand.rotation_degrees.z, -25, 25)
 
 func rotate_player():
-	rotate_y(mouse_motion_event_relative_x * Settings.mouse_sensitivity * -1)
+	rotation.y += mouse_motion_event_relative_x * Settings.mouse_sensitivity * -1
 	rotation_degrees.y = wrap(rotation_degrees.y, -180, 180)
 
 
@@ -188,5 +198,12 @@ func tilt_head():
 	var head_tilt := 0.0
 	if abs(mouse_motion_event_relative_x / viewport_size.x) > head_tilt_deadzone:
 		head_tilt = -mouse_motion_event_relative_x
-	camera.rotation_degrees.z = lerp(camera.rotation_degrees.z, HEAD_TILT_DEGREES * sign(head_tilt), 0.1)
+	head.rotation_degrees.z = lerp(head.rotation_degrees.z, HEAD_TILT_DEGREES * sign(head_tilt), 0.1)
 
+
+func tilt_upper_body():
+	upper_body.rotation_degrees.z = lerp(upper_body.rotation_degrees.z, UPPER_BODY_TILT_DEGREES * tilt, 0.1)
+
+
+func ads():
+	pass

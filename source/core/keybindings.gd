@@ -5,6 +5,8 @@ var key_bindings : Dictionary = {
 	"move_backward" : KEY_S,
 	"move_left" : KEY_A,
 	"move_right" : KEY_D,
+	"tilt_left" : KEY_Q,
+	"tilt_right" : KEY_E,
 	"jump" : KEY_SPACE,
 	"crouch" : KEY_C,
 	"sprint" : KEY_SHIFT

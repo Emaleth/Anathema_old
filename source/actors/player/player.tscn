@@ -12,15 +12,12 @@ height = 1.8
 radius = 0.3
 height = 1.25
 
-[sub_resource type="BoxMesh" id="BoxMesh_1jcpn"]
-size = Vector3(0.1, 0.1, 0.5)
-
 [sub_resource type="Animation" id="Animation_ftmxe"]
 length = 0.001
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
-tracks/0/path = NodePath("Head/Camera3D:position")
+tracks/0/path = NodePath("UpperBody/Head/Camera3D:position")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
@@ -32,7 +29,7 @@ tracks/0/keys = {
 tracks/1/type = "value"
 tracks/1/imported = false
 tracks/1/enabled = true
-tracks/1/path = NodePath("Head/Camera3D:rotation")
+tracks/1/path = NodePath("UpperBody/Head/Camera3D:rotation")
 tracks/1/interp = 1
 tracks/1/loop_wrap = true
 tracks/1/keys = {
@@ -124,7 +121,7 @@ length = 0.3
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
-tracks/0/path = NodePath("Head/Camera3D:position")
+tracks/0/path = NodePath("UpperBody/Head/Camera3D:position")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
@@ -136,7 +133,7 @@ tracks/0/keys = {
 tracks/1/type = "value"
 tracks/1/imported = false
 tracks/1/enabled = true
-tracks/1/path = NodePath("Head/Camera3D:rotation")
+tracks/1/path = NodePath("UpperBody/Head/Camera3D:rotation")
 tracks/1/interp = 1
 tracks/1/loop_wrap = true
 tracks/1/keys = {
@@ -152,7 +149,7 @@ length = 0.3
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
-tracks/0/path = NodePath("Head/Camera3D:position")
+tracks/0/path = NodePath("UpperBody/Head/Camera3D:position")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
@@ -164,7 +161,7 @@ tracks/0/keys = {
 tracks/1/type = "value"
 tracks/1/imported = false
 tracks/1/enabled = true
-tracks/1/path = NodePath("Head/Camera3D:rotation")
+tracks/1/path = NodePath("UpperBody/Head/Camera3D:rotation")
 tracks/1/interp = 1
 tracks/1/loop_wrap = true
 tracks/1/keys = {
@@ -227,6 +224,9 @@ _data = {
 radius = 0.3
 height = 1.8
 
+[sub_resource type="BoxMesh" id="BoxMesh_1jcpn"]
+size = Vector3(0.1, 0.1, 0.5)
+
 [node name="Player" type="CharacterBody3D"]
 script = ExtResource("1_k454m")
 crouched = true
@@ -246,33 +246,6 @@ max_polyphony = 2
 emission_angle_enabled = true
 emission_angle_degrees = 90.0
 
-[node name="Head" type="Marker3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.55, 0)
-
-[node name="BreathingAudio" type="AudioStreamPlayer3D" parent="Head"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.0152214, 0)
-max_polyphony = 2
-emission_angle_enabled = true
-
-[node name="Camera3D" type="Camera3D" parent="Head"]
-
-[node name="RayCast3D" type="RayCast3D" parent="Head"]
-target_position = Vector3(0, 0, -1000)
-
-[node name="RightHand" type="Marker3D" parent="Head"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.4, -0.25, -0.6)
-
-[node name="MeshInstance3D" type="MeshInstance3D" parent="Head/RightHand"]
-material_override = ExtResource("2_py1g5")
-mesh = SubResource("BoxMesh_1jcpn")
-
-[node name="LeftHand" type="Marker3D" parent="Head"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.4, -0.25, -0.6)
-
-[node name="MeshInstance3D" type="MeshInstance3D" parent="Head/LeftHand"]
-material_override = ExtResource("2_py1g5")
-mesh = SubResource("BoxMesh_1jcpn")
-
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
 libraries = {
 "": SubResource("AnimationLibrary_twy8m")
@@ -288,3 +261,57 @@ mesh = SubResource("CapsuleMesh_ekk3i")
 
 [node name="RayCast3D2" type="RayCast3D" parent="."]
 target_position = Vector3(0, 1.8, 0)
+
+[node name="UpperBody" type="Marker3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.8, 0)
+
+[node name="Head" type="Marker3D" parent="UpperBody"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.75, 0)
+
+[node name="BreathingAudio" type="AudioStreamPlayer3D" parent="UpperBody/Head"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.0152214, 0)
+max_polyphony = 2
+emission_angle_enabled = true
+
+[node name="Camera3D" type="Camera3D" parent="UpperBody/Head"]
+cull_mask = 1048573
+
+[node name="RemoteTransform3D" type="RemoteTransform3D" parent="UpperBody/Head/Camera3D"]
+remote_path = NodePath("../SubViewportContainer/SubViewport/Camera3D")
+
+[node name="SubViewportContainer" type="SubViewportContainer" parent="UpperBody/Head/Camera3D"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+stretch = true
+
+[node name="SubViewport" type="SubViewport" parent="UpperBody/Head/Camera3D/SubViewportContainer"]
+transparent_bg = true
+size = Vector2i(1152, 648)
+
+[node name="Camera3D" type="Camera3D" parent="UpperBody/Head/Camera3D/SubViewportContainer/SubViewport"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.55, 0)
+cull_mask = 2
+
+[node name="RayCast3D" type="RayCast3D" parent="UpperBody/Head"]
+target_position = Vector3(0, 0, -1000)
+
+[node name="RightHand" type="Marker3D" parent="UpperBody/Head"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.4, -0.25, -0.6)
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="UpperBody/Head/RightHand"]
+layers = 2
+material_override = ExtResource("2_py1g5")
+mesh = SubResource("BoxMesh_1jcpn")
+
+[node name="LeftHand" type="Marker3D" parent="UpperBody/Head"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.4, -0.25, -0.6)
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="UpperBody/Head/LeftHand"]
+layers = 2
+material_override = ExtResource("2_py1g5")
+mesh = SubResource("BoxMesh_1jcpn")
