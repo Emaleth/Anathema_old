@@ -11,7 +11,6 @@
 [node name="Actors" type="Node3D" parent="."]
 
 [node name="Player" parent="Actors" instance=ExtResource("1_fnffb")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.46917, 0)
 
 [node name="Terrain" type="Node3D" parent="."]
 
@@ -23,12 +22,24 @@ size = Vector3(100, 1, 100)
 metadata/_edit_lock_ = true
 
 [node name="CSGBox3D" type="CSGBox3D" parent="Terrain"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, -3.97484)
 material_override = ExtResource("3_5gc0g")
 use_collision = true
 
 [node name="CSGBox3D2" type="CSGBox3D" parent="Terrain"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.34, 1.6, -1.553)
+material_override = ExtResource("3_5gc0g")
+use_collision = true
+size = Vector3(3, 0.1, 3)
+
+[node name="CSGBox3D3" type="CSGBox3D" parent="Terrain"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6.24557, 2.56157, 0.620326)
+material_override = ExtResource("3_5gc0g")
+use_collision = true
+size = Vector3(3, 0.1, 3)
+
+[node name="CSGBox3D4" type="CSGBox3D" parent="Terrain"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.59136, 3.23854, 1.90305)
 material_override = ExtResource("3_5gc0g")
 use_collision = true
 size = Vector3(3, 0.1, 3)

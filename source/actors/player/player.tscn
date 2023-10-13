@@ -1,8 +1,9 @@
-[gd_scene load_steps=14 format=3 uid="uid://cruro5nbk2ds"]
+[gd_scene load_steps=15 format=3 uid="uid://cruro5nbk2ds"]
 
 [ext_resource type="Script" path="res://source/actors/player/player.gd" id="1_k454m"]
 [ext_resource type="Material" uid="uid://ccjbygewnki37" path="res://assets/materials/dark.tres" id="2_py1g5"]
 [ext_resource type="Material" uid="uid://b5m5fyxd5eph1" path="res://assets/materials/green.tres" id="2_qg5ep"]
+[ext_resource type="AudioStream" uid="uid://d3jm7hucgkrb3" path="res://assets/sounds/jump.wav" id="3_hyc5u"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_sq2cy"]
 radius = 0.3
@@ -225,7 +226,7 @@ radius = 0.3
 height = 1.8
 
 [sub_resource type="BoxMesh" id="BoxMesh_1jcpn"]
-size = Vector3(0.1, 0.1, 0.5)
+size = Vector3(0.1, 0.1, 0.7)
 
 [node name="Player" type="CharacterBody3D"]
 script = ExtResource("1_k454m")
@@ -273,6 +274,12 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.0152214, 0)
 max_polyphony = 2
 emission_angle_enabled = true
 
+[node name="VoiceAudio" type="AudioStreamPlayer3D" parent="UpperBody/Head"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.0152214, 0)
+stream = ExtResource("3_hyc5u")
+max_polyphony = 2
+emission_angle_enabled = true
+
 [node name="Camera3D" type="Camera3D" parent="UpperBody/Head"]
 cull_mask = 1048573
 
@@ -291,7 +298,9 @@ stretch = true
 
 [node name="SubViewport" type="SubViewport" parent="UpperBody/Head/Camera3D/SubViewportContainer"]
 transparent_bg = true
+handle_input_locally = false
 size = Vector2i(1152, 648)
+render_target_update_mode = 4
 
 [node name="Camera3D" type="Camera3D" parent="UpperBody/Head/Camera3D/SubViewportContainer/SubViewport"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.55, 0)
@@ -312,6 +321,7 @@ mesh = SubResource("BoxMesh_1jcpn")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.4, -0.25, -0.6)
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="UpperBody/Head/LeftHand"]
+visible = false
 layers = 2
 material_override = ExtResource("2_py1g5")
 mesh = SubResource("BoxMesh_1jcpn")

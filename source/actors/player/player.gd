@@ -12,6 +12,9 @@ const UPPER_BODY_TILT_DEGREES := 27.0
 const JUMP_GRACE_PERIOD := 1.0
 const STEP_LENGHT := 1.5
 
+var acceleraion := 0.9
+var normal_deceleraion := 0.9
+var slide_deceleraion := 0.001
 var head_tilt_deadzone := 0.05
 var hand_tilt_deadzone := 0.001
 var crouching := false
@@ -49,13 +52,15 @@ var footstep_sounds := [
 @onready var right_hand := $UpperBody/Head/RightHand
 @onready var left_hand := $UpperBody/Head/LeftHand
 @onready var upper_body := $UpperBody
+@onready var voice_audio := $UpperBody/Head/VoiceAudio
 
 var last_in_air_velocity := 0.0
 var mouse_motion_event_relative_x := 0.0
 var mouse_motion_event_relative_y := 0.0
 var direction := Vector3.ZERO
-@export var crouched := false
+@export var crouched := false # just for the crouch / stand animation
 var tilt := 0.0
+var sprinting := false
 
 func _ready():
 	Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
@@ -95,12 +100,15 @@ func _physics_process(delta):
 			crouching_collision_shape.set_deferred("disabled", true)
 			if Input.is_action_pressed("sprint") and grounded:
 				current_speed = SPRINTING_SPEED
+				sprinting = true
 			else:
 				current_speed = RUNNING_SPEED
+				sprinting = false
 
 	if Input.is_action_pressed("jump") and grounded and not jumped:
 		animation_player.play("jump")
 		velocity.y = JUMP_VELOCITY
+		voice_audio.play()
 		jumped = true
 	if not is_on_floor() and velocity.y < 0:
 		last_in_air_velocity = velocity.y
@@ -109,11 +117,15 @@ func _physics_process(delta):
 		jumped = false
 		last_in_air_velocity = 0
 	if direction:
-		velocity.x = move_toward(velocity.x, direction.x * current_speed, 0.9)
-		velocity.z = move_toward(velocity.z, direction.z * current_speed, 0.9)
+		velocity.x = move_toward(velocity.x, direction.x * current_speed, acceleraion)
+		velocity.z = move_toward(velocity.z, direction.z * current_speed, acceleraion)
 	else:
-		velocity.x = move_toward(velocity.x, 0, 0.9)
-		velocity.z = move_toward(velocity.z, 0, 0.9)
+		if crouching and sprinting:
+			velocity.x = move_toward(velocity.x, 0, slide_deceleraion)
+			velocity.z = move_toward(velocity.z, 0, slide_deceleraion)
+		else:
+			velocity.x = move_toward(velocity.x, 0, normal_deceleraion)
+			velocity.z = move_toward(velocity.z, 0, normal_deceleraion)
 
 	move_and_slide()
 
@@ -179,15 +191,19 @@ func weapon_sway():
 		hand_tilt_z = mouse_motion_event_relative_x
 
 	for hand in [right_hand, left_hand]:
-		# X AXIS
 		hand.rotation_degrees.x = lerp(hand.rotation_degrees.x, sign(hand_tilt_x) * weapon_sway_amount, 0.1)
-		hand.rotation_degrees.x = clamp(hand.rotation_degrees.x, -25, 25)
-		# Y AXIS
 		hand.rotation_degrees.y = lerp(hand.rotation_degrees.y, sign(hand_tilt_y) * weapon_sway_amount, 0.1)
-		hand.rotation_degrees.y = clamp(hand.rotation_degrees.y, -25, 25)
-		# > AXIS
 		hand.rotation_degrees.z = lerp(hand.rotation_degrees.z, sign(hand_tilt_z) * weapon_sway_amount, 0.3)
-		hand.rotation_degrees.z = clamp(hand.rotation_degrees.z, -25, 25)
+
+		var gun : Node = hand.get_child(0)
+
+		if sprinting:
+			gun.rotation_degrees.x = lerp(gun.rotation_degrees.x, 15.0, 0.15)
+			gun.rotation_degrees.y = lerp(gun.rotation_degrees.y, 65.0, 0.15)
+		else:
+			gun.rotation_degrees.x = lerp(gun.rotation_degrees.x, 0.0, 0.15)
+			gun.rotation_degrees.y = lerp(gun.rotation_degrees.y, 0.0, 0.15)
+
 
 func rotate_player():
 	rotation.y += mouse_motion_event_relative_x * Settings.mouse_sensitivity * -1
