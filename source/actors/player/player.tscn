@@ -321,7 +321,6 @@ mesh = SubResource("BoxMesh_1jcpn")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.4, -0.25, -0.6)
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="UpperBody/Head/LeftHand"]
-visible = false
 layers = 2
 material_override = ExtResource("2_py1g5")
 mesh = SubResource("BoxMesh_1jcpn")
