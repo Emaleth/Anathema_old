@@ -1,9 +1,9 @@
-[gd_scene load_steps=15 format=3 uid="uid://cruro5nbk2ds"]
+[gd_scene load_steps=14 format=3 uid="uid://cruro5nbk2ds"]
 
 [ext_resource type="Script" path="res://source/actors/player/player.gd" id="1_k454m"]
-[ext_resource type="Material" uid="uid://ccjbygewnki37" path="res://assets/materials/dark.tres" id="2_py1g5"]
 [ext_resource type="Material" uid="uid://b5m5fyxd5eph1" path="res://assets/materials/green.tres" id="2_qg5ep"]
 [ext_resource type="AudioStream" uid="uid://d3jm7hucgkrb3" path="res://assets/sounds/jump.wav" id="3_hyc5u"]
+[ext_resource type="PackedScene" uid="uid://2waksyqjviqx" path="res://source/weapons/blaster_d.tscn" id="5_x72aw"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_sq2cy"]
 radius = 0.3
@@ -225,9 +225,6 @@ _data = {
 radius = 0.3
 height = 1.8
 
-[sub_resource type="BoxMesh" id="BoxMesh_1jcpn"]
-size = Vector3(0.1, 0.1, 0.7)
-
 [node name="Player" type="CharacterBody3D"]
 script = ExtResource("1_k454m")
 crouched = true
@@ -312,15 +309,10 @@ target_position = Vector3(0, 0, -1000)
 [node name="RightHand" type="Marker3D" parent="UpperBody/Head"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.4, -0.25, -0.6)
 
-[node name="MeshInstance3D" type="MeshInstance3D" parent="UpperBody/Head/RightHand"]
-layers = 2
-material_override = ExtResource("2_py1g5")
-mesh = SubResource("BoxMesh_1jcpn")
+[node name="blasterD" parent="UpperBody/Head/RightHand" instance=ExtResource("5_x72aw")]
 
 [node name="LeftHand" type="Marker3D" parent="UpperBody/Head"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.4, -0.25, -0.6)
 
-[node name="MeshInstance3D" type="MeshInstance3D" parent="UpperBody/Head/LeftHand"]
-layers = 2
-material_override = ExtResource("2_py1g5")
-mesh = SubResource("BoxMesh_1jcpn")
+[connection signal="child_entered_tree" from="UpperBody/Head/RightHand" to="." method="_on_right_hand_child_entered_tree"]
+[connection signal="child_entered_tree" from="UpperBody/Head/LeftHand" to="." method="_on_left_hand_child_entered_tree"]

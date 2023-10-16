@@ -64,9 +64,11 @@ var direction := Vector3.ZERO
 var tilt := 0.0
 var sprinting := false
 var adsing := false
+var weapon : Node3D
 
 func _ready():
 	Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
+	weapon = right_hand.get_child(0) # tmp
 
 
 func _physics_process(delta):
@@ -93,6 +95,8 @@ func _physics_process(delta):
 		if crouched: animation_player.play("stand")
 		crouching = false
 
+	if Input.is_action_pressed("primary_action"):
+		weapon.use()
 	if Input.is_action_pressed("secondary_action"):
 		adsing = true
 	else:
@@ -249,3 +253,17 @@ func ads():
 func head_bob():
 	pass
 
+
+
+func _on_right_hand_child_entered_tree(node: Node) -> void:
+	set_visibility(node)
+
+
+func _on_left_hand_child_entered_tree(node: Node) -> void:
+	set_visibility(node)
+
+
+func set_visibility(node : Node):
+	for i in node.get_children():
+		if i is MeshInstance3D or i is GPUParticles3D:
+			i.layers = 2
