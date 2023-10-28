@@ -12,8 +12,8 @@ const UPPER_BODY_TILT_DEGREES := 27.0
 const JUMP_GRACE_PERIOD := 1.0
 const STEP_LENGHT := 1.5
 
-var ads_stance := Vector3(0.1, -0.1, -0.2)
-var normal_stance := Vector3(0.4, -0.25, -0.6)
+var ads_stance := Vector3(0.0, 0.0, -0.2)
+var normal_stance := Vector3(0.4, -0.1, -0.6)
 var acceleraion := 0.9
 var normal_deceleraion := 0.9
 var slide_deceleraion := 0.001
@@ -66,6 +66,11 @@ var sprinting := false
 var adsing := false
 var weapon : Node3D
 
+
+signal sig_ads
+signal sig_no_ads
+
+
 func _ready():
 	Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
 	weapon = right_hand.get_child(0) # tmp
@@ -99,8 +104,10 @@ func _physics_process(delta):
 		weapon.use()
 	if Input.is_action_pressed("secondary_action"):
 		adsing = true
+		sig_ads.emit()
 	else:
 		adsing = false
+		sig_no_ads.emit()
 
 	if crouching:
 		current_speed = CROUCHING_SPEED
