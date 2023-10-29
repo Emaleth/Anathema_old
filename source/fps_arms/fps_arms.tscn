@@ -1,0 +1,69 @@
+[gd_scene load_steps=3 format=3 uid="uid://clj7ettt1jwp8"]
+
+[ext_resource type="PackedScene" uid="uid://kfsyv0mlcmca" path="res://assets/models/FPSArms.glb" id="1_dk1xq"]
+[ext_resource type="Script" path="res://source/fps_arms/fps_arms.gd" id="2_pkfqw"]
+
+[node name="FPSArms" instance=ExtResource("1_dk1xq")]
+script = ExtResource("2_pkfqw")
+
+[node name="9mm shell" parent="." index="0"]
+visible = false
+
+[node name="_223 shell" parent="." index="1"]
+visible = false
+
+[node name="M9 Bayonet" parent="." index="2"]
+visible = false
+
+[node name="M9 Pistol" parent="." index="3"]
+visible = false
+
+[node name="M9 Pistol Mag" parent="." index="4"]
+visible = false
+
+[node name="M4 Carbine" parent="." index="5"]
+visible = false
+
+[node name="M4 Magazine" parent="." index="6"]
+visible = false
+
+[node name="MagLite" parent="." index="7"]
+visible = false
+
+[node name="Armature" parent="." index="8"]
+transform = Transform3D(-1, -7.54979e-08, 7.54979e-08, 7.54979e-08, 0, 1, -7.54979e-08, 1, 0, 0, 0, 0.5)
+
+[node name="RightArmIK" type="SkeletonIK3D" parent="Armature/Skeleton3D" index="1"]
+root_bone = &"R_colar"
+tip_bone = &"R_handTrack"
+
+[node name="LeftArmIK" type="SkeletonIK3D" parent="Armature/Skeleton3D" index="2"]
+root_bone = &"L_colar"
+tip_bone = &"L_handTrack"
+
+[node name="Cylinder_001" parent="." index="9"]
+visible = false
+
+[node name="_45 shell" parent="." index="10"]
+visible = false
+
+[node name="USP-CT" parent="." index="11"]
+visible = false
+
+[node name="USP-Magazine" parent="." index="12"]
+visible = false
+
+[node name="Scar" parent="." index="13"]
+visible = false
+
+[node name="Scar magazine" parent="." index="14"]
+visible = false
+
+[node name="EOTech" parent="." index="15"]
+visible = false
+
+[node name="Mossberg 500" parent="." index="16"]
+visible = false
+
+[node name="Shotgun shell" parent="." index="17"]
+visible = false

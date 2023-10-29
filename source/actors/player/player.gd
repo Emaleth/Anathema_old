@@ -65,6 +65,7 @@ var tilt := 0.0
 var sprinting := false
 var adsing := false
 var weapon : Node3D
+@onready var fps_arms := $UpperBody/Head/FPSArms
 
 
 signal sig_ads
@@ -74,6 +75,14 @@ signal sig_no_ads
 func _ready():
 	Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
 	weapon = right_hand.get_child(0) # tmp
+	arms_ik_setup()
+
+
+func arms_ik_setup():
+	fps_arms.right_arm_ik.target_node = right_hand.get_path()
+	fps_arms.left_arm_ik.target_node = left_hand.get_path()
+	fps_arms.right_arm_ik.start()
+	fps_arms.left_arm_ik.start()
 
 
 func _physics_process(delta):

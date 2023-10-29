@@ -1,8 +1,9 @@
-[gd_scene load_steps=14 format=3 uid="uid://cruro5nbk2ds"]
+[gd_scene load_steps=15 format=3 uid="uid://cruro5nbk2ds"]
 
 [ext_resource type="Script" path="res://source/actors/player/player.gd" id="1_k454m"]
 [ext_resource type="Material" uid="uid://b5m5fyxd5eph1" path="res://assets/materials/green.tres" id="2_qg5ep"]
 [ext_resource type="AudioStream" uid="uid://d3jm7hucgkrb3" path="res://assets/sounds/jump.wav" id="3_hyc5u"]
+[ext_resource type="PackedScene" uid="uid://clj7ettt1jwp8" path="res://source/fps_arms/fps_arms.tscn" id="5_ddpc4"]
 [ext_resource type="PackedScene" uid="uid://2waksyqjviqx" path="res://source/weapons/blaster_d.tscn" id="5_x72aw"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_sq2cy"]
@@ -313,6 +314,9 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.4, -0.25, -0.6)
 
 [node name="LeftHand" type="Marker3D" parent="UpperBody/Head"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.4, -0.25, -0.6)
+
+[node name="FPSArms" parent="UpperBody/Head" instance=ExtResource("5_ddpc4")]
+visible = false
 
 [connection signal="child_entered_tree" from="UpperBody/Head/RightHand" to="." method="_on_right_hand_child_entered_tree"]
 [connection signal="child_entered_tree" from="UpperBody/Head/LeftHand" to="." method="_on_left_hand_child_entered_tree"]
