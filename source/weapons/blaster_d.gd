@@ -25,15 +25,17 @@ func use():
 	if current_ammo > 0:
 		if rounds_per_second <= rof_time:
 			shot_animation()
+			owner.recoil(Vector2(0.01, 0.01 * sign(randf()*2-1)))
 			rof_time = 0.0
 			current_ammo -= 1
+#			print(current_ammo)
 
 
 func shot_animation():
 	var recoil_animation_time : float = min(rounds_per_second * 0.25, 0.05)
 	var recover_animation_time : float = min(rounds_per_second * 0.75, 0.15)
 	muzzle_flash.show()
-	shot_audio.pitch_scale = randf_range(0.95, 1.05)
+	shot_audio.pitch_scale = randf_range(0.9, 1.1)
 	shot_audio.play()
 	var tween = create_tween()
 	tween.tween_property( self, "position:z", randf_range(0.035, 0.045), recoil_animation_time ).set_trans(Tween.TRANS_SINE)
@@ -48,7 +50,7 @@ func shot_animation():
 	tween.parallel().tween_callback(muzzle_flash.hide)
 
 
-func reaload():
+func reload():
 	reload_audio.play()
 	current_ammo = ammo
 

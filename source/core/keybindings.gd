@@ -9,7 +9,8 @@ var key_bindings : Dictionary = {
 	"tilt_right" : KEY_E,
 	"jump" : KEY_SPACE,
 	"crouch" : KEY_C,
-	"sprint" : KEY_SHIFT
+	"sprint" : KEY_SHIFT,
+	"reload" : KEY_R,
 }
 
 var mouse_bindings : Dictionary = {

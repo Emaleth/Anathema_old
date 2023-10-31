@@ -28,19 +28,6 @@ var last_step_position := Vector2.ZERO
 var weapon_sway_amount := 3.0
 var jumped := false
 
-var footstep_sounds := [
-	preload("res://assets/sounds/footsteps/footstep00.ogg"),
-	preload("res://assets/sounds/footsteps/footstep01.ogg"),
-	preload("res://assets/sounds/footsteps/footstep02.ogg"),
-	preload("res://assets/sounds/footsteps/footstep06.ogg"),
-	preload("res://assets/sounds/footsteps/footstep05.ogg"),
-	preload("res://assets/sounds/footsteps/footstep04.ogg"),
-	preload("res://assets/sounds/footsteps/footstep03.ogg"),
-	preload("res://assets/sounds/footsteps/footstep08.ogg"),
-	preload("res://assets/sounds/footsteps/footstep09.ogg"),
-	preload("res://assets/sounds/footsteps/footstep07.ogg"),
-]
-
 @onready var head := $UpperBody/Head
 @onready var camera := $UpperBody/Head/Camera3D
 @onready var footsteps_audio := $FootstepsAudio
@@ -109,8 +96,11 @@ func _physics_process(delta):
 		if crouched: animation_player.play("stand")
 		crouching = false
 
+	if Input.is_action_just_pressed("reload"):
+		weapon.reload()
 	if Input.is_action_pressed("primary_action"):
 		weapon.use()
+#		recoil_force += Vector2(0.01, 0.01 * sign(randf()*2-1))
 	if Input.is_action_pressed("secondary_action"):
 		adsing = true
 		sig_ads.emit()
@@ -200,7 +190,7 @@ func footsteps():
 	if is_on_floor():
 		var current_position = Vector2(position.x, position.z)
 		if current_position.distance_squared_to(last_step_position) > pow(STEP_LENGHT, 2):
-			footsteps_audio.stream = footstep_sounds.pick_random()
+			footsteps_audio.pitch_scale = randf_range(0.9, 1.1)
 			footsteps_audio.play()
 			last_step_position = Vector2(position.x, position.z)
 
@@ -283,3 +273,11 @@ func set_visibility(node : Node):
 	for i in node.get_children():
 		if i is MeshInstance3D or i is GPUParticles3D:
 			i.layers = 2
+
+
+func recoil(recoil_force : Vector2):
+	rotation.y += recoil_force.y
+	head.rotation.x += recoil_force.x
+	rotation_degrees.y = wrap(rotation_degrees.y, -180, 180)
+	head.rotation_degrees.x = clamp(head.rotation_degrees.x, -90, 90)
+
