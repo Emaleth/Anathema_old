@@ -309,16 +309,20 @@ cull_mask = 2
 [node name="RayCast3D" type="RayCast3D" parent="UpperBody/Head"]
 target_position = Vector3(0, 0, -1000)
 
-[node name="RightHand" type="Marker3D" parent="UpperBody/Head"]
+[node name="Chest" type="Marker3D" parent="UpperBody/Head"]
+
+[node name="RightHand" type="Marker3D" parent="UpperBody/Head/Chest"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.4, -0.25, -0.6)
 
-[node name="blasterD" parent="UpperBody/Head/RightHand" instance=ExtResource("5_x72aw")]
+[node name="blasterD" parent="UpperBody/Head/Chest/RightHand" instance=ExtResource("5_x72aw")]
 
-[node name="LeftHand" type="Marker3D" parent="UpperBody/Head"]
+[node name="LeftHand" type="Marker3D" parent="UpperBody/Head/Chest"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.4, -0.25, -0.6)
 
-[node name="FPSArms" parent="UpperBody/Head" instance=ExtResource("5_ddpc4")]
+[node name="blasterD2" parent="UpperBody/Head/Chest/LeftHand" instance=ExtResource("5_x72aw")]
+
+[node name="FPSArms" parent="UpperBody/Head/Chest" instance=ExtResource("5_ddpc4")]
 visible = false
 
-[connection signal="child_entered_tree" from="UpperBody/Head/RightHand" to="." method="_on_right_hand_child_entered_tree"]
-[connection signal="child_entered_tree" from="UpperBody/Head/LeftHand" to="." method="_on_left_hand_child_entered_tree"]
+[connection signal="child_entered_tree" from="UpperBody/Head/Chest/RightHand" to="." method="_on_right_hand_child_entered_tree"]
+[connection signal="child_entered_tree" from="UpperBody/Head/Chest/LeftHand" to="." method="_on_left_hand_child_entered_tree"]

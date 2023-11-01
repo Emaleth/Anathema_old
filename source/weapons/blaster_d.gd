@@ -17,6 +17,7 @@ func _ready() -> void:
 	rounds_per_second = 60 / rof
 	current_ammo = ammo
 
+
 func _physics_process(delta: float) -> void:
 	rof_time += delta
 
@@ -38,7 +39,10 @@ func shot_animation():
 	shot_audio.pitch_scale = randf_range(0.9, 1.1)
 	shot_audio.play()
 	var tween = create_tween()
-	tween.tween_property( self, "position:z", randf_range(0.035, 0.045), recoil_animation_time ).set_trans(Tween.TRANS_SINE)
+	if not ads:
+		tween.tween_property( self, "position:z", randf_range(0.035, 0.045), recoil_animation_time ).set_trans(Tween.TRANS_SINE)
+	else:
+		tween.tween_property( self, "position:z", 0.0, recoil_animation_time ).set_trans(Tween.TRANS_SINE)
 	tween.parallel().tween_property( self, "position:y", randf_range(0.005, 0.015), recoil_animation_time ).set_trans(Tween.TRANS_SINE)
 	tween.parallel().tween_property( self, "position:x", randf_range(-0.005, 0.005), recoil_animation_time ).set_trans(Tween.TRANS_SINE)
 	tween.parallel().tween_property( self, "rotation:x", deg_to_rad( randf_range(-1.5, -0.5) ), recoil_animation_time ).set_trans(Tween.TRANS_SINE)
@@ -54,3 +58,6 @@ func reload():
 	reload_audio.play()
 	current_ammo = ammo
 
+var ads := false
+func set_ads(on_off : bool):
+	ads = on_off

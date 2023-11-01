@@ -38,11 +38,14 @@ var jumped := false
 @onready var head_raycast := $RayCast3D2
 @onready var feet_raycast := $RayCast3D
 @onready var viewport_size : Vector2 = get_viewport().size
-@onready var right_hand := $UpperBody/Head/RightHand
-@onready var left_hand := $UpperBody/Head/LeftHand
+@onready var right_hand := $UpperBody/Head/Chest/RightHand
+@onready var left_hand := $UpperBody/Head/Chest/LeftHand
 @onready var upper_body := $UpperBody
 @onready var voice_audio := $UpperBody/Head/VoiceAudio
 
+var sin_time := 0.0
+var sin_frequency := 2.0
+var sin_amplitude := 0.0003
 var last_in_air_velocity := 0.0
 var mouse_motion_event_relative_x := 0.0
 var mouse_motion_event_relative_y := 0.0
@@ -52,7 +55,7 @@ var tilt := 0.0
 var sprinting := false
 var adsing := false
 var weapon : Node3D
-@onready var fps_arms := $UpperBody/Head/FPSArms
+@onready var fps_arms := $UpperBody/Head/Chest/FPSArms
 
 
 signal sig_ads
@@ -77,7 +80,7 @@ func _physics_process(delta):
 	get_tilt()
 	check_is_on_floor(delta)
 	rotate_camera()
-	head_bob()
+	arm_swing(delta)
 	rotate_player()
 	ads()
 	tilt_head()
@@ -206,11 +209,12 @@ func weapon_sway():
 	var hand_tilt_z := 0.0
 	var hand_position := Vector3.ZERO
 
-	if abs(mouse_motion_event_relative_y / viewport_size.y) > hand_tilt_deadzone:
-		hand_tilt_x = mouse_motion_event_relative_y
-	if abs(mouse_motion_event_relative_x / viewport_size.x) > hand_tilt_deadzone:
-		hand_tilt_y = mouse_motion_event_relative_x
-		hand_tilt_z = mouse_motion_event_relative_x
+	if not adsing:
+		if abs(mouse_motion_event_relative_y / viewport_size.y) > hand_tilt_deadzone:
+			hand_tilt_x = mouse_motion_event_relative_y
+		if abs(mouse_motion_event_relative_x / viewport_size.x) > hand_tilt_deadzone:
+			hand_tilt_y = mouse_motion_event_relative_x
+			hand_tilt_z = mouse_motion_event_relative_x
 
 	if sprinting:
 		hand_position.x = 65.0
@@ -245,20 +249,28 @@ func tilt_head():
 func tilt_upper_body():
 	upper_body.rotation_degrees.z = lerp(upper_body.rotation_degrees.z, UPPER_BODY_TILT_DEGREES * tilt, 0.1)
 
-
 func ads():
 	if adsing:
+		weapon.set_ads(true)
 		sprinting = false
 		right_hand.position = lerp(right_hand.position, ads_stance, 0.3)
-		left_hand.position = lerp(left_hand.position, ads_stance * Vector3(-1.0, 1.0, 1.0), 0.3)
+#		left_hand.position = lerp(left_hand.position, ads_stance * Vector3(-1.0, 1.0, 1.0), 0.3)
+		left_hand.position = lerp(left_hand.position, normal_stance * Vector3(-1.0, 1.0, 1.0), 0.3)
 	else:
+		weapon.set_ads(false)
 		right_hand.position = lerp(right_hand.position, normal_stance, 0.3)
 		left_hand.position = lerp(left_hand.position, normal_stance * Vector3(-1.0, 1.0, 1.0), 0.3)
 
 
-func head_bob():
-	pass
+@onready var chest := $UpperBody/Head/Chest
+func arm_swing(delta):
+	if not adsing:
+		chest.position.y += cos(sin_time * sin_frequency) * sin_amplitude
+		chest.position.x += sin(sin_time * sin_frequency * 0.5) * sin_amplitude
+	else:
+		chest.position = Vector3.ZERO
 
+	sin_time += delta
 
 
 func _on_right_hand_child_entered_tree(node: Node) -> void:
