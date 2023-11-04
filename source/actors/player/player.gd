@@ -111,7 +111,7 @@ func _physics_process(delta):
 		adsing = false
 		sig_no_ads.emit()
 
-	if crouching:
+	if crouching or sliding:
 		current_speed = CROUCHING_SPEED
 		head.position.y = lerp(head.position.y, CROUCHING_HEAD_HEIGHT, 0.3)
 		standing_collision_shape.set_deferred("disabled", true)
@@ -139,13 +139,20 @@ func _physics_process(delta):
 		animation_player.play("land")
 		jumped = false
 		last_in_air_velocity = 0
-	if direction:
+	if sliding:
+		current_speed = SPRINTING_SPEED
+		slide_timer += delta
+		if slide_timer > slide_max_time:
+			sliding = false
+			slide_timer = 0.0
+		velocity.x = move_toward(velocity.x, 0, slide_deceleraion)
+		velocity.z = move_toward(velocity.z, 0, slide_deceleraion)
+	elif direction:
 		velocity.x = move_toward(velocity.x, direction.x * current_speed, acceleraion)
 		velocity.z = move_toward(velocity.z, direction.z * current_speed, acceleraion)
 	else:
 		if crouching and sprinting:
-			velocity.x = move_toward(velocity.x, 0, slide_deceleraion)
-			velocity.z = move_toward(velocity.z, 0, slide_deceleraion)
+			sliding = true
 		else:
 			velocity.x = move_toward(velocity.x, 0, normal_deceleraion)
 			velocity.z = move_toward(velocity.z, 0, normal_deceleraion)
@@ -229,9 +236,10 @@ func weapon_sway():
 	right_hand.rotation_degrees.y = lerp(right_hand.rotation_degrees.y, sign(hand_tilt_y) * weapon_sway_amount + hand_position.y, 0.1)
 	right_hand.rotation_degrees.z = lerp(right_hand.rotation_degrees.z, sign(hand_tilt_z) * weapon_sway_amount + hand_position.z, 0.3)
 	# LEFT
-	left_hand.rotation_degrees.x = lerp(left_hand.rotation_degrees.x, sign(hand_tilt_x) * weapon_sway_amount + hand_position.x, 0.1)
-	left_hand.rotation_degrees.y = lerp(left_hand.rotation_degrees.y, sign(hand_tilt_y) * weapon_sway_amount + -hand_position.y, 0.1)
-	left_hand.rotation_degrees.z = lerp(left_hand.rotation_degrees.z, sign(hand_tilt_z) * weapon_sway_amount + -hand_position.z, 0.3)
+	if not adsing:
+		left_hand.rotation_degrees.x = lerp(left_hand.rotation_degrees.x, sign(hand_tilt_x) * weapon_sway_amount + hand_position.x, 0.1)
+		left_hand.rotation_degrees.y = lerp(left_hand.rotation_degrees.y, sign(hand_tilt_y) * weapon_sway_amount + -hand_position.y, 0.1)
+		left_hand.rotation_degrees.z = lerp(left_hand.rotation_degrees.z, sign(hand_tilt_z) * weapon_sway_amount + -hand_position.z, 0.3)
 
 
 func rotate_player():
@@ -255,6 +263,14 @@ func ads():
 		sprinting = false
 		right_hand.position = lerp(right_hand.position, ads_stance, 0.3)
 #		left_hand.position = lerp(left_hand.position, ads_stance * Vector3(-1.0, 1.0, 1.0), 0.3)
+		# LEFT
+		var hand_position := Vector3.ZERO
+		hand_position.x = 65.0
+		hand_position.y = 15.0
+		hand_position.y = 15.0
+		left_hand.rotation_degrees.x = lerp(left_hand.rotation_degrees.x, hand_position.x, 0.1)
+		left_hand.rotation_degrees.y = lerp(left_hand.rotation_degrees.y, -hand_position.y, 0.1)
+		left_hand.rotation_degrees.z = lerp(left_hand.rotation_degrees.z, -hand_position.z, 0.3)
 		left_hand.position = lerp(left_hand.position, normal_stance * Vector3(-1.0, 1.0, 1.0), 0.3)
 	else:
 		weapon.set_ads(false)
@@ -293,3 +309,6 @@ func recoil(recoil_force : Vector2):
 	rotation_degrees.y = wrap(rotation_degrees.y, -180, 180)
 	head.rotation_degrees.x = clamp(head.rotation_degrees.x, -90, 90)
 
+var sliding := false
+var slide_timer := 0.0
+var slide_max_time := 3.0
