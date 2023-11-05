@@ -229,7 +229,6 @@ height = 1.8
 
 [node name="Player" type="CharacterBody3D"]
 script = ExtResource("1_k454m")
-crouched = true
 
 [node name="StandingCollisionShape" type="CollisionShape3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.9, 0)
@@ -318,8 +317,6 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.4, -0.25, -0.6)
 
 [node name="LeftHand" type="Marker3D" parent="UpperBody/Head/Chest"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.4, -0.25, -0.6)
-
-[node name="blasterD2" parent="UpperBody/Head/Chest/LeftHand" instance=ExtResource("5_x72aw")]
 
 [node name="FPSArms" parent="UpperBody/Head/Chest" instance=ExtResource("5_ddpc4")]
 visible = false
