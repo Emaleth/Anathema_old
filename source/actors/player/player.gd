@@ -33,7 +33,7 @@ var gravity : float = ProjectSettings.get_setting("physics/3d/default_gravity")
 var last_step_position := Vector2.ZERO
 var weapon_sway_amount := 3.0
 var slide_timer := 0.0
-var slide_max_time := 3.0
+var slide_max_time := 1.0
 
 @onready var head := $UpperBody/Head
 @onready var camera := $UpperBody/Head/Camera3D
@@ -88,7 +88,9 @@ func _physics_process(delta: float) -> void:
 	weapon_sway_and_pose()
 	reset_mouse_motion_event_relative()
 	shoot()
+	check_is_on_floor(delta)
 	move_and_slide()
+	$Label.text = str(motion_state)
 
 
 func shoot():
@@ -120,6 +122,8 @@ func switch_aim_state(_new_state : int):
 func motion_fsm(delta):
 	match motion_state:
 		IDLE:
+			if not is_on_floor():
+				switch_motion_state(FALL)
 			hand_position = Vector3.ZERO
 			tilt_upper_body()
 			if head_raycast.is_colliding():
@@ -129,7 +133,21 @@ func motion_fsm(delta):
 			crouching_collision_shape.set_deferred("disabled", true)
 			velocity.x = move_toward(velocity.x, 0, normal_deceleraion)
 			velocity.z = move_toward(velocity.z, 0, normal_deceleraion)
+			if direction != Vector3.ZERO:
+				switch_motion_state(RUN)
+			if Input.is_action_pressed("jump") and grounded:
+				switch_motion_state(JUMP)
+			if Input.is_action_pressed("crouch"):
+				switch_motion_state(CROUCH)
 		RUN:
+			if Input.is_action_pressed("crouch"):
+				switch_motion_state(CROUCH)
+			if Input.is_action_pressed("jump") and grounded:
+				switch_motion_state(JUMP)
+			if not is_on_floor():
+				switch_motion_state(FALL)
+			if direction == Vector3.ZERO:
+				switch_motion_state(IDLE)
 			current_speed = RUNNING_SPEED
 			hand_position = Vector3.ZERO
 			if head_raycast.is_colliding():
@@ -139,10 +157,10 @@ func motion_fsm(delta):
 			crouching_collision_shape.set_deferred("disabled", true)
 			velocity.x = move_toward(velocity.x, direction.x * current_speed, acceleraion)
 			velocity.z = move_toward(velocity.z, direction.z * current_speed, acceleraion)
+			if Input.is_action_pressed("sprint"):
+				switch_motion_state(SPRINT)
 		JUMP:
 			hand_position = Vector3.ZERO
-			if head_raycast.is_colliding():
-				switch_motion_state(CROUCH)
 			head.position.y = lerp(head.position.y, STANDING_HEAD_HEIGHT, 0.3)
 			standing_collision_shape.set_deferred("disabled", false)
 			crouching_collision_shape.set_deferred("disabled", true)
@@ -151,11 +169,10 @@ func motion_fsm(delta):
 			voice_audio.play()
 			velocity.x = move_toward(velocity.x, direction.x * current_speed, acceleraion)
 			velocity.z = move_toward(velocity.z, direction.z * current_speed, acceleraion)
+			switch_motion_state(FALL)
 		FALL:
 			hand_position = Vector3.ZERO
 			velocity.y -= gravity * delta
-			if head_raycast.is_colliding():
-				switch_motion_state(CROUCH)
 			head.position.y = lerp(head.position.y, STANDING_HEAD_HEIGHT, 0.3)
 			standing_collision_shape.set_deferred("disabled", false)
 			crouching_collision_shape.set_deferred("disabled", true)
@@ -163,7 +180,20 @@ func motion_fsm(delta):
 				last_in_air_velocity = velocity.y
 			velocity.x = move_toward(velocity.x, direction.x * current_speed, acceleraion)
 			velocity.z = move_toward(velocity.z, direction.z * current_speed, acceleraion)
+			if is_on_floor():
+				switch_motion_state(LAND)
 		SPRINT:
+			if Input.is_action_pressed("crouch"):
+				switch_motion_state(SLIDE)
+			if Input.is_action_pressed("jump") and grounded:
+				switch_motion_state(JUMP)
+			if not is_on_floor():
+				switch_motion_state(FALL)
+			if direction == Vector3.ZERO:
+				switch_motion_state(IDLE)
+			else:
+				if not Input.is_action_pressed("sprint"):
+					switch_motion_state(RUN)
 			current_speed = SPRINTING_SPEED
 			hand_position = Vector3(65.0, 15.0, 15.0)
 			if head_raycast.is_colliding():
@@ -174,6 +204,12 @@ func motion_fsm(delta):
 			velocity.x = move_toward(velocity.x, direction.x * current_speed, acceleraion)
 			velocity.z = move_toward(velocity.z, direction.z * current_speed, acceleraion)
 		CROUCH:
+			if Input.is_action_pressed("jump") and grounded:
+				switch_motion_state(JUMP)
+			if not is_on_floor():
+				switch_motion_state(FALL)
+			if not Input.is_action_pressed("crouch") and not head_raycast.is_colliding():
+				switch_motion_state(IDLE)
 			hand_position = Vector3.ZERO
 			tilt_upper_body()
 			current_speed = CROUCHING_SPEED
@@ -183,6 +219,10 @@ func motion_fsm(delta):
 			velocity.x = move_toward(velocity.x, direction.x * current_speed, acceleraion)
 			velocity.z = move_toward(velocity.z, direction.z * current_speed, acceleraion)
 		SLIDE:
+			if Input.is_action_pressed("jump") and grounded:
+				switch_motion_state(JUMP)
+			if not is_on_floor():
+				switch_motion_state(FALL)
 			current_speed = CROUCHING_SPEED
 			head.position.y = lerp(head.position.y, CROUCHING_HEAD_HEIGHT, 0.3)
 			standing_collision_shape.set_deferred("disabled", true)
