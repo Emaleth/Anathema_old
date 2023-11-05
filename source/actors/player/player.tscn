@@ -321,9 +321,5 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.4, -0.25, -0.6)
 [node name="FPSArms" parent="UpperBody/Head/Chest" instance=ExtResource("5_ddpc4")]
 visible = false
 
-[node name="Label" type="Label" parent="."]
-offset_right = 40.0
-offset_bottom = 23.0
-
 [connection signal="child_entered_tree" from="UpperBody/Head/Chest/RightHand" to="." method="_on_right_hand_child_entered_tree"]
 [connection signal="child_entered_tree" from="UpperBody/Head/Chest/LeftHand" to="." method="_on_left_hand_child_entered_tree"]

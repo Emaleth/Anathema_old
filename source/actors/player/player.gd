@@ -1,7 +1,9 @@
 extends CharacterBody3D
 
 enum {IDLE, RUN, JUMP, FALL, SPRINT, CROUCH, SLIDE, LAND}
+const motion_states_array := ["IDLE", "RUN", "JUMP", "FALL", "SPRINT", "CROUCH", "SLIDE", "LAND"]
 enum {HIPFIRE, ADS}
+const aim_states_array := ["HIPFIRE", "ADS"]
 
 const RUNNING_SPEED = 5.0
 const CROUCHING_SPEED = 2.0
@@ -90,7 +92,6 @@ func _physics_process(delta: float) -> void:
 	shoot()
 	check_is_on_floor(delta)
 	move_and_slide()
-	$Label.text = str(motion_state)
 
 
 func shoot():
@@ -110,6 +111,7 @@ func switch_motion_state(_new_state : int):
 		return
 	else:
 		motion_state = _new_state
+		Signals.update_motion_state.emit(motion_states_array[_new_state])
 
 
 func switch_aim_state(_new_state : int):
@@ -117,6 +119,7 @@ func switch_aim_state(_new_state : int):
 		return
 	else:
 		aim_state = _new_state
+		Signals.update_aim_state.emit(aim_states_array[_new_state])
 
 
 func motion_fsm(delta):
@@ -219,6 +222,7 @@ func motion_fsm(delta):
 			velocity.x = move_toward(velocity.x, direction.x * current_speed, acceleraion)
 			velocity.z = move_toward(velocity.z, direction.z * current_speed, acceleraion)
 		SLIDE:
+			hand_position = Vector3.ZERO
 			if Input.is_action_pressed("jump") and grounded:
 				switch_motion_state(JUMP)
 			if not is_on_floor():
@@ -235,6 +239,7 @@ func motion_fsm(delta):
 				switch_motion_state(IDLE)
 				slide_timer = 0.0
 		LAND:
+			hand_position = Vector3.ZERO
 			animation_player.play("land")
 			last_in_air_velocity = 0
 			switch_motion_state(IDLE)

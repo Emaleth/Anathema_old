@@ -21,6 +21,7 @@ config/icon="res://icon.svg"
 DebugMenu="*res://addons/debug_menu/debug_menu.tscn"
 Keybindings="*res://source/core/keybindings.gd"
 Settings="*res://source/core/settings.gd"
+Signals="*res://source/core/signals.gd"
 
 [editor_plugins]
 

@@ -4,7 +4,7 @@
 [ext_resource type="Material" uid="uid://bxjk8g7oqv63i" path="res://assets/materials/light.tres" id="1_iddo6"]
 [ext_resource type="Material" uid="uid://cms78nc73istx" path="res://assets/materials/orange.tres" id="3_5gc0g"]
 [ext_resource type="Environment" uid="uid://c8ahbxm7apnk3" path="res://environment.tres" id="4_w3iq6"]
-[ext_resource type="Texture2D" uid="uid://ck4au80p8sdyc" path="res://assets/crosshairs/crosshair003.png" id="5_mlso6"]
+[ext_resource type="PackedScene" uid="uid://do7naiytuc1cp" path="res://source/user_interface/user_interface.tscn" id="5_e818q"]
 
 [node name="World" type="Node3D"]
 
@@ -52,29 +52,4 @@ transform = Transform3D(1, 0, 0, 0, 0.866025, 0.5, 0, -0.5, 0.866025, 0, 0, 0)
 [node name="WorldEnvironment" type="WorldEnvironment" parent="Environment"]
 environment = ExtResource("4_w3iq6")
 
-[node name="UserInterface" type="Control" parent="."]
-layout_mode = 3
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-size_flags_horizontal = 3
-size_flags_vertical = 3
-
-[node name="MarginContainer" type="MarginContainer" parent="UserInterface"]
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-
-[node name="CenterContainer" type="CenterContainer" parent="UserInterface/MarginContainer"]
-layout_mode = 2
-
-[node name="Crosshair" type="TextureRect" parent="UserInterface/MarginContainer/CenterContainer"]
-custom_minimum_size = Vector2(32, 32)
-layout_mode = 2
-texture = ExtResource("5_mlso6")
-expand_mode = 1
+[node name="UserInterface" parent="." instance=ExtResource("5_e818q")]
