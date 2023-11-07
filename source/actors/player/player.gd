@@ -23,6 +23,8 @@ const ADS_SIN_AMPLITUDE := 0.003
 const ADS_STANCE := Vector3(0.0, 0.0, -0.2)
 const HIPFIRE_STANCE := Vector3(0.4, -0.1, -0.6)
 
+var motion_state_entered := false
+var aim_state_entered := false
 var acceleraion := 0.9
 var normal_deceleraion := 0.9
 var slide_deceleraion := 0.001
@@ -34,8 +36,6 @@ var current_speed := 0.0
 var gravity : float = ProjectSettings.get_setting("physics/3d/default_gravity")
 var last_step_position := Vector2.ZERO
 var weapon_sway_amount := 3.0
-var slide_timer := 0.0
-var slide_max_time := 1.0
 
 @onready var head := $UpperBody/Head
 @onready var camera := $UpperBody/Head/Camera3D
@@ -68,6 +68,8 @@ var motion_state : int
 var aim_state : int
 var hand_position := Vector3.ZERO
 var hand_tilt := Vector3.ZERO
+var slide_start_position := Vector3.ZERO
+var slide_max_distance := 10
 
 
 func _ready():
@@ -110,6 +112,7 @@ func switch_motion_state(_new_state : int):
 	if _new_state == motion_state:
 		return
 	else:
+		motion_state_entered = false
 		motion_state = _new_state
 		Signals.update_motion_state.emit(motion_states_array[_new_state])
 
@@ -118,6 +121,7 @@ func switch_aim_state(_new_state : int):
 	if _new_state == aim_state:
 		return
 	else:
+		aim_state_entered = false
 		aim_state = _new_state
 		Signals.update_aim_state.emit(aim_states_array[_new_state])
 
@@ -125,6 +129,8 @@ func switch_aim_state(_new_state : int):
 func motion_fsm(delta):
 	match motion_state:
 		IDLE:
+			if not motion_state_entered:
+				motion_state_entered = true
 			if not is_on_floor():
 				switch_motion_state(FALL)
 			hand_position = Vector3.ZERO
@@ -143,6 +149,8 @@ func motion_fsm(delta):
 			if Input.is_action_pressed("crouch"):
 				switch_motion_state(CROUCH)
 		RUN:
+			if not motion_state_entered:
+				motion_state_entered = true
 			if Input.is_action_pressed("crouch"):
 				switch_motion_state(CROUCH)
 			if Input.is_action_pressed("jump") and grounded:
@@ -163,6 +171,8 @@ func motion_fsm(delta):
 			if Input.is_action_pressed("sprint"):
 				switch_motion_state(SPRINT)
 		JUMP:
+			if not motion_state_entered:
+				motion_state_entered = true
 			hand_position = Vector3.ZERO
 			head.position.y = lerp(head.position.y, STANDING_HEAD_HEIGHT, 0.3)
 			standing_collision_shape.set_deferred("disabled", false)
@@ -174,6 +184,8 @@ func motion_fsm(delta):
 			velocity.z = move_toward(velocity.z, direction.z * current_speed, acceleraion)
 			switch_motion_state(FALL)
 		FALL:
+			if not motion_state_entered:
+				motion_state_entered = true
 			hand_position = Vector3.ZERO
 			velocity.y -= gravity * delta
 			head.position.y = lerp(head.position.y, STANDING_HEAD_HEIGHT, 0.3)
@@ -186,6 +198,8 @@ func motion_fsm(delta):
 			if is_on_floor():
 				switch_motion_state(LAND)
 		SPRINT:
+			if not motion_state_entered:
+				motion_state_entered = true
 			if Input.is_action_pressed("crouch"):
 				switch_motion_state(SLIDE)
 			if Input.is_action_pressed("jump") and grounded:
@@ -207,6 +221,8 @@ func motion_fsm(delta):
 			velocity.x = move_toward(velocity.x, direction.x * current_speed, acceleraion)
 			velocity.z = move_toward(velocity.z, direction.z * current_speed, acceleraion)
 		CROUCH:
+			if not motion_state_entered:
+				motion_state_entered = true
 			if Input.is_action_pressed("jump") and grounded:
 				switch_motion_state(JUMP)
 			if not is_on_floor():
@@ -222,6 +238,9 @@ func motion_fsm(delta):
 			velocity.x = move_toward(velocity.x, direction.x * current_speed, acceleraion)
 			velocity.z = move_toward(velocity.z, direction.z * current_speed, acceleraion)
 		SLIDE:
+			if not motion_state_entered:
+				slide_start_position = position
+				motion_state_entered = true
 			hand_position = Vector3.ZERO
 			if Input.is_action_pressed("jump") and grounded:
 				switch_motion_state(JUMP)
@@ -234,11 +253,11 @@ func motion_fsm(delta):
 			current_speed = SPRINTING_SPEED
 			velocity.x = move_toward(velocity.x, 0, slide_deceleraion)
 			velocity.z = move_toward(velocity.z, 0, slide_deceleraion)
-			slide_timer += delta
-			if slide_timer > slide_max_time:
+			if slide_start_position.distance_squared_to(position) > pow(slide_max_distance, 2):
 				switch_motion_state(IDLE)
-				slide_timer = 0.0
 		LAND:
+			if not motion_state_entered:
+				motion_state_entered = true
 			hand_position = Vector3.ZERO
 			animation_player.play("land")
 			last_in_air_velocity = 0
@@ -248,12 +267,16 @@ func motion_fsm(delta):
 func aim_fsm(delta):
 	match aim_state:
 		HIPFIRE:
+			if not aim_state_entered:
+				aim_state_entered = true
 			sin_amplitude = HIPFIRE_SIN_AMPLITUDE
 			sin_frequency = HIPFIRE_SIN_FREQUENCY
 			hipfire_mode()
 			get_hand_tilt()
 			hipfire_arm_swing(delta)
 		ADS:
+			if not aim_state_entered:
+				aim_state_entered = true
 			if motion_state == SPRINT:
 				switch_motion_state(RUN)
 			sin_amplitude = ADS_SIN_AMPLITUDE
