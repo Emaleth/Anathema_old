@@ -3,6 +3,7 @@ extends Node3D
 @export var ammo : int = 30
 @export var rof := 720.0 # per minute
 
+var ads := false
 var rof_time := 0.0
 var current_ammo : int = 0
 var rounds_per_second : float = 0.0
@@ -16,6 +17,10 @@ func _ready() -> void:
 	muzzle_flash.visible = false
 	rounds_per_second = 60 / rof
 	current_ammo = ammo
+	Signals.secondary_action.connect(ads_mode)
+	Signals.reload.connect(reload)
+	Signals.primary_action.connect(use)
+	get_tree().create_timer(0.1).timeout.connect(emit_initial_signals)
 
 
 func _physics_process(delta: float) -> void:
@@ -29,7 +34,7 @@ func use():
 			owner.recoil(Vector2(0.01, 0.01 * sign(randf()*2-1)))
 			rof_time = 0.0
 			current_ammo -= 1
-#			print(current_ammo)
+			Signals.update_current_ammo.emit(current_ammo)
 
 
 func shot_animation():
@@ -57,7 +62,13 @@ func shot_animation():
 func reload():
 	reload_audio.play()
 	current_ammo = ammo
+	Signals.update_current_ammo.emit(current_ammo)
 
-var ads := false
-func set_ads(on_off : bool):
-	ads = on_off
+
+func ads_mode(value : bool):
+	ads = value
+
+
+func emit_initial_signals():
+	Signals.update_max_ammo.emit(ammo)
+	Signals.update_current_ammo.emit(current_ammo)

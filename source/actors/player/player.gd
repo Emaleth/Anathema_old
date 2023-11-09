@@ -77,6 +77,7 @@ func _ready():
 	arms_ik_setup()
 	switch_motion_state(IDLE)
 	switch_aim_state(HIPFIRE)
+	get_tree().create_timer(0.1).timeout.connect(emit_initial_signals)
 
 
 func _physics_process(delta: float) -> void:
@@ -97,7 +98,7 @@ func _physics_process(delta: float) -> void:
 
 func shoot():
 	if Input.is_action_pressed("primary_action"):
-		weapon.use()
+		Signals.primary_action.emit()
 
 
 func arms_ik_setup():
@@ -278,6 +279,7 @@ func aim_fsm(delta):
 			hipfire_mode()
 			get_hand_tilt()
 			hipfire_arm_swing(delta)
+#			Signals.ads_mode.emit(false)
 		ADS:
 			if not aim_state_entered:
 				sin_amplitude = ADS_SIN_AMPLITUDE
@@ -287,6 +289,7 @@ func aim_fsm(delta):
 				switch_motion_state(RUN)
 			ads_mode()
 			ads_arm_swing(delta)
+#			Signals.ads_mode.emit(true)
 
 
 func hipfire_arm_swing(delta):
@@ -312,12 +315,10 @@ func rotate_player():
 
 
 func ads_mode():
-	weapon.set_ads(true)
 	right_hand.position = lerp(right_hand.position, ADS_STANCE, 0.3)
 
 
 func hipfire_mode():
-	weapon.set_ads(false)
 	right_hand.position = lerp(right_hand.position, HIPFIRE_STANCE, 0.3)
 
 
@@ -355,11 +356,13 @@ func _input(event):
 		mouse_motion_event_relative_y = event.relative.y
 
 	if Input.is_action_just_pressed("reload"):
-		weapon.reload()
+		Signals.reload.emit()
 	if Input.is_action_just_pressed("secondary_action"):
 		switch_aim_state(ADS)
+		Signals.secondary_action.emit(true)
 	if Input.is_action_just_released("secondary_action"):
 		switch_aim_state(HIPFIRE)
+		Signals.secondary_action.emit(false)
 
 
 func get_direction():
@@ -434,3 +437,8 @@ func land_animation():
 
 	tween.tween_property( camera, "position:y", 0.0, 0.2 ).set_trans(Tween.TRANS_LINEAR)
 	tween.parallel().tween_property( camera, "rotation:x", 0.0, 0.2 ).set_trans(Tween.TRANS_LINEAR)
+
+
+func emit_initial_signals():
+	Signals.update_motion_state.emit(motion_states_array[motion_state])
+	Signals.update_aim_state.emit(aim_states_array[aim_state])

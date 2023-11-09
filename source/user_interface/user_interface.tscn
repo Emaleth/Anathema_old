@@ -47,3 +47,12 @@ text = "text"
 
 [node name="AimState" type="Label" parent="MarginContainer/DebugPanel/VBoxContainer"]
 layout_mode = 2
+
+[node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer/DebugPanel/VBoxContainer"]
+layout_mode = 2
+
+[node name="CurrentAmmo" type="Label" parent="MarginContainer/DebugPanel/VBoxContainer/HBoxContainer"]
+layout_mode = 2
+
+[node name="MaxAmmo" type="Label" parent="MarginContainer/DebugPanel/VBoxContainer/HBoxContainer"]
+layout_mode = 2
