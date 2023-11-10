@@ -48,11 +48,20 @@ text = "text"
 [node name="AimState" type="Label" parent="MarginContainer/DebugPanel/VBoxContainer"]
 layout_mode = 2
 
-[node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer/DebugPanel/VBoxContainer"]
+[node name="Ammo" type="PanelContainer" parent="MarginContainer"]
+layout_mode = 2
+size_flags_horizontal = 8
+size_flags_vertical = 8
+
+[node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer/Ammo"]
 layout_mode = 2
 
-[node name="CurrentAmmo" type="Label" parent="MarginContainer/DebugPanel/VBoxContainer/HBoxContainer"]
+[node name="Current" type="Label" parent="MarginContainer/Ammo/HBoxContainer"]
 layout_mode = 2
 
-[node name="MaxAmmo" type="Label" parent="MarginContainer/DebugPanel/VBoxContainer/HBoxContainer"]
+[node name="Dash" type="Label" parent="MarginContainer/Ammo/HBoxContainer"]
+layout_mode = 2
+text = "/"
+
+[node name="Max" type="Label" parent="MarginContainer/Ammo/HBoxContainer"]
 layout_mode = 2

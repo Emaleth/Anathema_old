@@ -98,6 +98,8 @@ func _physics_process(delta: float) -> void:
 
 func shoot():
 	if Input.is_action_pressed("primary_action"):
+		if motion_state == SPRINT:
+			switch_motion_state(RUN)
 		Signals.primary_action.emit()
 
 
@@ -257,7 +259,7 @@ func motion_fsm(delta):
 			head.position.y = lerp(head.position.y, SLIDING_HEAD_HEIGHT, 0.3)
 			velocity.x = move_toward(velocity.x, 0, slide_deceleraion)
 			velocity.z = move_toward(velocity.z, 0, slide_deceleraion)
-			if slide_start_position.distance_squared_to(position) > pow(slide_max_distance, 2):
+			if slide_start_position.distance_squared_to(position) > pow(slide_max_distance, 2) or is_on_wall():
 				switch_motion_state(IDLE)
 		LAND:
 			if not motion_state_entered:
@@ -279,7 +281,6 @@ func aim_fsm(delta):
 			hipfire_mode()
 			get_hand_tilt()
 			hipfire_arm_swing(delta)
-#			Signals.ads_mode.emit(false)
 		ADS:
 			if not aim_state_entered:
 				sin_amplitude = ADS_SIN_AMPLITUDE
@@ -289,7 +290,6 @@ func aim_fsm(delta):
 				switch_motion_state(RUN)
 			ads_mode()
 			ads_arm_swing(delta)
-#			Signals.ads_mode.emit(true)
 
 
 func hipfire_arm_swing(delta):

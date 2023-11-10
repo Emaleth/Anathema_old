@@ -34,6 +34,6 @@ func _process(_delta):
 
 func process_audion():
 	if not queue.is_empty() and not available.is_empty():
-		available[0].stream = load(queue.pop_front())
+		available[0].stream = queue.pop_front()
 		available[0].play()
 		available.pop_front()
