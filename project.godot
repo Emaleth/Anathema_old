@@ -22,6 +22,7 @@ DebugMenu="*res://addons/debug_menu/debug_menu.tscn"
 Keybindings="*res://source/core/keybindings.gd"
 Settings="*res://source/core/settings.gd"
 Signals="*res://source/core/signals.gd"
+AudioManager="*res://source/managers/audio_manager.gd"
 
 [editor_plugins]
 
