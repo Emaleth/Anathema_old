@@ -35,7 +35,7 @@ func use():
 			rof_time = 0.0
 			current_ammo -= 1
 			Signals.update_current_ammo.emit(current_ammo)
-			BulletManager.create_bullet(owner, $MuzzleMarker.transform)
+			BulletManager.create_bullet(owner, $MuzzleMarker.global_transform)
 	else:
 		reload()
 
