@@ -2,10 +2,10 @@ extends Node3D
 
 var bullet_index : Dictionary = {
 	"default" : {
-		"speed" : 100,
+		"speed" : 1, # 800 is avarage
 		"container" : {},
 		"multimesh" : null,
-		"mesh" : null
+		"mesh" : preload("res://assets/models/bullets/untitled.obj")
  	}
 }
 
@@ -18,11 +18,15 @@ func configure_multimeshes():
 	for type in bullet_index:
 		var multi_mesh_instance = MultiMeshInstance3D.new()
 		multi_mesh_instance.multimesh = MultiMesh.new()
+		multi_mesh_instance.multimesh.transform_format = MultiMesh.TRANSFORM_3D
+		multi_mesh_instance.multimesh.mesh = bullet_index[type]["mesh"]
 		bullet_index[type]["multimesh"] = multi_mesh_instance
+		add_child(multi_mesh_instance)
 
 
-func _physics_process(delta: float) -> void:
-	process_bullets(delta)
+func _physics_process(_delta: float) -> void:
+	process_bullet_ray()
+	process_bullet_multimesh()
 
 
 func create_bullet(shooter : CharacterBody3D, initial_transform : Transform3D, bullet_id : String = "default") -> void:
@@ -32,16 +36,13 @@ func create_bullet(shooter : CharacterBody3D, initial_transform : Transform3D, b
 		"transform" : initial_transform,
 		"owner" : shooter
 	}
-#	print(bullet_index[bullet_id]["container"].size())
 
 
-func process_bullets(delta) -> void:
+func process_bullet_ray() -> void:
 	for type in bullet_index:
-		bullet_index[type]["multimesh"].multimesh.instance_count = bullet_index[type]["container"].size()
 		for uid in bullet_index[type]["container"]:
 			var current_transform : Transform3D = bullet_index[type]["container"][uid]["transform"]
-#			var next_transform = Transform3D(bullet_index[type]["container"][uid]["transform"].basis, bullet_index[type]["container"][uid]["transform"].origin + (Vector3.FORWARD * bullet_index[type]["container"][uid]["transform"].basis.inverse() * (Time.get_unix_time_from_system() - bullet_index[type]["container"][uid]["time"]) * bullet_index[type]["speed"]))
-			var next_transform = bullet_index[type]["container"][uid]["transform"].transposed(
+			var next_transform = bullet_index[type]["container"][uid]["transform"].translated(
 					Vector3.FORWARD
 					 * bullet_index[type]["container"][uid]["transform"].basis.inverse()
 					 * (Time.get_unix_time_from_system() - bullet_index[type]["container"][uid]["time"])
@@ -57,12 +58,17 @@ func process_bullets(delta) -> void:
 				var result = space_state.intersect_ray(query)
 				if result:
 					destroy_bullet(type, uid, result.position, result.collider)
-#		for i in bullet_index[type]["container"].size():
-#			bullet_index[type]["multimesh"].multimesh
 
 
-func destroy_bullet(bullet_id, bullet_uid, _impact_position, impacted_node):
+func process_bullet_multimesh() -> void:
+	for type in bullet_index:
+		var index := 0
+		bullet_index[type]["multimesh"].multimesh.instance_count = bullet_index[type]["container"].size()
+		for i in bullet_index[type]["container"]:
+			bullet_index[type]["multimesh"].multimesh.set_instance_transform(index, bullet_index[type]["container"][i]["transform"])
+			index += 1
+
+
+func destroy_bullet(bullet_id, bullet_uid, _impact_position, _impacted_node):
 	bullet_index[bullet_id]["container"].erase(bullet_uid)
-#	print(bullet_uid)
-	print(impacted_node)
-#	if impacted_node: impacted_node.queue_free()
+
