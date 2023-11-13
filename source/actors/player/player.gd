@@ -53,6 +53,7 @@ var weapon_sway_amount := 3.0
 @onready var upper_body := $UpperBody
 @onready var voice_audio := $UpperBody/Head/VoiceAudio
 @onready var fps_arms := $UpperBody/Head/Chest/FPSArms
+@onready var camera_ray := $UpperBody/Head/RayCast3D
 
 var sin_time := 0.0
 var sin_frequency := 0.0
@@ -278,6 +279,7 @@ func aim_fsm(delta):
 				sin_amplitude = HIPFIRE_SIN_AMPLITUDE
 				sin_frequency = HIPFIRE_SIN_FREQUENCY
 				aim_state_entered = true
+			right_hand.look_at(camera_ray.get_collision_point()) # make it lerped
 			hipfire_mode()
 			get_hand_tilt()
 			hipfire_arm_swing(delta)
