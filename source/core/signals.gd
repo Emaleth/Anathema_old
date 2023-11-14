@@ -8,3 +8,4 @@ signal update_max_ammo
 signal primary_action
 signal secondary_action
 signal reload
+signal update_camera_ray_collision_point

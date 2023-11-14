@@ -63,7 +63,6 @@ var mouse_motion_event_relative_x := 0.0
 var mouse_motion_event_relative_y := 0.0
 var direction := Vector3.ZERO
 var tilt := 0.0
-var weapon : Node3D
 var motion_state : int
 var aim_state : int
 var hand_position := Vector3.ZERO
@@ -74,7 +73,6 @@ var slide_max_distance := 10
 
 func _ready():
 	Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
-	weapon = right_hand.get_child(0) # tmp
 	arms_ik_setup()
 	switch_motion_state(IDLE)
 	switch_aim_state(HIPFIRE)
@@ -279,7 +277,8 @@ func aim_fsm(delta):
 				sin_amplitude = HIPFIRE_SIN_AMPLITUDE
 				sin_frequency = HIPFIRE_SIN_FREQUENCY
 				aim_state_entered = true
-			right_hand.look_at(camera_ray.get_collision_point()) # make it lerped
+			var camera_ray_collision_point = camera_ray.get_collision_point()
+			Signals.update_camera_ray_collision_point.emit(camera_ray_collision_point)
 			hipfire_mode()
 			get_hand_tilt()
 			hipfire_arm_swing(delta)

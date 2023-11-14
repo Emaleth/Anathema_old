@@ -11,6 +11,7 @@ var rounds_per_second : float = 0.0
 @onready var muzzle_flash := $MuzzleFlash
 @onready var shot_audio := $ShotSound
 @onready var reload_audio := $ReloadSound
+@onready var muzzle_marker := $MuzzleMarker
 
 
 func _ready() -> void:
@@ -20,6 +21,7 @@ func _ready() -> void:
 	Signals.secondary_action.connect(ads_mode)
 	Signals.reload.connect(reload)
 	Signals.primary_action.connect(use)
+	Signals.update_camera_ray_collision_point.connect(adjust_muzzle)
 	get_tree().create_timer(0.1).timeout.connect(emit_initial_signals)
 
 
@@ -76,3 +78,7 @@ func ads_mode(value : bool):
 func emit_initial_signals():
 	Signals.update_max_ammo.emit(ammo)
 	Signals.update_current_ammo.emit(current_ammo)
+
+
+func adjust_muzzle(target_point : Vector3):
+	muzzle_marker.look_at(target_point)

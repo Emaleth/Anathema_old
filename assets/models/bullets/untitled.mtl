@@ -1,10 +1,10 @@
-# Blender 3.6.5 MTL File: 'None'
+# Blender 3.6.5 MTL File: 'untitled.blend'
 # www.blender.org
 
-newmtl yellow
+newmtl red
 Ns 0.000000
 Ka 1.000000 1.000000 1.000000
-Kd 0.991102 0.564712 0.039546
+Kd 1.000000 0.000000 0.005169
 Ks 0.500000 0.500000 0.500000
 Ke 0.000000 0.000000 0.000000
 Ni 1.500000

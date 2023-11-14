@@ -2,7 +2,7 @@ extends Node3D
 
 var bullet_index : Dictionary = {
 	"default" : {
-		"speed" : 1, # 800 is avarage
+		"speed" : 10, # 800 is avarage
 		"container" : {},
 		"multimesh" : null,
 		"mesh" : preload("res://assets/models/bullets/untitled.obj")
@@ -54,7 +54,12 @@ func process_bullet_ray() -> void:
 				return
 			else:
 				var space_state = get_world_3d().direct_space_state
-				var query = PhysicsRayQueryParameters3D.create(current_transform.origin, next_transform.origin)
+				var query = PhysicsRayQueryParameters3D.create(
+						current_transform.origin,
+						next_transform.origin,
+						0xFFFFFFFF,
+						[bullet_index[type]["container"][uid]["owner"].get_rid()]
+						)
 				var result = space_state.intersect_ray(query)
 				if result:
 					destroy_bullet(type, uid, result.position, result.collider)
