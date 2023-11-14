@@ -86,6 +86,7 @@ func _physics_process(delta: float) -> void:
 	tilt_head()
 	motion_fsm(delta)
 	aim_fsm(delta)
+	emit_camera_ray_signal()
 	rotate_camera()
 	rotate_player()
 	weapon_sway_and_pose()
@@ -93,6 +94,12 @@ func _physics_process(delta: float) -> void:
 	shoot()
 	check_is_on_floor(delta)
 	move_and_slide()
+
+
+func emit_camera_ray_signal():
+	var next_transform = head.transform.translated(Vector3.FORWARD * head.basis.inverse() * 1000)
+	var camera_ray_collision_point = camera_ray.get_collision_point() if camera_ray.get_collider() else (Vector3.FORWARD * 1000)
+	Signals.update_camera_ray_collision_point.emit(camera_ray_collision_point)
 
 
 func shoot():
@@ -277,8 +284,6 @@ func aim_fsm(delta):
 				sin_amplitude = HIPFIRE_SIN_AMPLITUDE
 				sin_frequency = HIPFIRE_SIN_FREQUENCY
 				aim_state_entered = true
-			var camera_ray_collision_point = camera_ray.get_collision_point()
-			Signals.update_camera_ray_collision_point.emit(camera_ray_collision_point)
 			hipfire_mode()
 			get_hand_tilt()
 			hipfire_arm_swing(delta)
