@@ -2,7 +2,7 @@
 
 [ext_resource type="PackedScene" uid="uid://cruro5nbk2ds" path="res://source/actors/player/player.tscn" id="1_xtea1"]
 [ext_resource type="Material" uid="uid://hyvyqqja2dwt" path="res://assets/materials/slate_driveway_1k.tres" id="2_eaeeo"]
-[ext_resource type="Material" uid="uid://cms78nc73istx" path="res://assets/materials/orange.tres" id="3_jwrln"]
+[ext_resource type="Material" uid="uid://cemxpwk7d3b3e" path="res://assets/materials/rock_wall_09_1k.tres" id="2_qnehf"]
 [ext_resource type="Environment" uid="uid://c8ahbxm7apnk3" path="res://environment.tres" id="4_5iq55"]
 [ext_resource type="PackedScene" uid="uid://do7naiytuc1cp" path="res://source/user_interface/user_interface.tscn" id="5_vpxmy"]
 
@@ -15,7 +15,7 @@
 [node name="Terrain" type="Node3D" parent="."]
 
 [node name="Walls" type="CSGBox3D" parent="Terrain"]
-material_override = ExtResource("2_eaeeo")
+material_override = ExtResource("2_qnehf")
 use_collision = true
 size = Vector3(100, 5, 100)
 metadata/_edit_lock_ = true
@@ -28,24 +28,24 @@ metadata/_edit_lock_ = true
 
 [node name="CSGBox3D" type="CSGBox3D" parent="Terrain"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, -3.97484)
-material_override = ExtResource("3_jwrln")
+material_override = ExtResource("2_qnehf")
 use_collision = true
 
 [node name="CSGBox3D2" type="CSGBox3D" parent="Terrain"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.34, 1.6, -1.553)
-material_override = ExtResource("3_jwrln")
+material_override = ExtResource("2_qnehf")
 use_collision = true
 size = Vector3(3, 0.1, 3)
 
 [node name="CSGBox3D3" type="CSGBox3D" parent="Terrain"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6.24557, 2.56157, 0.620326)
-material_override = ExtResource("3_jwrln")
+material_override = ExtResource("2_qnehf")
 use_collision = true
 size = Vector3(3, 0.1, 3)
 
 [node name="CSGBox3D4" type="CSGBox3D" parent="Terrain"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.59136, 3.23854, 1.90305)
-material_override = ExtResource("3_jwrln")
+material_override = ExtResource("2_qnehf")
 use_collision = true
 size = Vector3(3, 0.1, 3)
 
