@@ -7,11 +7,9 @@
 [ext_resource type="PackedScene" uid="uid://2waksyqjviqx" path="res://source/weapons/blaster_d.tscn" id="5_x72aw"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_sq2cy"]
-radius = 0.3
 height = 1.8
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_ej0bd"]
-radius = 0.3
 height = 1.25
 
 [node name="Player" type="CharacterBody3D"]
