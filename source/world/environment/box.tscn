@@ -1,12 +1,14 @@
-[gd_scene load_steps=4 format=3 uid="uid://0b2vflaw6ptc"]
+[gd_scene load_steps=5 format=3 uid="uid://0b2vflaw6ptc"]
 
 [ext_resource type="PackedScene" uid="uid://c31tnse2w1ffc" path="res://assets/models/environment/box.glb" id="1_ax8kb"]
 [ext_resource type="Material" uid="uid://bsgqkgek6vuw2" path="res://assets/materials/rough_wood_1k.tres" id="2_edtx5"]
+[ext_resource type="Script" path="res://source/world/environment/box.gd" id="2_p5fqf"]
 
 [sub_resource type="ConcavePolygonShape3D" id="ConcavePolygonShape3D_2lsgs"]
 data = PackedVector3Array(0.5, 1, -0.5, -0.5, 1, 0.5, -0.5, 1, -0.5, 0.5, 1, -0.5, 0.5, 1, 0.5, -0.5, 1, 0.5, 0.5, 0, 0.5, -0.5, 1, 0.5, 0.5, 1, 0.5, 0.5, 0, 0.5, -0.5, 0, 0.5, -0.5, 1, 0.5, -0.5, 0, 0.5, -0.5, 1, -0.5, -0.5, 1, 0.5, -0.5, 0, 0.5, -0.5, 0, -0.5, -0.5, 1, -0.5, -0.5, 0, -0.5, 0.5, 0, 0.5, 0.5, 0, -0.5, -0.5, 0, -0.5, -0.5, 0, 0.5, 0.5, 0, 0.5, 0.5, 0, -0.5, 0.5, 1, 0.5, 0.5, 1, -0.5, 0.5, 0, -0.5, 0.5, 0, 0.5, 0.5, 1, 0.5, -0.5, 0, -0.5, 0.5, 1, -0.5, -0.5, 1, -0.5, -0.5, 0, -0.5, 0.5, 0, -0.5, 0.5, 1, -0.5)
 
 [node name="box" instance=ExtResource("1_ax8kb")]
+script = ExtResource("2_p5fqf")
 
 [node name="Cube" parent="." index="0"]
 material_override = ExtResource("2_edtx5")

@@ -31,12 +31,13 @@ func _physics_process(_delta: float) -> void:
 	process_bullet_multimesh()
 
 
-func create_bullet(shooter : CharacterBody3D, initial_transform : Transform3D, bullet_id : String = "default") -> void:
+func create_bullet(shooter : CharacterBody3D, initial_transform : Transform3D, damage : float, bullet_id : String = "default") -> void:
 	var bullet_uid = hash(randi())
 	bullet_index[bullet_id]["container"][bullet_uid] = {
 		"time" : Time.get_unix_time_from_system(),
 		"transform" : initial_transform,
-		"owner" : shooter
+		"owner" : shooter,
+		"damage" : damage
 	}
 
 
@@ -76,6 +77,9 @@ func process_bullet_multimesh() -> void:
 			index += 1
 
 
-func destroy_bullet(bullet_id, bullet_uid, _impact_position, _impacted_node):
+func destroy_bullet(bullet_id, bullet_uid, _impact_position, impacted_node):
+	if impacted_node.has_method("damage"):
+		impacted_node.damage(bullet_index[bullet_id]["container"][bullet_uid]["damage"])
+	if impacted_node.owner.has_method("damage"):
+		impacted_node.owner.damage(bullet_index[bullet_id]["container"][bullet_uid]["damage"])
 	bullet_index[bullet_id]["container"].erase(bullet_uid)
-

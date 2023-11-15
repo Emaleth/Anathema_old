@@ -12,10 +12,12 @@ var rounds_per_second : float = 0.0
 @onready var shot_audio := $ShotSound
 @onready var reload_audio := $ReloadSound
 @onready var muzzle_marker := $MuzzleMarker
+@onready var muzzle_flash_light := $SpotLight3D
 
 
 func _ready() -> void:
 	muzzle_flash.visible = false
+	muzzle_flash_light.visible = false
 	rounds_per_second = 60 / rof
 	current_ammo = ammo
 	Signals.secondary_action.connect(ads_mode)
@@ -37,7 +39,7 @@ func use():
 			rof_time = 0.0
 			current_ammo -= 1
 			Signals.update_current_ammo.emit(current_ammo)
-			BulletManager.create_bullet(owner, $MuzzleMarker.global_transform)
+			BulletManager.create_bullet(owner, $MuzzleMarker.global_transform, 1.0)
 	else:
 		reload()
 
@@ -46,6 +48,7 @@ func shot_animation():
 	var recoil_animation_time : float = min(rounds_per_second * 0.25, 0.05)
 	var recover_animation_time : float = min(rounds_per_second * 0.75, 0.15)
 	muzzle_flash.show()
+	muzzle_flash_light.show()
 	shot_audio.pitch_scale = randf_range(0.9, 1.1)
 	shot_audio.play()
 	var tween = create_tween()
@@ -65,6 +68,7 @@ func shot_animation():
 	tween.parallel().tween_property( self, "position:x", 0.0, recover_animation_time ).set_trans(Tween.TRANS_SINE)
 	tween.parallel().tween_property( self, "rotation:x", 0.0, recover_animation_time ).set_trans(Tween.TRANS_SINE)
 	tween.parallel().tween_callback(muzzle_flash.hide)
+	tween.parallel().tween_callback(muzzle_flash_light.hide)
 
 
 func reload():

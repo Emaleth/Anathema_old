@@ -22,7 +22,7 @@ const HIPFIRE_SIN_AMPLITUDE := 0.03
 const ADS_SIN_FREQUENCY := 1.0
 const ADS_SIN_AMPLITUDE := 0.003
 const ADS_STANCE := Vector3(0.0, 0.0, -0.2)
-const HIPFIRE_STANCE := Vector3(0.4, -0.1, -0.6)
+const HIPFIRE_STANCE := Vector3(0.25, -0.1, -0.6)
 
 var motion_state_entered := false
 var aim_state_entered := false
@@ -49,6 +49,7 @@ var weapon_sway_amount := 3.0
 @onready var feet_raycast := $RayCast3D
 @onready var viewport_size : Vector2 = get_viewport().size
 @onready var right_hand := $UpperBody/Head/Chest/RightHand
+@onready var right_weapon_pivot := $UpperBody/Head/Chest/RightHand/WeaponPivot
 @onready var left_hand := $UpperBody/Head/Chest/LeftHand
 @onready var upper_body := $UpperBody
 @onready var voice_audio := $UpperBody/Head/VoiceAudio
@@ -85,8 +86,8 @@ func _physics_process(delta: float) -> void:
 	get_tilt()
 	tilt_head()
 	motion_fsm(delta)
-	aim_fsm(delta)
-	emit_camera_ray_signal()
+	aim_fsm()
+	arm_swing(delta)
 	rotate_camera()
 	rotate_player()
 	weapon_sway_and_pose()
@@ -106,6 +107,7 @@ func shoot():
 	if Input.is_action_pressed("primary_action"):
 		if motion_state == SPRINT:
 			switch_motion_state(RUN)
+		emit_camera_ray_signal()
 		Signals.primary_action.emit()
 
 
@@ -277,7 +279,7 @@ func motion_fsm(delta):
 			switch_motion_state(IDLE)
 
 
-func aim_fsm(delta):
+func aim_fsm():
 	match aim_state:
 		HIPFIRE:
 			if not aim_state_entered:
@@ -286,7 +288,6 @@ func aim_fsm(delta):
 				aim_state_entered = true
 			hipfire_mode()
 			get_hand_tilt()
-			hipfire_arm_swing(delta)
 		ADS:
 			if not aim_state_entered:
 				sin_amplitude = ADS_SIN_AMPLITUDE
@@ -295,16 +296,9 @@ func aim_fsm(delta):
 			if motion_state == SPRINT:
 				switch_motion_state(RUN)
 			ads_mode()
-			ads_arm_swing(delta)
 
 
-func hipfire_arm_swing(delta):
-	chest.position.y = cos(sin_time * sin_frequency) * sin_amplitude
-	chest.position.x = sin(sin_time * sin_frequency * 0.5) * sin_amplitude
-	sin_time += delta
-
-
-func ads_arm_swing(delta):
+func arm_swing(delta):
 	chest.position.y = cos(sin_time * sin_frequency) * sin_amplitude
 	chest.position.x = sin(sin_time * sin_frequency * 0.5) * sin_amplitude
 	sin_time += delta
@@ -321,11 +315,11 @@ func rotate_player():
 
 
 func ads_mode():
-	right_hand.position = lerp(right_hand.position, ADS_STANCE, 0.3)
+	right_hand.position = lerp(right_hand.position, ADS_STANCE, 0.5)
 
 
 func hipfire_mode():
-	right_hand.position = lerp(right_hand.position, HIPFIRE_STANCE, 0.3)
+	right_hand.position = lerp(right_hand.position, HIPFIRE_STANCE, 0.5)
 
 
 func get_hand_tilt():
@@ -337,9 +331,13 @@ func get_hand_tilt():
 
 
 func weapon_sway_and_pose():
-	right_hand.rotation_degrees.x = lerp(right_hand.rotation_degrees.x, sign(hand_tilt.x) * weapon_sway_amount + hand_position.x, 0.1)
-	right_hand.rotation_degrees.y = lerp(right_hand.rotation_degrees.y, sign(hand_tilt.y) * weapon_sway_amount + hand_position.y, 0.1)
-	right_hand.rotation_degrees.z = lerp(right_hand.rotation_degrees.z, sign(hand_tilt.z) * weapon_sway_amount + hand_position.z, 0.3)
+	right_hand.rotation_degrees.x = lerp(right_hand.rotation_degrees.x, hand_position.x, 0.3)
+	right_hand.rotation_degrees.y = lerp(right_hand.rotation_degrees.y, hand_position.y, 0.3)
+	right_hand.rotation_degrees.z = lerp(right_hand.rotation_degrees.z, hand_position.z, 0.3)
+
+	right_weapon_pivot.rotation_degrees.x = lerp(right_weapon_pivot.rotation_degrees.x, sign(hand_tilt.x) * weapon_sway_amount, 0.1)
+	right_weapon_pivot.rotation_degrees.y = lerp(right_weapon_pivot.rotation_degrees.y, sign(hand_tilt.y) * weapon_sway_amount, 0.1)
+	right_weapon_pivot.rotation_degrees.z = lerp(right_weapon_pivot.rotation_degrees.z, sign(hand_tilt.z) * weapon_sway_amount, 0.1)
 
 
 func _on_right_hand_child_entered_tree(node: Node) -> void:

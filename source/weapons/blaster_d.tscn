@@ -42,3 +42,8 @@ stream = ExtResource("4_mw5l0")
 
 [node name="MuzzleMarker" type="Marker3D" parent="." index="4"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.134096, -0.432655)
+
+[node name="SpotLight3D" type="SpotLight3D" parent="." index="5"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.134096, -0.432655)
+light_energy = 10.0
+spot_range = 10.0

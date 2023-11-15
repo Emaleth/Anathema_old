@@ -88,9 +88,13 @@ target_position = Vector3(0, 0, -1000)
 [node name="Chest" type="Marker3D" parent="UpperBody/Head"]
 
 [node name="RightHand" type="Marker3D" parent="UpperBody/Head/Chest"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.4, -0.25, -0.6)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.25, -0.25, -0.6)
 
-[node name="blasterD" parent="UpperBody/Head/Chest/RightHand" instance=ExtResource("5_x72aw")]
+[node name="WeaponPivot" type="Marker3D" parent="UpperBody/Head/Chest/RightHand"]
+
+[node name="blasterD" parent="UpperBody/Head/Chest/RightHand/WeaponPivot" instance=ExtResource("5_x72aw")]
+ammo = null
+rof = null
 
 [node name="LeftHand" type="Marker3D" parent="UpperBody/Head/Chest"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.4, -0.25, -0.6)
