@@ -85,6 +85,7 @@ func _physics_process(delta: float) -> void:
 	get_direction()
 	get_tilt()
 	tilt_head()
+	head_bob()
 	motion_fsm(delta)
 	aim_fsm()
 	arm_swing(delta)
@@ -399,6 +400,10 @@ func footsteps():
 		footsteps_audio.pitch_scale = randf_range(0.9, 1.1)
 		footsteps_audio.play()
 		last_step_position = Vector2(position.x, position.z)
+
+
+func head_bob():
+	pass
 
 
 func tilt_head():

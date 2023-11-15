@@ -7,7 +7,7 @@ var autoloads : Dictionary = {
 	"Signals" : "res://source/core/signals.gd",
 	"AudioManager" : "res://source/managers/audio_manager.gd",
 	"BulletManager" : "res://source/managers/bullet_manager.gd",
-	"SceneManager" : "res://source/managers/scene_manager.gd",
+	"SceneManager" : "res://source/managers/scene_manager.tscn",
 }
 
 

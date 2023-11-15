@@ -7,7 +7,7 @@ var hover_sound := preload("res://assets/sounds/interface/hover.ogg")
 
 
 func _on_play_button_pressed() -> void:
-	get_tree().change_scene_to_packed(world_scene)
+	SceneManager.load_scene(world_scene)
 	AudioManager.play(click_sound)
 
 
