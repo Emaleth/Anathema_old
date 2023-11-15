@@ -1,0 +1,11 @@
+[gd_resource type="StandardMaterial3D" format=3 uid="uid://dv1s8y0034dc5"]
+
+[resource]
+disable_ambient_light = true
+albedo_color = Color(1.7, 1.04, 0.1, 1)
+metallic = 1.0
+roughness = 0.0
+emission = Color(1, 0, 0, 1)
+backlight = Color(0, 1, 0, 1)
+refraction_scale = -1.0
+disable_receive_shadows = true

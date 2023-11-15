@@ -1,9 +1,9 @@
 [gd_resource type="Environment" load_steps=4 format=3 uid="uid://c8ahbxm7apnk3"]
 
-[ext_resource type="Texture2D" uid="uid://q1xumeifxf2b" path="res://assets/textures/skyfinal.png" id="1_kr23t"]
+[ext_resource type="Texture2D" uid="uid://jpmeik0och57" path="res://assets/textures/farm_field_puresky_1k.hdr" id="1_3riva"]
 
 [sub_resource type="PanoramaSkyMaterial" id="PanoramaSkyMaterial_n8ane"]
-panorama = ExtResource("1_kr23t")
+panorama = ExtResource("1_3riva")
 
 [sub_resource type="Sky" id="Sky_ym78n"]
 sky_material = SubResource("PanoramaSkyMaterial_n8ane")
@@ -11,3 +11,4 @@ sky_material = SubResource("PanoramaSkyMaterial_n8ane")
 [resource]
 background_mode = 2
 sky = SubResource("Sky_ym78n")
+volumetric_fog_emission = Color(1, 1, 1, 1)

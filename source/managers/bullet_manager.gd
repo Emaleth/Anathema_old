@@ -5,7 +5,8 @@ var bullet_index : Dictionary = {
 		"speed" : 10, # 800 is avarage
 		"container" : {},
 		"multimesh" : null,
-		"mesh" : preload("res://assets/models/bullets/untitled.obj")
+		"mesh" : preload("res://assets/models/bullets/untitled.obj"),
+		"material" : preload("res://assets/materials/bullet_trace.tres")
  	}
 }
 
@@ -20,6 +21,7 @@ func configure_multimeshes():
 		multi_mesh_instance.multimesh = MultiMesh.new()
 		multi_mesh_instance.multimesh.transform_format = MultiMesh.TRANSFORM_3D
 		multi_mesh_instance.multimesh.mesh = bullet_index[type]["mesh"]
+		multi_mesh_instance.material_override = bullet_index[type]["material"]
 		bullet_index[type]["multimesh"] = multi_mesh_instance
 		add_child(multi_mesh_instance)
 
