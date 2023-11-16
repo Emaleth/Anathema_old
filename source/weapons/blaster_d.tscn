@@ -6,7 +6,7 @@
 [ext_resource type="AudioStream" uid="uid://bbd8iro4ii1wb" path="res://assets/sounds/footsteps/footstep09.ogg" id="4_mw5l0"]
 [ext_resource type="Texture2D" uid="uid://7eu8mii5j0nq" path="res://assets/textures/circle_05.png" id="5_8h8r4"]
 
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_kg8gl"]
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_kew6t"]
 cull_mode = 2
 shading_mode = 0
 disable_ambient_light = true
@@ -14,7 +14,7 @@ albedo_color = Color(1, 1, 0, 1)
 disable_receive_shadows = true
 
 [sub_resource type="CylinderMesh" id="CylinderMesh_6vfhd"]
-material = SubResource("StandardMaterial3D_kg8gl")
+material = SubResource("StandardMaterial3D_kew6t")
 top_radius = 0.0
 bottom_radius = 0.3
 height = 0.5

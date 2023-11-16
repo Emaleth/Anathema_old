@@ -58,6 +58,7 @@ emission_angle_enabled = true
 
 [node name="Camera3D" type="Camera3D" parent="UpperBody/Head"]
 cull_mask = 1048573
+current = true
 
 [node name="RemoteTransform3D" type="RemoteTransform3D" parent="UpperBody/Head/Camera3D"]
 remote_path = NodePath("../SubViewportContainer/SubViewport/Camera3D")
@@ -81,6 +82,7 @@ render_target_update_mode = 4
 [node name="Camera3D" type="Camera3D" parent="UpperBody/Head/Camera3D/SubViewportContainer/SubViewport"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.55, 0)
 cull_mask = 2
+current = true
 
 [node name="RayCast3D" type="RayCast3D" parent="UpperBody/Head"]
 target_position = Vector3(0, 0, -1000)
