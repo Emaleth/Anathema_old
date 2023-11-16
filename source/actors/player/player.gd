@@ -42,6 +42,7 @@ var weapon_sway_amount := 3.0
 @onready var camera := $UpperBody/Head/Camera3D
 @onready var footsteps_audio := $FootstepsAudio
 @onready var breathing_audio := $UpperBody/Head/BreathingAudio
+@onready var sliding_audio := $SlideAudio
 @onready var standing_collision_shape := $StandingCollisionShape
 @onready var crouching_collision_shape := $CrouchingCollisionShape
 @onready var head_raycast := $RayCast3D2
@@ -273,6 +274,7 @@ func motion_fsm(delta):
 				switch_motion_state(JUMP)
 			if not is_on_floor():
 				switch_motion_state(FALL)
+			sliding_audio.play()
 			head.position.y = lerp(head.position.y, SLIDING_HEAD_HEIGHT, 0.3)
 			velocity.x = move_toward(velocity.x, 0, slide_deceleraion)
 			velocity.z = move_toward(velocity.z, 0, slide_deceleraion)

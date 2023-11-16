@@ -55,3 +55,9 @@ text = "/"
 
 [node name="Max" type="Label" parent="MarginContainer/Ammo/HBoxContainer"]
 layout_mode = 2
+
+[node name="HitMarkerTimer" type="Timer" parent="."]
+one_shot = true
+
+[connection signal="resized" from="." to="." method="_on_resized"]
+[connection signal="timeout" from="HitMarkerTimer" to="." method="_on_hit_marker_timer_timeout"]
