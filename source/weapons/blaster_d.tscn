@@ -1,9 +1,10 @@
-[gd_scene load_steps=7 format=3 uid="uid://2waksyqjviqx"]
+[gd_scene load_steps=8 format=3 uid="uid://2waksyqjviqx"]
 
 [ext_resource type="PackedScene" uid="uid://c6rq7jes58yqi" path="res://assets/models/blasters/blasterD.glb" id="1_bbyuu"]
 [ext_resource type="Script" path="res://source/weapons/blaster_d.gd" id="2_o4y8e"]
 [ext_resource type="AudioStream" uid="uid://bod86iabtvgge" path="res://assets/sounds/gunshots/riffle.wav" id="3_ky6cp"]
 [ext_resource type="AudioStream" uid="uid://bbd8iro4ii1wb" path="res://assets/sounds/footsteps/footstep09.ogg" id="4_mw5l0"]
+[ext_resource type="Texture2D" uid="uid://7eu8mii5j0nq" path="res://assets/textures/circle_05.png" id="5_8h8r4"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_kg8gl"]
 cull_mode = 2
@@ -47,3 +48,13 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.134096, -0.432655)
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.134096, -0.432655)
 light_energy = 10.0
 spot_range = 10.0
+
+[node name="RedDot" type="Marker3D" parent="." index="6"]
+
+[node name="Decal" type="Decal" parent="RedDot" index="0"]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0, 0)
+size = Vector3(0.1, 0.1, 0.1)
+texture_albedo = ExtResource("5_8h8r4")
+texture_emission = ExtResource("5_8h8r4")
+emission_energy = 5.0
+modulate = Color(1, 0, 0, 1)

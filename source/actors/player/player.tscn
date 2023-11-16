@@ -93,8 +93,6 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.25, -0.25, -0.6)
 [node name="WeaponPivot" type="Marker3D" parent="UpperBody/Head/Chest/RightHand"]
 
 [node name="blasterD" parent="UpperBody/Head/Chest/RightHand/WeaponPivot" instance=ExtResource("5_x72aw")]
-ammo = null
-rof = null
 
 [node name="LeftHand" type="Marker3D" parent="UpperBody/Head/Chest"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.4, -0.25, -0.6)

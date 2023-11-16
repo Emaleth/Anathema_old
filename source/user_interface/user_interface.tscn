@@ -1,7 +1,7 @@
 [gd_scene load_steps=4 format=3 uid="uid://do7naiytuc1cp"]
 
-[ext_resource type="Texture2D" uid="uid://ck4au80p8sdyc" path="res://assets/crosshairs/crosshair003.png" id="1_hxmcv"]
 [ext_resource type="Script" path="res://source/user_interface/user_interface.gd" id="1_igwfp"]
+[ext_resource type="Texture2D" uid="uid://cmkius3t6u1p0" path="res://assets/crosshairs/crosshair002.png" id="2_jbi0i"]
 [ext_resource type="Script" path="res://source/user_interface/DebugPanel.gd" id="3_tbgx3"]
 
 [node name="UserInterface" type="Control"]
@@ -29,7 +29,7 @@ layout_mode = 2
 [node name="Crosshair" type="TextureRect" parent="MarginContainer/CenterContainer"]
 custom_minimum_size = Vector2(32, 32)
 layout_mode = 2
-texture = ExtResource("1_hxmcv")
+texture = ExtResource("2_jbi0i")
 expand_mode = 1
 
 [node name="DebugPanel" type="PanelContainer" parent="MarginContainer"]

@@ -8,6 +8,7 @@ var rof_time := 0.0
 var current_ammo : int = 0
 var rounds_per_second : float = 0.0
 
+@onready var red_dot := $RedDot
 @onready var muzzle_flash := $MuzzleFlash
 @onready var shot_audio := $ShotSound
 @onready var reload_audio := $ReloadSound
@@ -20,10 +21,12 @@ func _ready() -> void:
 	muzzle_flash_light.visible = false
 	rounds_per_second = 60 / rof
 	current_ammo = ammo
+	red_dot.top_level = true
 	Signals.secondary_action.connect(ads_mode)
 	Signals.reload.connect(reload)
 	Signals.primary_action.connect(use)
 	Signals.update_camera_ray_collision_point.connect(adjust_muzzle)
+	Signals.update_camera_ray_collision_point.connect(adjust_red_dot)
 	get_tree().create_timer(0.1).timeout.connect(emit_initial_signals)
 
 
@@ -86,5 +89,11 @@ func emit_initial_signals():
 	Signals.update_current_ammo.emit(current_ammo)
 
 
-func adjust_muzzle(target_point : Vector3):
-	muzzle_marker.look_at(target_point)
+func adjust_muzzle(c_point : Vector3, _c_normal : Vector3):
+	muzzle_marker.look_at(c_point)
+
+
+func adjust_red_dot(c_point : Vector3, c_normal : Vector3):
+	red_dot.global_transform.origin = c_point
+	var random_vector_up = Vector3(randf_range(-1.0, 1.0), randf_range(-1.0, 1.0), randf_range(-1.0, 1.0))
+	red_dot.global_transform = red_dot.global_transform.looking_at(c_point + c_normal, random_vector_up)

@@ -95,12 +95,21 @@ func _physics_process(delta: float) -> void:
 	reset_mouse_motion_event_relative()
 	shoot()
 	check_is_on_floor(delta)
+	emit_camera_ray_signal()
 	move_and_slide()
 
 
 func emit_camera_ray_signal():
-	var camera_ray_collision_point = camera_ray.get_collision_point() if camera_ray.get_collider() else (head.global_transform.translated(Vector3.FORWARD * head.global_transform.basis.inverse() * 100)).origin
-	Signals.update_camera_ray_collision_point.emit(camera_ray_collision_point)
+	var camera_ray_collision_point := Vector3.ZERO
+	var camera_ray_collision_normal := Vector3.ZERO
+	camera_ray.force_raycast_update()
+	if camera_ray.get_collider():
+		camera_ray_collision_point = camera_ray.get_collision_point()
+		camera_ray_collision_normal = camera_ray.get_collision_normal()
+	else:
+		camera_ray_collision_point = (head.global_transform.translated(Vector3.FORWARD * head.global_transform.basis.inverse() * 100)).origin
+		camera_ray_collision_normal = Vector3.ONE
+	Signals.update_camera_ray_collision_point.emit(camera_ray_collision_point, camera_ray_collision_normal)
 
 
 
@@ -108,7 +117,6 @@ func shoot():
 	if Input.is_action_pressed("primary_action"):
 		if motion_state == SPRINT:
 			switch_motion_state(RUN)
-		emit_camera_ray_signal()
 		Signals.primary_action.emit()
 
 
