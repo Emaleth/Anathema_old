@@ -53,7 +53,7 @@ func process_bullet_ray() -> void:
 			)
 			bullet_index[type]["container"][uid]["transform"] = next_transform
 			if current_transform.origin.distance_squared_to(next_transform.origin) > pow(1000, 2):
-				destroy_bullet(type, uid, null, null)
+				destroy_bullet(type, uid, null)
 				return
 			else:
 				var space_state = get_world_3d().direct_space_state
@@ -63,9 +63,10 @@ func process_bullet_ray() -> void:
 						0xFFFFFFFF,
 						[bullet_index[type]["container"][uid]["owner"].get_rid()]
 						)
+				query.hit_from_inside = true
 				var result = space_state.intersect_ray(query)
 				if result:
-					destroy_bullet(type, uid, result.position, result.collider)
+					destroy_bullet(type, uid, result)
 
 
 func process_bullet_multimesh() -> void:
@@ -77,9 +78,16 @@ func process_bullet_multimesh() -> void:
 			index += 1
 
 
-func destroy_bullet(bullet_id, bullet_uid, _impact_position, impacted_node):
-	if impacted_node.has_method("damage"):
-		impacted_node.damage(bullet_index[bullet_id]["container"][bullet_uid]["damage"])
-	if impacted_node.owner.has_method("damage"):
-		impacted_node.owner.damage(bullet_index[bullet_id]["container"][bullet_uid]["damage"])
+func destroy_bullet(bullet_id, bullet_uid, impact_result):
+	# FIXME: BULLET HOLE ALIGNMENT AND RANDOM Z AXIS ROTATION
+	if impact_result.collider.has_method("damage"):
+		impact_result.collider.damage(bullet_index[bullet_id]["container"][bullet_uid]["damage"])
+	if impact_result.collider.owner.has_method("damage"):
+		impact_result.collider.owner.damage(bullet_index[bullet_id]["container"][bullet_uid]["damage"])
+	var bullet_hole := preload("res://assets/fx/bullet_hole.tscn").instantiate()
+	impact_result.collider.add_child(bullet_hole)
+	bullet_hole.global_transform.origin = impact_result.position
+	var vector_up = (impact_result.position.cross(impact_result.position + impact_result.normal)).normalized()
+	bullet_hole.look_at(impact_result.position + impact_result.normal, vector_up)
+	bullet_hole.rotation.x += deg_to_rad(-90)
 	bullet_index[bullet_id]["container"].erase(bullet_uid)
