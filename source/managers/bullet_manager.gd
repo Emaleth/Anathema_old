@@ -79,15 +79,13 @@ func process_bullet_multimesh() -> void:
 
 
 func destroy_bullet(bullet_id, bullet_uid, impact_result):
-	# FIXME: BULLET HOLE ALIGNMENT AND RANDOM Z AXIS ROTATION
 	if impact_result.collider.has_method("damage"):
 		impact_result.collider.damage(bullet_index[bullet_id]["container"][bullet_uid]["damage"])
 	if impact_result.collider.owner.has_method("damage"):
 		impact_result.collider.owner.damage(bullet_index[bullet_id]["container"][bullet_uid]["damage"])
-	var bullet_hole := preload("res://assets/fx/bullet_hole.tscn").instantiate()
+	var bullet_hole := preload("res://source/fx/bullet_hole.tscn").instantiate()
 	impact_result.collider.add_child(bullet_hole)
 	bullet_hole.global_transform.origin = impact_result.position
-	var vector_up = (impact_result.position.cross(impact_result.position + impact_result.normal)).normalized()
-	bullet_hole.look_at(impact_result.position + impact_result.normal, vector_up)
-	bullet_hole.rotation.x += deg_to_rad(-90)
+	var random_vector_up = Vector3(randf_range(-1.0, 1.0), randf_range(-1.0, 1.0), randf_range(-1.0, 1.0))
+	bullet_hole.global_transform = bullet_hole.global_transform.looking_at(impact_result.position + impact_result.normal, random_vector_up)
 	bullet_index[bullet_id]["container"].erase(bullet_uid)

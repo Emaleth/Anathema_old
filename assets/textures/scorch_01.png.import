@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://b0qxv6dsxc3lb"
-path="res://.godot/imported/bullet_hole.png-448eb3bcaf6e210cb23950eab136572c.ctex"
+uid="uid://fakpy88q6r2s"
+path="res://.godot/imported/scorch_01.png-9bdd62121fc0cde375c157b034bf2629.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/textures/bullet_hole.png"
-dest_files=["res://.godot/imported/bullet_hole.png-448eb3bcaf6e210cb23950eab136572c.ctex"]
+source_file="res://assets/textures/scorch_01.png"
+dest_files=["res://.godot/imported/scorch_01.png-9bdd62121fc0cde375c157b034bf2629.ctex"]
 
 [params]
 
