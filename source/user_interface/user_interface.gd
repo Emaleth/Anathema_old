@@ -49,12 +49,12 @@ func _draw() -> void:
 	var hit_marker_size := 5
 	var crosshair_color := Color.WHITE
 	var hit_markerr_color := Color.RED
-	if crosshair:
+	if crosshair and Settings.enable_crosshair:
 		draw_line(screen_center + Vector2(crosshair_offset, 0), screen_center + Vector2((crosshair_offset + crosshair_size), 0), crosshair_color, crosshair_line_size, true)
 		draw_line(screen_center + Vector2(-crosshair_offset, 0), screen_center + Vector2(-(crosshair_offset + crosshair_size), 0), crosshair_color, crosshair_line_size, true)
 		draw_line(screen_center + Vector2(0, crosshair_offset), screen_center + Vector2(0, (crosshair_offset + crosshair_size)), crosshair_color, crosshair_line_size, true)
 		draw_line(screen_center + Vector2(0, -crosshair_offset), screen_center + Vector2(0, -(crosshair_offset + crosshair_size)), crosshair_color, crosshair_line_size, true)
-	if hit_marker:
+	if hit_marker and Settings.enable_hit_marker:
 		draw_line(screen_center + Vector2(hit_marker_offset, -hit_marker_offset), screen_center + Vector2((hit_marker_offset + hit_marker_size), -(hit_marker_offset + hit_marker_size)), hit_markerr_color, hit_marker_line_size, true)
 		draw_line(screen_center + Vector2(-hit_marker_offset, hit_marker_offset), screen_center + Vector2(-(hit_marker_offset + hit_marker_size), (hit_marker_offset + hit_marker_size)), hit_markerr_color, hit_marker_line_size, true)
 		draw_line(screen_center + Vector2(hit_marker_offset, hit_marker_offset), screen_center + Vector2((hit_marker_offset + hit_marker_size), (hit_marker_offset + hit_marker_size)), hit_markerr_color, hit_marker_line_size, true)

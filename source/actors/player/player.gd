@@ -20,7 +20,7 @@ const STEP_LENGHT := 1.5
 const HIPFIRE_SIN_FREQUENCY := 2.0
 const HIPFIRE_SIN_AMPLITUDE := 0.03
 const ADS_SIN_FREQUENCY := 1.0
-const ADS_SIN_AMPLITUDE := 0.003
+const ADS_SIN_AMPLITUDE := 0.001
 const ADS_STANCE := Vector3(0.0, 0.0, -0.2)
 const HIPFIRE_STANCE := Vector3(0.25, -0.1, -0.6)
 
@@ -37,6 +37,7 @@ var current_speed := 0.0
 var gravity : float = ProjectSettings.get_setting("physics/3d/default_gravity")
 var last_step_position := Vector2.ZERO
 var weapon_sway_amount := 3.0
+var mouse_sensitivity := 0.0
 
 @onready var head := $UpperBody/Head
 @onready var camera := $UpperBody/Head/Camera3D
@@ -296,6 +297,7 @@ func aim_fsm():
 			if not aim_state_entered:
 				sin_amplitude = HIPFIRE_SIN_AMPLITUDE
 				sin_frequency = HIPFIRE_SIN_FREQUENCY
+				mouse_sensitivity = Settings.hipfire_mouse_sensitivity
 				aim_state_entered = true
 			hipfire_mode()
 			get_hand_tilt()
@@ -303,6 +305,7 @@ func aim_fsm():
 			if not aim_state_entered:
 				sin_amplitude = ADS_SIN_AMPLITUDE
 				sin_frequency = ADS_SIN_FREQUENCY
+				mouse_sensitivity = Settings.ads_mouse_sensitivity
 				aim_state_entered = true
 			if motion_state == SPRINT:
 				switch_motion_state(RUN)
@@ -316,12 +319,12 @@ func arm_swing(delta):
 
 
 func rotate_camera():
-	head.rotation.x += mouse_motion_event_relative_y * Settings.mouse_sensitivity * -1
+	head.rotation.x += mouse_motion_event_relative_y * mouse_sensitivity * -1
 	head.rotation_degrees.x = clamp(head.rotation_degrees.x, -90, 90)
 
 
 func rotate_player():
-	rotation.y += mouse_motion_event_relative_x * Settings.mouse_sensitivity * -1
+	rotation.y += mouse_motion_event_relative_x * mouse_sensitivity * -1
 	rotation_degrees.y = wrap(rotation_degrees.y, -180, 180)
 
 

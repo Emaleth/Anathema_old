@@ -1,7 +1,8 @@
-[gd_scene load_steps=4 format=3 uid="uid://c5ricriktorvd"]
+[gd_scene load_steps=5 format=3 uid="uid://c5ricriktorvd"]
 
 [ext_resource type="Script" path="res://source/main_menu/main_menu.gd" id="1_fyyvh"]
 [ext_resource type="Texture2D" uid="uid://brbpme65u3wo" path="res://assets/textures/splatter.png" id="2_l87nr"]
+[ext_resource type="Script" path="res://source/custom_classes/ui_button.gd" id="3_43sak"]
 
 [sub_resource type="LabelSettings" id="LabelSettings_2bq1q"]
 font_size = 128
@@ -59,18 +60,18 @@ size_flags_horizontal = 4
 [node name="PlayButton" type="Button" parent="MarginContainer/CenterContainer/VBoxContainer2/VBoxContainer"]
 layout_mode = 2
 text = "Play"
+script = ExtResource("3_43sak")
 
 [node name="SettingsButton" type="Button" parent="MarginContainer/CenterContainer/VBoxContainer2/VBoxContainer"]
 layout_mode = 2
 text = "Settings"
+script = ExtResource("3_43sak")
 
 [node name="QuitButton" type="Button" parent="MarginContainer/CenterContainer/VBoxContainer2/VBoxContainer"]
 layout_mode = 2
 text = "Quit"
+script = ExtResource("3_43sak")
 
-[connection signal="mouse_entered" from="MarginContainer/CenterContainer/VBoxContainer2/VBoxContainer/PlayButton" to="." method="_on_play_button_mouse_entered"]
 [connection signal="pressed" from="MarginContainer/CenterContainer/VBoxContainer2/VBoxContainer/PlayButton" to="." method="_on_play_button_pressed"]
-[connection signal="mouse_entered" from="MarginContainer/CenterContainer/VBoxContainer2/VBoxContainer/SettingsButton" to="." method="_on_settings_button_mouse_entered"]
 [connection signal="pressed" from="MarginContainer/CenterContainer/VBoxContainer2/VBoxContainer/SettingsButton" to="." method="_on_settings_button_pressed"]
-[connection signal="mouse_entered" from="MarginContainer/CenterContainer/VBoxContainer2/VBoxContainer/QuitButton" to="." method="_on_quit_button_mouse_entered"]
 [connection signal="pressed" from="MarginContainer/CenterContainer/VBoxContainer2/VBoxContainer/QuitButton" to="." method="_on_quit_button_pressed"]
