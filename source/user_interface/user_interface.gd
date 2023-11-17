@@ -10,6 +10,8 @@ var hit_marker_offset := 15
 var target_crosshair_offset := 10
 var target_hit_marker_offset := 15
 
+@onready var settins_scene := preload("res://source/user_interface/settings_panel.tscn")
+
 @onready var current_ammo_label := $MarginContainer/Ammo/HBoxContainer/Current
 @onready var max_ammo_label := $MarginContainer/Ammo/HBoxContainer/Max
 @onready var hit_marker_timer := $HitMarkerTimer
@@ -79,3 +81,7 @@ func _on_resized() -> void:
 
 func _on_hit_marker_timer_timeout() -> void:
 	hit_marker = false
+
+
+func _input(_event: InputEvent) -> void:
+	if Input.is_action_just_pressed("settings"): SceneManager.load_settings()

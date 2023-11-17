@@ -11,6 +11,7 @@ var key_bindings : Dictionary = {
 	"crouch" : KEY_C,
 	"sprint" : KEY_SHIFT,
 	"reload" : KEY_R,
+	"settings" : KEY_ESCAPE,
 }
 
 var mouse_bindings : Dictionary = {

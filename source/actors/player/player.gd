@@ -41,6 +41,7 @@ var mouse_sensitivity := 0.0
 
 @onready var head := $UpperBody/Head
 @onready var camera := $UpperBody/Head/Camera3D
+@onready var weapon_camera := $UpperBody/Head/Camera3D/SubViewportContainer/SubViewport/Camera3D
 @onready var footsteps_audio := $FootstepsAudio
 @onready var breathing_audio := $UpperBody/Head/BreathingAudio
 @onready var sliding_audio := $SlideAudio
@@ -79,6 +80,9 @@ func _ready():
 	arms_ik_setup()
 	switch_motion_state(IDLE)
 	switch_aim_state(HIPFIRE)
+	camera.fov = Settings.field_of_view
+	weapon_camera.fov = Settings.field_of_view
+	Signals.update_fov_setting.connect(func(value : int): camera.fov = value; weapon_camera.fov = value)
 	get_tree().create_timer(0.1).timeout.connect(emit_initial_signals)
 
 

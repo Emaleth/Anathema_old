@@ -19,6 +19,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+color = Color(0, 0, 0, 0.521569)
 
 [node name="MarginContainer" type="MarginContainer" parent="."]
 layout_mode = 1
@@ -47,16 +48,74 @@ layout_mode = 2
 
 [node name="TabContainer" type="TabContainer" parent="MarginContainer/PanelContainer/MarginContainer/VBoxContainer"]
 layout_mode = 2
+size_flags_vertical = 3
 tab_alignment = 1
 
-[node name="Graphics" type="PanelContainer" parent="MarginContainer/PanelContainer/MarginContainer/VBoxContainer/TabContainer"]
+[node name="Gameplay" type="PanelContainer" parent="MarginContainer/PanelContainer/MarginContainer/VBoxContainer/TabContainer"]
+layout_mode = 2
+
+[node name="MarginContainer" type="MarginContainer" parent="MarginContainer/PanelContainer/MarginContainer/VBoxContainer/TabContainer/Gameplay"]
+layout_mode = 2
+theme_override_constants/margin_left = 256
+theme_override_constants/margin_top = 32
+theme_override_constants/margin_right = 256
+theme_override_constants/margin_bottom = 32
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer/PanelContainer/MarginContainer/VBoxContainer/TabContainer/Gameplay/MarginContainer"]
+layout_mode = 2
+
+[node name="Crosshair" type="HBoxContainer" parent="MarginContainer/PanelContainer/MarginContainer/VBoxContainer/TabContainer/Gameplay/MarginContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="MarginContainer/PanelContainer/MarginContainer/VBoxContainer/TabContainer/Gameplay/MarginContainer/VBoxContainer/Crosshair"]
+layout_mode = 2
+text = "Crosshair"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="CrosshairCheckButton" type="CheckButton" parent="MarginContainer/PanelContainer/MarginContainer/VBoxContainer/TabContainer/Gameplay/MarginContainer/VBoxContainer/Crosshair"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 10
+
+[node name="Hitmarker" type="HBoxContainer" parent="MarginContainer/PanelContainer/MarginContainer/VBoxContainer/TabContainer/Gameplay/MarginContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="MarginContainer/PanelContainer/MarginContainer/VBoxContainer/TabContainer/Gameplay/MarginContainer/VBoxContainer/Hitmarker"]
+layout_mode = 2
+text = "Hitmarker"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="HitmarkerCheckButton" type="CheckButton" parent="MarginContainer/PanelContainer/MarginContainer/VBoxContainer/TabContainer/Gameplay/MarginContainer/VBoxContainer/Hitmarker"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 10
+
+[node name="FieldOfView" type="HBoxContainer" parent="MarginContainer/PanelContainer/MarginContainer/VBoxContainer/TabContainer/Gameplay/MarginContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="MarginContainer/PanelContainer/MarginContainer/VBoxContainer/TabContainer/Gameplay/MarginContainer/VBoxContainer/FieldOfView"]
+layout_mode = 2
+text = "Field of View"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="FieldOfViewSpinBox" type="SpinBox" parent="MarginContainer/PanelContainer/MarginContainer/VBoxContainer/TabContainer/Gameplay/MarginContainer/VBoxContainer/FieldOfView"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 10
+alignment = 1
+
+[node name="Controls" type="PanelContainer" parent="MarginContainer/PanelContainer/MarginContainer/VBoxContainer/TabContainer"]
+visible = false
 layout_mode = 2
 
 [node name="Audio" type="PanelContainer" parent="MarginContainer/PanelContainer/MarginContainer/VBoxContainer/TabContainer"]
 visible = false
 layout_mode = 2
 
-[node name="Controls" type="PanelContainer" parent="MarginContainer/PanelContainer/MarginContainer/VBoxContainer/TabContainer"]
+[node name="Graphics" type="PanelContainer" parent="MarginContainer/PanelContainer/MarginContainer/VBoxContainer/TabContainer"]
 visible = false
 layout_mode = 2
 
@@ -66,16 +125,22 @@ size_flags_horizontal = 4
 size_flags_vertical = 10
 
 [node name="ReturnButton" type="Button" parent="MarginContainer/PanelContainer/MarginContainer/VBoxContainer/HBoxContainer"]
+unique_name_in_owner = true
 layout_mode = 2
 text = "Return"
 script = ExtResource("2_5xboo")
 
 [node name="RestoreDefaultsButton" type="Button" parent="MarginContainer/PanelContainer/MarginContainer/VBoxContainer/HBoxContainer"]
+unique_name_in_owner = true
 layout_mode = 2
 text = "Restore Default"
 script = ExtResource("2_5xboo")
 
 [node name="QuitButton" type="Button" parent="MarginContainer/PanelContainer/MarginContainer/VBoxContainer/HBoxContainer"]
+unique_name_in_owner = true
 layout_mode = 2
 text = "Quit"
 script = ExtResource("2_5xboo")
+
+[connection signal="tree_entered" from="." to="." method="_on_tree_entered"]
+[connection signal="tree_exited" from="." to="." method="_on_tree_exited"]

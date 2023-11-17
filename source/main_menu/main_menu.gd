@@ -9,7 +9,7 @@ func _on_play_button_pressed() -> void:
 
 
 func _on_settings_button_pressed() -> void:
-	pass
+	SceneManager.load_settings()
 
 
 func _on_quit_button_pressed() -> void:
