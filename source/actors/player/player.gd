@@ -83,6 +83,7 @@ func _ready():
 	camera.fov = Settings.field_of_view
 	weapon_camera.fov = Settings.field_of_view
 	Signals.update_fov_setting.connect(func(value : int): camera.fov = value; weapon_camera.fov = value)
+	Signals.update_mouse_sensitivity_setting.connect(update_mouse_sensitivity)
 	get_tree().create_timer(0.1).timeout.connect(emit_initial_signals)
 
 
@@ -468,3 +469,11 @@ func land_animation():
 func emit_initial_signals():
 	Signals.update_motion_state.emit(motion_states_array[motion_state])
 	Signals.update_aim_state.emit(aim_states_array[aim_state])
+
+
+func update_mouse_sensitivity():
+	match aim_state:
+		HIPFIRE:
+			mouse_sensitivity = Settings.hipfire_mouse_sensitivity
+		ADS:
+			mouse_sensitivity = Settings.ads_mouse_sensitivity
