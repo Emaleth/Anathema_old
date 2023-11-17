@@ -106,6 +106,7 @@ unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 10
 alignment = 1
+update_on_text_changed = true
 
 [node name="Controls" type="PanelContainer" parent="MarginContainer/PanelContainer/MarginContainer/VBoxContainer/TabContainer"]
 visible = false
@@ -142,5 +143,5 @@ layout_mode = 2
 text = "Quit"
 script = ExtResource("2_5xboo")
 
-[connection signal="tree_entered" from="." to="." method="_on_tree_entered"]
 [connection signal="tree_exited" from="." to="." method="_on_tree_exited"]
+[connection signal="tree_exiting" from="." to="." method="_on_tree_exiting"]
