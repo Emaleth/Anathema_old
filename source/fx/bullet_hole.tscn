@@ -9,6 +9,7 @@ script = ExtResource("1_4ulyy")
 
 [node name="AudioStreamPlayer3D" type="AudioStreamPlayer3D" parent="."]
 stream = ExtResource("2_1k2ya")
+bus = &"SFX"
 emission_angle_enabled = true
 
 [node name="Decal" type="Decal" parent="."]

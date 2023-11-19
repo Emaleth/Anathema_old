@@ -1,0 +1,71 @@
+[gd_scene load_steps=9 format=3 uid="uid://2waksyqjviqx"]
+
+[ext_resource type="Script" path="res://source/weapons/weapon.gd" id="1_nrns2"]
+[ext_resource type="AudioStream" uid="uid://bbd8iro4ii1wb" path="res://assets/sounds/footsteps/footstep09.ogg" id="2_md1tj"]
+[ext_resource type="AudioStream" uid="uid://bod86iabtvgge" path="res://assets/sounds/gunshots/riffle.wav" id="3_i5snk"]
+[ext_resource type="Texture2D" uid="uid://7eu8mii5j0nq" path="res://assets/textures/circle_05.png" id="4_eicrl"]
+[ext_resource type="PackedScene" uid="uid://dpkqagr6x3cf5" path="res://assets/models/weapons/AssaultRifle_1.glb" id="5_ploc2"]
+[ext_resource type="Material" uid="uid://bsgqkgek6vuw2" path="res://assets/materials/rough_wood_1k.tres" id="6_0xugt"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_kew6t"]
+cull_mode = 2
+shading_mode = 0
+disable_ambient_light = true
+albedo_color = Color(1, 1, 0, 1)
+disable_receive_shadows = true
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_6vfhd"]
+material = SubResource("StandardMaterial3D_kew6t")
+top_radius = 0.0
+bottom_radius = 0.3
+height = 0.5
+cap_top = false
+cap_bottom = false
+
+[node name="Weapon" type="Node3D"]
+script = ExtResource("1_nrns2")
+
+[node name="ReloadSound" type="AudioStreamPlayer3D" parent="."]
+stream = ExtResource("2_md1tj")
+
+[node name="MuzzleMarker" type="Marker3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.268951, -1.42897)
+
+[node name="SpotLight3D" type="SpotLight3D" parent="MuzzleMarker"]
+light_energy = 10.0
+spot_range = 10.0
+
+[node name="MuzzleFlash" type="MeshInstance3D" parent="MuzzleMarker"]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0, -0.25)
+mesh = SubResource("CylinderMesh_6vfhd")
+skeleton = NodePath("../..")
+
+[node name="ShotSound" type="AudioStreamPlayer3D" parent="MuzzleMarker"]
+stream = ExtResource("3_i5snk")
+max_polyphony = 10
+emission_angle_enabled = true
+metadata/_edit_lock_ = true
+
+[node name="RedDot" type="Marker3D" parent="."]
+
+[node name="Decal" type="Decal" parent="RedDot"]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0, 0)
+size = Vector3(0.1, 0.1, 0.1)
+texture_albedo = ExtResource("4_eicrl")
+texture_emission = ExtResource("4_eicrl")
+emission_energy = 5.0
+modulate = Color(1, 0, 0, 1)
+
+[node name="AssaultRifle_1" parent="." instance=ExtResource("5_ploc2")]
+transform = Transform3D(-2.18557e-08, 0, 0.5, 0, 0.5, 0, -0.5, 0, -2.18557e-08, 0, 0, 0)
+
+[node name="AssaultRifle_12" parent="AssaultRifle_1" index="0"]
+surface_material_override/3 = ExtResource("6_0xugt")
+
+[node name="AdsMarker" type="Marker3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.411, 0)
+
+[node name="MuzzlePivot" type="Marker3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.268951, -1.42897)
+
+[editable path="AssaultRifle_1"]

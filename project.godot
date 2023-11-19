@@ -16,6 +16,10 @@ config/features=PackedStringArray("4.1", "Forward Plus")
 boot_splash/image="res://assets/textures/splatter.png"
 config/icon="res://icon.svg"
 
+[audio]
+
+buses/default_bus_layout="res://audio_bus_layout.tres"
+
 [autoload]
 
 DebugMenu="*res://addons/debug_menu/debug_menu.tscn"

@@ -3,8 +3,8 @@
 [ext_resource type="Script" path="res://source/actors/player/player.gd" id="1_k454m"]
 [ext_resource type="AudioStream" uid="uid://cqkb1g7apv46g" path="res://assets/sounds/footsteps/footstep00.ogg" id="2_uytlb"]
 [ext_resource type="AudioStream" uid="uid://d3jm7hucgkrb3" path="res://assets/sounds/jump.wav" id="3_hyc5u"]
+[ext_resource type="PackedScene" uid="uid://2waksyqjviqx" path="res://source/weapons/weapon.tscn" id="4_5vnoj"]
 [ext_resource type="PackedScene" uid="uid://clj7ettt1jwp8" path="res://source/fps_arms/fps_arms.tscn" id="5_ddpc4"]
-[ext_resource type="PackedScene" uid="uid://2waksyqjviqx" path="res://source/weapons/blaster_d.tscn" id="5_x72aw"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_sq2cy"]
 height = 1.8
@@ -28,6 +28,7 @@ transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 
 stream = ExtResource("2_uytlb")
 max_distance = 5.0
 max_polyphony = 2
+bus = &"SFX"
 emission_angle_enabled = true
 emission_angle_degrees = 90.0
 
@@ -48,6 +49,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.75, 0)
 [node name="BreathingAudio" type="AudioStreamPlayer3D" parent="UpperBody/Head"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.0152214, 0)
 max_polyphony = 2
+bus = &"SFX"
 emission_angle_enabled = true
 
 [node name="VoiceAudio" type="AudioStreamPlayer3D" parent="UpperBody/Head"]
@@ -90,19 +92,22 @@ target_position = Vector3(0, 0, -1000)
 [node name="Chest" type="Marker3D" parent="UpperBody/Head"]
 
 [node name="RightHand" type="Marker3D" parent="UpperBody/Head/Chest"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.25, -0.25, -0.6)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.25, -0.6, -0.6)
 
 [node name="WeaponPivot" type="Marker3D" parent="UpperBody/Head/Chest/RightHand"]
 
-[node name="blasterD" parent="UpperBody/Head/Chest/RightHand/WeaponPivot" instance=ExtResource("5_x72aw")]
+[node name="Weapon" parent="UpperBody/Head/Chest/RightHand/WeaponPivot" instance=ExtResource("4_5vnoj")]
 
 [node name="LeftHand" type="Marker3D" parent="UpperBody/Head/Chest"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.4, -0.25, -0.6)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.25, -0.6, -0.6)
+
+[node name="WeaponPivot" type="Marker3D" parent="UpperBody/Head/Chest/LeftHand"]
 
 [node name="FPSArms" parent="UpperBody/Head/Chest" instance=ExtResource("5_ddpc4")]
 visible = false
 
 [node name="SlideAudio" type="AudioStreamPlayer3D" parent="."]
+bus = &"SFX"
 
-[connection signal="child_entered_tree" from="UpperBody/Head/Chest/RightHand" to="." method="_on_right_hand_child_entered_tree"]
-[connection signal="child_entered_tree" from="UpperBody/Head/Chest/LeftHand" to="." method="_on_left_hand_child_entered_tree"]
+[connection signal="child_entered_tree" from="UpperBody/Head/Chest/RightHand/WeaponPivot" to="." method="_on_weapon_pivot_child_entered_tree"]
+[connection signal="child_entered_tree" from="UpperBody/Head/Chest/LeftHand/WeaponPivot" to="." method="_on_weapon_pivot_child_entered_tree"]

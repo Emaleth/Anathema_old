@@ -21,6 +21,7 @@ func load_settings():
 		get_tree().root.add_child(settins_scene.instantiate())
 		settings_scene_loaded = true
 
+
 func load_scene(scene : PackedScene):
 	next_scene = scene
 	ResourceLoader.load_threaded_request(scene.get_path())
@@ -36,3 +37,4 @@ func _process(_delta: float):
 			loading_label.hide()
 			get_tree().change_scene_to_packed(next_scene)
 			next_scene = null
+			loading_progress = []

@@ -9,6 +9,9 @@ extends Control
 @onready var fov_slider := %FieldOfViewHSlider
 @onready var ads_mouse_sensitivity_slider := %AdsMouseSensitivityHSlider
 @onready var hipfire_mouse_sensitivity_slider := %HipfireMouseSensitivityHSlider
+@onready var master_audio_slider := %MasterVolumeHSlider
+@onready var ui_audio_slider := %UIVolumeHSlider
+@onready var sfx_audio_slider := %SFXVolumeHSlider
 
 
 func _ready() -> void:
@@ -24,6 +27,9 @@ func _ready() -> void:
 	fov_slider.value_changed.connect(func(value : int): Settings.field_of_view = value; Signals.update_fov_setting.emit(value))
 	ads_mouse_sensitivity_slider.value_changed.connect(func(value : float): Settings.ads_mouse_sensitivity = value; Signals.update_mouse_sensitivity_setting.emit())
 	hipfire_mouse_sensitivity_slider.value_changed.connect(func(value : float): Settings.hipfire_mouse_sensitivity = value; Signals.update_mouse_sensitivity_setting.emit())
+	master_audio_slider.value_changed.connect(func(value : int): AudioServer.set_bus_volume_db(AudioServer.get_bus_index("Master"), value))
+	ui_audio_slider.value_changed.connect(func(value : int): AudioServer.set_bus_volume_db(AudioServer.get_bus_index("UI"), value))
+	sfx_audio_slider.value_changed.connect(func(value : int): AudioServer.set_bus_volume_db(AudioServer.get_bus_index("SFX"), value))
 
 
 func _on_tree_exited() -> void:
@@ -42,3 +48,6 @@ func read_values():
 	fov_slider.value = Settings.field_of_view
 	ads_mouse_sensitivity_slider.value = Settings.ads_mouse_sensitivity
 	hipfire_mouse_sensitivity_slider.value = Settings.hipfire_mouse_sensitivity
+	master_audio_slider.value = AudioServer.get_bus_volume_db(AudioServer.get_bus_index("Master"))
+	ui_audio_slider.value = AudioServer.get_bus_volume_db(AudioServer.get_bus_index("UI"))
+	sfx_audio_slider.value = AudioServer.get_bus_volume_db(AudioServer.get_bus_index("SFX"))

@@ -22,7 +22,7 @@ const HIPFIRE_SIN_AMPLITUDE := 0.03
 const ADS_SIN_FREQUENCY := 1.0
 const ADS_SIN_AMPLITUDE := 0.001
 const ADS_STANCE := Vector3(0.0, 0.0, -0.2)
-const HIPFIRE_STANCE := Vector3(0.25, -0.1, -0.6)
+const HIPFIRE_STANCE := Vector3(0.25, -0.6, -0.6)
 
 var motion_state_entered := false
 var aim_state_entered := false
@@ -38,6 +38,7 @@ var gravity : float = ProjectSettings.get_setting("physics/3d/default_gravity")
 var last_step_position := Vector2.ZERO
 var weapon_sway_amount := 3.0
 var mouse_sensitivity := 0.0
+var ads_position_offset := Vector3.ZERO
 
 @onready var head := $UpperBody/Head
 @onready var camera := $UpperBody/Head/Camera3D
@@ -124,7 +125,11 @@ func shoot():
 	if Input.is_action_pressed("primary_action"):
 		if motion_state == SPRINT:
 			switch_motion_state(RUN)
-		Signals.primary_action.emit()
+		if (right_hand.rotation_degrees.x > -3.0 and right_hand.rotation_degrees.x < 3.0
+				and right_hand.rotation_degrees.y > -3.0 and right_hand.rotation_degrees.y < 3.0
+				and right_hand.rotation_degrees.z > -3.0 and right_hand.rotation_degrees.z < 3.0
+		):
+			Signals.primary_action.emit()
 
 
 func arms_ik_setup():
@@ -334,7 +339,7 @@ func rotate_player():
 
 
 func ads_mode():
-	right_hand.position = lerp(right_hand.position, ADS_STANCE, 0.5)
+	right_hand.position = lerp(right_hand.position, ADS_STANCE - ads_position_offset, 0.5)
 
 
 func hipfire_mode():
@@ -359,18 +364,17 @@ func weapon_sway_and_pose():
 	right_weapon_pivot.rotation_degrees.z = lerp(right_weapon_pivot.rotation_degrees.z, sign(hand_tilt.z) * weapon_sway_amount, 0.1)
 
 
-func _on_right_hand_child_entered_tree(node: Node) -> void:
+func _on_weapon_pivot_child_entered_tree(node: Node) -> void:
 	set_visibility(node)
-
-
-func _on_left_hand_child_entered_tree(node: Node) -> void:
-	set_visibility(node)
+	await node.ready
+	ads_position_offset = node.ads_marker.position
 
 
 func set_visibility(node : Node):
 	for i in node.get_children():
 		if i is MeshInstance3D or i is GPUParticles3D:
 			i.layers = 2
+		set_visibility(i)
 
 
 func _input(event):
@@ -477,3 +481,7 @@ func update_mouse_sensitivity():
 			mouse_sensitivity = Settings.hipfire_mouse_sensitivity
 		ADS:
 			mouse_sensitivity = Settings.ads_mouse_sensitivity
+
+
+
+
