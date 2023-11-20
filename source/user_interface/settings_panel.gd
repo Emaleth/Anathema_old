@@ -7,11 +7,17 @@ extends Control
 @onready var crosshair_button := %CrosshairCheckButton
 @onready var hitmarker_button := %HitmarkerCheckButton
 @onready var fov_slider := %FieldOfViewHSlider
+@onready var fov_label := %FieldOfViewLabel
 @onready var ads_mouse_sensitivity_slider := %AdsMouseSensitivityHSlider
+@onready var ads_mouse_sensitivity_label := %AdsMouseSensitivityLabel
 @onready var hipfire_mouse_sensitivity_slider := %HipfireMouseSensitivityHSlider
+@onready var hipfire_mouse_sensitivity_label := %HipfireMouseSensitivityLabel
 @onready var master_audio_slider := %MasterVolumeHSlider
+@onready var master_audio_label := %MasterVolumeLabel
 @onready var ui_audio_slider := %UIVolumeHSlider
+@onready var ui_audio_label := %UIVolumeLabel
 @onready var sfx_audio_slider := %SFXVolumeHSlider
+@onready var sfx_audio_label := %SFXVolumeLabel
 
 
 func _ready() -> void:
