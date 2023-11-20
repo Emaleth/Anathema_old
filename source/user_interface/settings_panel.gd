@@ -30,12 +30,12 @@ func _ready() -> void:
 
 	crosshair_button.toggled.connect(func(value : bool): Settings.enable_crosshair = value)
 	hitmarker_button.toggled.connect(func(value : bool): Settings.enable_hit_marker = value)
-	fov_slider.value_changed.connect(func(value : int): Settings.field_of_view = value; Signals.update_fov_setting.emit(value))
-	ads_mouse_sensitivity_slider.value_changed.connect(func(value : float): Settings.ads_mouse_sensitivity = value; Signals.update_mouse_sensitivity_setting.emit())
-	hipfire_mouse_sensitivity_slider.value_changed.connect(func(value : float): Settings.hipfire_mouse_sensitivity = value; Signals.update_mouse_sensitivity_setting.emit())
-	master_audio_slider.value_changed.connect(func(value : int): AudioServer.set_bus_volume_db(AudioServer.get_bus_index("Master"), value))
-	ui_audio_slider.value_changed.connect(func(value : int): AudioServer.set_bus_volume_db(AudioServer.get_bus_index("UI"), value))
-	sfx_audio_slider.value_changed.connect(func(value : int): AudioServer.set_bus_volume_db(AudioServer.get_bus_index("SFX"), value))
+	fov_slider.value_changed.connect(func(value : int): Settings.field_of_view = value; Signals.update_fov_setting.emit(value); fov_label.text = str(value))
+	ads_mouse_sensitivity_slider.value_changed.connect(func(value : float): Settings.ads_mouse_sensitivity = value; Signals.update_mouse_sensitivity_setting.emit(); ads_mouse_sensitivity_label.text = str(value))
+	hipfire_mouse_sensitivity_slider.value_changed.connect(func(value : float): Settings.hipfire_mouse_sensitivity = value; Signals.update_mouse_sensitivity_setting.emit(); hipfire_mouse_sensitivity_label.text = str(value))
+	master_audio_slider.value_changed.connect(func(value : int): AudioServer.set_bus_volume_db(AudioServer.get_bus_index("Master"), value); master_audio_label.text = str(value))
+	ui_audio_slider.value_changed.connect(func(value : int): AudioServer.set_bus_volume_db(AudioServer.get_bus_index("UI"), value); ui_audio_label.text = str(value))
+	sfx_audio_slider.value_changed.connect(func(value : int): AudioServer.set_bus_volume_db(AudioServer.get_bus_index("SFX"), value); sfx_audio_label.text = str(value))
 
 
 func _on_tree_exited() -> void:
@@ -57,3 +57,10 @@ func read_values():
 	master_audio_slider.value = AudioServer.get_bus_volume_db(AudioServer.get_bus_index("Master"))
 	ui_audio_slider.value = AudioServer.get_bus_volume_db(AudioServer.get_bus_index("UI"))
 	sfx_audio_slider.value = AudioServer.get_bus_volume_db(AudioServer.get_bus_index("SFX"))
+
+	fov_label.text = str(Settings.field_of_view)
+	ads_mouse_sensitivity_label.text = str(Settings.ads_mouse_sensitivity)
+	hipfire_mouse_sensitivity_label.text = str(Settings.hipfire_mouse_sensitivity)
+	master_audio_label.text = str(AudioServer.get_bus_volume_db(AudioServer.get_bus_index("Master")))
+	ui_audio_label.text = str(AudioServer.get_bus_volume_db(AudioServer.get_bus_index("UI")))
+	sfx_audio_label.text = str(AudioServer.get_bus_volume_db(AudioServer.get_bus_index("SFX")))
