@@ -82,10 +82,10 @@ func destroy_bullet(bullet_id, bullet_uid, impact_result):
 	if impact_result:
 		if impact_result.collider.has_method("damage"):
 			Signals.target_hit.emit()
-	#		impact_result.collider.damage(bullet_index[bullet_id]["container"][bullet_uid]["damage"])
+			impact_result.collider.damage(bullet_index[bullet_id]["container"][bullet_uid]["damage"])
 		if impact_result.collider.owner.has_method("damage"):
 			Signals.target_hit.emit()
-	#		impact_result.collider.owner.damage(bullet_index[bullet_id]["container"][bullet_uid]["damage"])
+			impact_result.collider.owner.damage(bullet_index[bullet_id]["container"][bullet_uid]["damage"])
 		var bullet_hole := preload("res://source/fx/bullet_hole.tscn").instantiate()
 		impact_result.collider.add_child(bullet_hole)
 		bullet_hole.global_transform.origin = impact_result.position
