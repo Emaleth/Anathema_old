@@ -3,13 +3,13 @@
 importer="scene"
 importer_version=1
 type="PackedScene"
-uid="uid://b6a5ywdglr4tj"
-path="res://.godot/imported/AssaultRifle_1.glb-3401dbbb075df824520b07416951a6c7.scn"
+uid="uid://dqxdt0j0h6tjn"
+path="res://.godot/imported/AssaultRifle2_1.glb-dabe46d34eff95e4d9800450424e2d99.scn"
 
 [deps]
 
-source_file="res://assets/models/weapons/AssaultRifle_1.glb"
-dest_files=["res://.godot/imported/AssaultRifle_1.glb-3401dbbb075df824520b07416951a6c7.scn"]
+source_file="res://assets/models/weapons/AssaultRifle2_1.glb"
+dest_files=["res://.godot/imported/AssaultRifle2_1.glb-dabe46d34eff95e4d9800450424e2d99.scn"]
 
 [params]
 

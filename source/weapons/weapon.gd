@@ -1,5 +1,6 @@
 extends Node3D
 
+
 @export var ammo : int = 30
 @export var rof := 720.0 # per minute
 
@@ -8,16 +9,26 @@ var rof_time := 0.0
 var current_ammo : int = 0
 var rounds_per_second : float = 0.0
 
+@export var muzzle_marker : Marker3D
+@export var ads_marker : Marker3D
+
 @onready var red_dot := $RedDot
-@onready var muzzle_flash := $MuzzleMarker/MuzzleFlash
-@onready var shot_audio := $MuzzleMarker/ShotSound
+@onready var muzzle_flash := $muzzle_flash
+@onready var shot_audio := $ShotSound
 @onready var reload_audio := $ReloadSound
 @onready var muzzle_pivot := $MuzzlePivot
-@onready var muzzle_flash_light := $MuzzleMarker/SpotLight3D
-@onready var ads_marker := $AdsMarker
+@onready var muzzle_flash_light := $SpotLight3D
+
+
+func position_nodes():
+	muzzle_flash.position = muzzle_marker.position
+	shot_audio.position = muzzle_marker.position
+	muzzle_pivot.position = muzzle_marker.position
+	muzzle_flash_light.position = muzzle_marker.position
 
 
 func _ready() -> void:
+	position_nodes()
 	muzzle_flash.visible = false
 	muzzle_flash_light.visible = false
 	rounds_per_second = 60 / rof

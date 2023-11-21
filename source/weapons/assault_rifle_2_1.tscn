@@ -1,0 +1,19 @@
+[gd_scene load_steps=3 format=3 uid="uid://cotyyfab85kii"]
+
+[ext_resource type="PackedScene" uid="uid://2waksyqjviqx" path="res://source/weapons/weapon.tscn" id="1_dlgbn"]
+[ext_resource type="PackedScene" uid="uid://dqxdt0j0h6tjn" path="res://assets/models/weapons/AssaultRifle2_1.glb" id="2_xlkl6"]
+
+[node name="AssaultRifle2_1" node_paths=PackedStringArray("muzzle_marker", "ads_marker") instance=ExtResource("1_dlgbn")]
+muzzle_marker = NodePath("MuzzleMarker3D")
+ads_marker = NodePath("AdsMarker3D")
+
+[node name="AssaultRifle2_1" parent="." index="6" instance=ExtResource("2_xlkl6")]
+transform = Transform3D(-2.18557e-08, 0, 0.5, 0, 0.5, 0, -0.5, 0, -2.18557e-08, 0, 0, 0)
+
+[node name="AdsMarker3D" type="Marker3D" parent="." index="7"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.537407, 0)
+
+[node name="MuzzleMarker3D" type="Marker3D" parent="." index="8"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.320241, -1.81035)
+
+[editable path="muzzle_flash"]
