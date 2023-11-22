@@ -4,15 +4,16 @@ importer="texture"
 type="CompressedTexture2D"
 uid="uid://dn5gaixh8kqc3"
 path.s3tc="res://.godot/imported/slate_driveway_rough_1k.png-8e958ddcc0b1dd7c6e58b01455d1ac10.s3tc.ctex"
+path.etc2="res://.godot/imported/slate_driveway_rough_1k.png-8e958ddcc0b1dd7c6e58b01455d1ac10.etc2.ctex"
 metadata={
-"imported_formats": ["s3tc_bptc"],
+"imported_formats": ["s3tc_bptc", "etc2_astc"],
 "vram_texture": true
 }
 
 [deps]
 
 source_file="res://assets/textures/slate_driveway_1k/textures/slate_driveway_rough_1k.png"
-dest_files=["res://.godot/imported/slate_driveway_rough_1k.png-8e958ddcc0b1dd7c6e58b01455d1ac10.s3tc.ctex"]
+dest_files=["res://.godot/imported/slate_driveway_rough_1k.png-8e958ddcc0b1dd7c6e58b01455d1ac10.s3tc.ctex", "res://.godot/imported/slate_driveway_rough_1k.png-8e958ddcc0b1dd7c6e58b01455d1ac10.etc2.ctex"]
 
 [params]
 

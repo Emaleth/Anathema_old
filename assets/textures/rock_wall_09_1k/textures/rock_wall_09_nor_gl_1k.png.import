@@ -4,15 +4,16 @@ importer="texture"
 type="CompressedTexture2D"
 uid="uid://cvon5qqrgvya0"
 path.s3tc="res://.godot/imported/rock_wall_09_nor_gl_1k.png-b0cd10fa3bb524c5350dbf6b8d453c7e.s3tc.ctex"
+path.etc2="res://.godot/imported/rock_wall_09_nor_gl_1k.png-b0cd10fa3bb524c5350dbf6b8d453c7e.etc2.ctex"
 metadata={
-"imported_formats": ["s3tc_bptc"],
+"imported_formats": ["s3tc_bptc", "etc2_astc"],
 "vram_texture": true
 }
 
 [deps]
 
 source_file="res://assets/textures/rock_wall_09_1k/textures/rock_wall_09_nor_gl_1k.png"
-dest_files=["res://.godot/imported/rock_wall_09_nor_gl_1k.png-b0cd10fa3bb524c5350dbf6b8d453c7e.s3tc.ctex"]
+dest_files=["res://.godot/imported/rock_wall_09_nor_gl_1k.png-b0cd10fa3bb524c5350dbf6b8d453c7e.s3tc.ctex", "res://.godot/imported/rock_wall_09_nor_gl_1k.png-b0cd10fa3bb524c5350dbf6b8d453c7e.etc2.ctex"]
 
 [params]
 

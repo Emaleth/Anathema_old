@@ -4,15 +4,16 @@ importer="texture"
 type="CompressedTexture2D"
 uid="uid://jpmeik0och57"
 path.bptc="res://.godot/imported/farm_field_puresky_1k.hdr-6acdab4543fec9408e7e0b1702117899.bptc.ctex"
+path.astc="res://.godot/imported/farm_field_puresky_1k.hdr-6acdab4543fec9408e7e0b1702117899.astc.ctex"
 metadata={
-"imported_formats": ["s3tc_bptc"],
+"imported_formats": ["s3tc_bptc", "etc2_astc"],
 "vram_texture": true
 }
 
 [deps]
 
 source_file="res://assets/textures/farm_field_puresky_1k.hdr"
-dest_files=["res://.godot/imported/farm_field_puresky_1k.hdr-6acdab4543fec9408e7e0b1702117899.bptc.ctex"]
+dest_files=["res://.godot/imported/farm_field_puresky_1k.hdr-6acdab4543fec9408e7e0b1702117899.bptc.ctex", "res://.godot/imported/farm_field_puresky_1k.hdr-6acdab4543fec9408e7e0b1702117899.astc.ctex"]
 
 [params]
 

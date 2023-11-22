@@ -4,15 +4,16 @@ importer="texture"
 type="CompressedTexture2D"
 uid="uid://cnuokhdt37ya8"
 path.s3tc="res://.godot/imported/rough_wood_ao_1k.png-b8fe9bc488a360369a6a9c6d55e7119f.s3tc.ctex"
+path.etc2="res://.godot/imported/rough_wood_ao_1k.png-b8fe9bc488a360369a6a9c6d55e7119f.etc2.ctex"
 metadata={
-"imported_formats": ["s3tc_bptc"],
+"imported_formats": ["s3tc_bptc", "etc2_astc"],
 "vram_texture": true
 }
 
 [deps]
 
 source_file="res://assets/textures/rough_wood_1k/textures/rough_wood_ao_1k.png"
-dest_files=["res://.godot/imported/rough_wood_ao_1k.png-b8fe9bc488a360369a6a9c6d55e7119f.s3tc.ctex"]
+dest_files=["res://.godot/imported/rough_wood_ao_1k.png-b8fe9bc488a360369a6a9c6d55e7119f.s3tc.ctex", "res://.godot/imported/rough_wood_ao_1k.png-b8fe9bc488a360369a6a9c6d55e7119f.etc2.ctex"]
 
 [params]
 
