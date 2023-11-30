@@ -57,6 +57,7 @@ size_flags_vertical = 3
 tab_alignment = 1
 
 [node name="Gameplay" type="PanelContainer" parent="MarginContainer/PanelContainer/MarginContainer/VBoxContainer/TabContainer"]
+visible = false
 layout_mode = 2
 
 [node name="MarginContainer" type="MarginContainer" parent="MarginContainer/PanelContainer/MarginContainer/VBoxContainer/TabContainer/Gameplay"]
@@ -294,8 +295,31 @@ horizontal_alignment = 2
 vertical_alignment = 1
 
 [node name="Graphics" type="PanelContainer" parent="MarginContainer/PanelContainer/MarginContainer/VBoxContainer/TabContainer"]
-visible = false
 layout_mode = 2
+
+[node name="MarginContainer" type="MarginContainer" parent="MarginContainer/PanelContainer/MarginContainer/VBoxContainer/TabContainer/Graphics"]
+layout_mode = 2
+theme_override_constants/margin_left = 256
+theme_override_constants/margin_top = 32
+theme_override_constants/margin_right = 256
+theme_override_constants/margin_bottom = 32
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer/PanelContainer/MarginContainer/VBoxContainer/TabContainer/Graphics/MarginContainer"]
+layout_mode = 2
+
+[node name="Resolution" type="HBoxContainer" parent="MarginContainer/PanelContainer/MarginContainer/VBoxContainer/TabContainer/Graphics/MarginContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="MarginContainer/PanelContainer/MarginContainer/VBoxContainer/TabContainer/Graphics/MarginContainer/VBoxContainer/Resolution"]
+layout_mode = 2
+text = "Resolution"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="ResolutionOptionButton" type="OptionButton" parent="MarginContainer/PanelContainer/MarginContainer/VBoxContainer/TabContainer/Graphics/MarginContainer/VBoxContainer/Resolution"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
 
 [node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer/PanelContainer/MarginContainer/VBoxContainer"]
 layout_mode = 2
@@ -322,3 +346,4 @@ script = ExtResource("2_5xboo")
 
 [connection signal="tree_exited" from="." to="." method="_on_tree_exited"]
 [connection signal="tree_exiting" from="." to="." method="_on_tree_exiting"]
+[connection signal="item_selected" from="MarginContainer/PanelContainer/MarginContainer/VBoxContainer/TabContainer/Graphics/MarginContainer/VBoxContainer/Resolution/ResolutionOptionButton" to="." method="_on_resolution_option_button_item_selected"]

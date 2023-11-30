@@ -1,4 +1,4 @@
-[gd_scene load_steps=7 format=3 uid="uid://2waksyqjviqx"]
+[gd_scene load_steps=8 format=3 uid="uid://2waksyqjviqx"]
 
 [ext_resource type="Script" path="res://source/weapons/weapon.gd" id="1_nrns2"]
 [ext_resource type="AudioStream" uid="uid://bbd8iro4ii1wb" path="res://assets/sounds/footsteps/footstep09.ogg" id="2_md1tj"]
@@ -13,7 +13,9 @@ disable_ambient_light = true
 albedo_color = Color(1, 1, 0, 1)
 disable_receive_shadows = true
 
-[node name="Weapon" type="Node3D"]
+[sub_resource type="BoxShape3D" id="BoxShape3D_jwut3"]
+
+[node name="Weapon" type="RigidBody3D"]
 script = ExtResource("1_nrns2")
 
 [node name="ReloadSound" type="AudioStreamPlayer3D" parent="."]
@@ -47,5 +49,8 @@ metadata/_edit_lock_ = true
 
 [node name="Cone" parent="muzzle_flash" index="0"]
 material_override = SubResource("StandardMaterial3D_kew6t")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+shape = SubResource("BoxShape3D_jwut3")
 
 [editable path="muzzle_flash"]

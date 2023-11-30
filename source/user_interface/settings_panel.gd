@@ -18,9 +18,17 @@ extends Control
 @onready var ui_audio_label := %UIVolumeLabel
 @onready var sfx_audio_slider := %SFXVolumeHSlider
 @onready var sfx_audio_label := %SFXVolumeLabel
+@onready var resolution_option_button := %ResolutionOptionButton
+
+var resolutions := [
+	"1152:648",
+	"576:324",
+]
 
 
 func _ready() -> void:
+	for i in resolutions:
+		resolution_option_button.add_item(i)
 	get_tree().paused = true
 	Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
 	read_values()
@@ -64,3 +72,12 @@ func read_values():
 	master_audio_label.text = str(AudioServer.get_bus_volume_db(AudioServer.get_bus_index("Master")))
 	ui_audio_label.text = str(AudioServer.get_bus_volume_db(AudioServer.get_bus_index("UI")))
 	sfx_audio_label.text = str(AudioServer.get_bus_volume_db(AudioServer.get_bus_index("SFX")))
+
+
+func _on_resolution_option_button_item_selected(index: int) -> void:
+	match index:
+		0:
+			pass
+		1:
+			pass
+

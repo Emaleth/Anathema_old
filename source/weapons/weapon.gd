@@ -1,4 +1,4 @@
-extends Node3D
+extends RigidBody3D
 
 
 @export var ammo : int = 30
@@ -11,6 +11,7 @@ var rounds_per_second : float = 0.0
 
 @export var muzzle_marker : Marker3D
 @export var ads_marker : Marker3D
+@export var model : Node
 
 @onready var red_dot := $RedDot
 @onready var muzzle_flash := $muzzle_flash
@@ -18,6 +19,7 @@ var rounds_per_second : float = 0.0
 @onready var reload_audio := $ReloadSound
 @onready var muzzle_pivot := $MuzzlePivot
 @onready var muzzle_flash_light := $SpotLight3D
+@onready var collision_shape := $CollisionShape3D
 
 
 func position_nodes():
@@ -28,6 +30,9 @@ func position_nodes():
 
 
 func _ready() -> void:
+	collision_shape.shape.size = Vector3(1, 1, 1)
+	freeze = true
+	collision_shape.disabled = true
 	position_nodes()
 	muzzle_flash.visible = false
 	muzzle_flash_light.visible = false

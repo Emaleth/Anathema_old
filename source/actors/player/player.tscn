@@ -1,8 +1,9 @@
-[gd_scene load_steps=7 format=3 uid="uid://cruro5nbk2ds"]
+[gd_scene load_steps=8 format=3 uid="uid://cruro5nbk2ds"]
 
 [ext_resource type="Script" path="res://source/actors/player/player.gd" id="1_k454m"]
 [ext_resource type="AudioStream" uid="uid://cqkb1g7apv46g" path="res://assets/sounds/footsteps/footstep00.ogg" id="2_uytlb"]
 [ext_resource type="AudioStream" uid="uid://d3jm7hucgkrb3" path="res://assets/sounds/jump.wav" id="3_hyc5u"]
+[ext_resource type="PackedScene" uid="uid://cotyyfab85kii" path="res://source/weapons/assault_rifle_2_1.tscn" id="4_jbfoe"]
 [ext_resource type="PackedScene" uid="uid://clj7ettt1jwp8" path="res://source/fps_arms/fps_arms.tscn" id="5_ddpc4"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_sq2cy"]
@@ -94,6 +95,8 @@ target_position = Vector3(0, 0, -1000)
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.25, -0.6, -0.6)
 
 [node name="WeaponPivot" type="Marker3D" parent="UpperBody/Head/Chest/RightHand"]
+
+[node name="AssaultRifle2_1" parent="UpperBody/Head/Chest/RightHand/WeaponPivot" instance=ExtResource("4_jbfoe")]
 
 [node name="LeftHand" type="Marker3D" parent="UpperBody/Head/Chest"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.25, -0.6, -0.6)
