@@ -57,7 +57,6 @@ size_flags_vertical = 3
 tab_alignment = 1
 
 [node name="Gameplay" type="PanelContainer" parent="MarginContainer/PanelContainer/MarginContainer/VBoxContainer/TabContainer"]
-visible = false
 layout_mode = 2
 
 [node name="MarginContainer" type="MarginContainer" parent="MarginContainer/PanelContainer/MarginContainer/VBoxContainer/TabContainer/Gameplay"]
@@ -295,6 +294,7 @@ horizontal_alignment = 2
 vertical_alignment = 1
 
 [node name="Graphics" type="PanelContainer" parent="MarginContainer/PanelContainer/MarginContainer/VBoxContainer/TabContainer"]
+visible = false
 layout_mode = 2
 
 [node name="MarginContainer" type="MarginContainer" parent="MarginContainer/PanelContainer/MarginContainer/VBoxContainer/TabContainer/Graphics"]

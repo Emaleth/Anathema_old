@@ -21,8 +21,11 @@ extends Control
 @onready var resolution_option_button := %ResolutionOptionButton
 
 var resolutions := [
-	"1152:648",
-	"576:324",
+	"1920:1080", # 1.0
+	"1280:720", # 1.5
+	"960:540", # 2.0
+	"768:432", # 2.5
+	"640:360", # 3.0
 ]
 
 
@@ -72,12 +75,28 @@ func read_values():
 	master_audio_label.text = str(AudioServer.get_bus_volume_db(AudioServer.get_bus_index("Master")))
 	ui_audio_label.text = str(AudioServer.get_bus_volume_db(AudioServer.get_bus_index("UI")))
 	sfx_audio_label.text = str(AudioServer.get_bus_volume_db(AudioServer.get_bus_index("SFX")))
+	resolution_option_button.selected = (func():
+		match get_tree().root.content_scale_factor:
+			1.0: return 0
+			1.5: return 1
+			2.0: return 2
+			2.5: return 3
+			3.0: return 4
+	).call()
 
 
 func _on_resolution_option_button_item_selected(index: int) -> void:
+	var scale_factor = 1.0
 	match index:
 		0:
-			pass
+			scale_factor = 1.0
 		1:
-			pass
+			scale_factor = 1.5
+		2:
+			scale_factor = 2.0
+		3:
+			scale_factor = 2.5
+		4:
+			scale_factor = 3.0
 
+	get_tree().root.content_scale_factor = scale_factor
