@@ -18,7 +18,6 @@ var rounds_per_second : float = 0.0
 @onready var shot_audio := $ShotSound
 @onready var reload_audio := $ReloadSound
 @onready var muzzle_pivot := $MuzzlePivot
-@onready var muzzle_flash_light := $SpotLight3D
 @onready var collision_shape := $CollisionShape3D
 
 
@@ -26,7 +25,6 @@ func position_nodes():
 	muzzle_flash.position = muzzle_marker.position
 	shot_audio.position = muzzle_marker.position
 	muzzle_pivot.position = muzzle_marker.position
-	muzzle_flash_light.position = muzzle_marker.position
 
 
 func _ready() -> void:
@@ -35,7 +33,6 @@ func _ready() -> void:
 	collision_shape.disabled = true
 	position_nodes()
 	muzzle_flash.visible = false
-	muzzle_flash_light.visible = false
 	rounds_per_second = 60 / rof
 	current_ammo = ammo
 	red_dot.top_level = true
@@ -68,7 +65,6 @@ func shot_animation():
 	var recoil_animation_time : float = min(rounds_per_second * 0.25, 0.05)
 	var recover_animation_time : float = min(rounds_per_second * 0.75, 0.15)
 	muzzle_flash.show()
-	muzzle_flash_light.show()
 	shot_audio.pitch_scale = randf_range(0.9, 1.1)
 	shot_audio.play()
 	var tween = create_tween()
@@ -88,7 +84,6 @@ func shot_animation():
 	tween.parallel().tween_property( self, "position:x", 0.0, recover_animation_time ).set_trans(Tween.TRANS_SINE)
 	tween.parallel().tween_property( self, "rotation:x", 0.0, recover_animation_time ).set_trans(Tween.TRANS_SINE)
 	tween.parallel().tween_callback(muzzle_flash.hide)
-	tween.parallel().tween_callback(muzzle_flash_light.hide)
 
 
 func reload():
