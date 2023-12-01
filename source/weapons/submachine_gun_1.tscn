@@ -5,7 +5,6 @@
 
 [node name="SubmachineGun_1" node_paths=PackedStringArray("muzzle_marker", "ads_marker") instance=ExtResource("1_e1wdr")]
 ammo = 45
-rof = 600.0
 muzzle_marker = NodePath("MuzzleMarker3D")
 ads_marker = NodePath("AdsMarker3D")
 
