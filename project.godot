@@ -22,9 +22,9 @@ buses/default_bus_layout="res://audio_bus_layout.tres"
 
 [autoload]
 
+Settings="*res://source/core/settings.gd"
 DebugMenu="*res://addons/debug_menu/debug_menu.tscn"
 Keybindings="*res://source/core/keybindings.gd"
-Settings="*res://source/core/settings.gd"
 Signals="*res://source/core/signals.gd"
 AudioManager="*res://source/managers/audio_manager.gd"
 BulletManager="*res://source/managers/bullet_manager.gd"

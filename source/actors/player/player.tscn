@@ -3,7 +3,7 @@
 [ext_resource type="Script" path="res://source/actors/player/player.gd" id="1_k454m"]
 [ext_resource type="AudioStream" uid="uid://cqkb1g7apv46g" path="res://assets/sounds/footsteps/footstep00.ogg" id="2_uytlb"]
 [ext_resource type="AudioStream" uid="uid://d3jm7hucgkrb3" path="res://assets/sounds/jump.wav" id="3_hyc5u"]
-[ext_resource type="PackedScene" uid="uid://busohj1khnjy" path="res://source/weapons/submachine_gun_1.tscn" id="4_7ebrf"]
+[ext_resource type="PackedScene" uid="uid://cotyyfab85kii" path="res://source/weapons/assault_rifle_2_1.tscn" id="4_5lxwm"]
 [ext_resource type="PackedScene" uid="uid://clj7ettt1jwp8" path="res://source/fps_arms/fps_arms.tscn" id="5_ddpc4"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_sq2cy"]
@@ -96,7 +96,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.25, -0.6, -0.6)
 
 [node name="WeaponPivot" type="Marker3D" parent="UpperBody/Head/Chest/RightHand"]
 
-[node name="SubmachineGun_1" parent="UpperBody/Head/Chest/RightHand/WeaponPivot" instance=ExtResource("4_7ebrf")]
+[node name="AssaultRifle2_1" parent="UpperBody/Head/Chest/RightHand/WeaponPivot" instance=ExtResource("4_5lxwm")]
 
 [node name="LeftHand" type="Marker3D" parent="UpperBody/Head/Chest"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.25, -0.6, -0.6)

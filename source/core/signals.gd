@@ -15,3 +15,4 @@ signal target_hit
 # SETTINGS
 signal update_fov_setting
 signal update_mouse_sensitivity_setting
+signal update_config_file
