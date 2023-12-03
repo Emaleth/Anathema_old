@@ -1,4 +1,4 @@
-[gd_scene load_steps=7 format=3 uid="uid://bddatxiwhrt7b"]
+[gd_scene load_steps=10 format=3 uid="uid://bddatxiwhrt7b"]
 
 [ext_resource type="PackedScene" uid="uid://cruro5nbk2ds" path="res://source/actors/player/player.tscn" id="1_xtea1"]
 [ext_resource type="Material" uid="uid://hyvyqqja2dwt" path="res://assets/materials/slate_driveway_1k.tres" id="2_eaeeo"]
@@ -6,6 +6,44 @@
 [ext_resource type="Environment" uid="uid://c8ahbxm7apnk3" path="res://environment.tres" id="4_5iq55"]
 [ext_resource type="PackedScene" uid="uid://0b2vflaw6ptc" path="res://source/world/environment/box.tscn" id="4_ifetv"]
 [ext_resource type="PackedScene" uid="uid://do7naiytuc1cp" path="res://source/user_interface/user_interface.tscn" id="5_vpxmy"]
+
+[sub_resource type="Animation" id="Animation_tv252"]
+resource_name = "new_animation"
+length = 10.0
+loop_mode = 1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = false
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 5, 10),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [Vector3(2.59136, 3.23854, 1.90305), Vector3(2.591, 20, 1.903), Vector3(2.591, 3.239, 1.903)]
+}
+
+[sub_resource type="Animation" id="Animation_5hw5p"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector3(2.59136, 3.23854, 1.90305)]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_u057i"]
+_data = {
+"RESET": SubResource("Animation_5hw5p"),
+"new_animation": SubResource("Animation_tv252")
+}
 
 [node name="World" type="Node3D"]
 
@@ -45,6 +83,12 @@ material_override = ExtResource("2_qnehf")
 use_collision = true
 size = Vector3(3, 0.1, 3)
 
+[node name="AnimationPlayer" type="AnimationPlayer" parent="Terrain/CSGBox3D4"]
+autoplay = "new_animation"
+libraries = {
+"": SubResource("AnimationLibrary_u057i")
+}
+
 [node name="Ground" type="CSGBox3D" parent="Terrain"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1.25, 0)
 material_override = ExtResource("2_eaeeo")
@@ -61,6 +105,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -3.975)
 
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="Environment"]
 transform = Transform3D(1, 0, 0, 0, 0.866025, 0.5, 0, -0.5, 0.866025, 0, 0, 0)
+directional_shadow_mode = 0
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="Environment"]
 environment = ExtResource("4_5iq55")

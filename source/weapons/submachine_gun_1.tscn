@@ -9,12 +9,12 @@ muzzle_marker = NodePath("MuzzleMarker3D")
 ads_marker = NodePath("AdsMarker3D")
 
 [node name="SubmachineGun_1" parent="." index="5" instance=ExtResource("1_il3oq")]
-transform = Transform3D(-2.18557e-08, 0, 0.5, 0, 0.5, 0, -0.5, 0, -2.18557e-08, 0, 0, 0)
+transform = Transform3D(-1.31134e-08, 0, 0.3, 0, 0.3, 0, -0.3, 0, -1.31134e-08, 0, 0, 0)
 
 [node name="AdsMarker3D" type="Marker3D" parent="." index="6"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.478482, 0.18025)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.288213, 0.107737)
 
 [node name="MuzzleMarker3D" type="Marker3D" parent="." index="7"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.312471, -1.14133)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.185419, -0.683322)
 
 [editable path="muzzle_flash"]

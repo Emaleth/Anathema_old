@@ -9,7 +9,7 @@ const RUNNING_SPEED = 5.0
 const CROUCHING_SPEED = 2.0
 const SPRINTING_SPEED = 10.0
 const SLIDING_SPEED = 10.0
-const JUMP_FORCE = 9.0
+const JUMP_FORCE = 5.0
 const STANDING_HEAD_HEIGHT := 0.75
 const CROUCHING_HEAD_HEIGHT := 0.2
 const SLIDING_HEAD_HEIGHT := 0.0
@@ -21,7 +21,7 @@ const HIPFIRE_SIN_AMPLITUDE := 0.03
 const ADS_SIN_FREQUENCY := 1.0
 const ADS_SIN_AMPLITUDE := 0.001
 const ADS_STANCE := Vector3(0.0, 0.0, -0.2)
-const HIPFIRE_STANCE := Vector3(0.25, -0.6, -0.6)
+const HIPFIRE_STANCE := Vector3(0.25, -0.4, -0.6)
 
 var motion_state_entered := false
 var aim_state_entered := false
