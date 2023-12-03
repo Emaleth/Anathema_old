@@ -9,13 +9,12 @@ const RUNNING_SPEED = 5.0
 const CROUCHING_SPEED = 2.0
 const SPRINTING_SPEED = 10.0
 const SLIDING_SPEED = 10.0
-const JUMP_VELOCITY = 4.5
+const JUMP_FORCE = 9.0
 const STANDING_HEAD_HEIGHT := 0.75
 const CROUCHING_HEAD_HEIGHT := 0.2
 const SLIDING_HEAD_HEIGHT := 0.0
 const HEAD_TILT_DEGREES := 25.0
 const UPPER_BODY_TILT_DEGREES := 27.0
-const JUMP_GRACE_PERIOD := 1.0
 const STEP_LENGHT := 1.5
 const HIPFIRE_SIN_FREQUENCY := 2.0
 const HIPFIRE_SIN_AMPLITUDE := 0.03
@@ -31,8 +30,6 @@ var normal_deceleraion := 0.9
 var slide_deceleraion := 0.001
 var head_tilt_deadzone := 0.05
 var hand_tilt_deadzone := 0.001
-var grounded := false
-var time_since_grounded := 0.0
 var current_speed := 0.0
 var gravity : float = ProjectSettings.get_setting("physics/3d/default_gravity")
 var last_step_position := Vector2.ZERO
@@ -88,6 +85,10 @@ func _ready():
 	get_tree().create_timer(0.1).timeout.connect(emit_initial_signals)
 
 
+func _process(_delta: float) -> void:
+	emit_camera_ray_signal()
+
+
 func _physics_process(delta: float) -> void:
 	hand_tilt = Vector3.ZERO
 	get_direction()
@@ -102,8 +103,6 @@ func _physics_process(delta: float) -> void:
 	weapon_sway_and_pose()
 	reset_mouse_motion_event_relative()
 	shoot()
-	check_is_on_floor(delta)
-	emit_camera_ray_signal()
 	move_and_slide()
 
 
@@ -175,7 +174,7 @@ func motion_fsm(delta):
 			velocity.z = move_toward(velocity.z, 0, normal_deceleraion)
 			if direction != Vector3.ZERO:
 				switch_motion_state(RUN)
-			if Input.is_action_pressed("jump") and grounded:
+			if Input.is_action_pressed("jump"):
 				switch_motion_state(JUMP)
 			if Input.is_action_pressed("crouch"):
 				switch_motion_state(CROUCH)
@@ -188,7 +187,7 @@ func motion_fsm(delta):
 				motion_state_entered = true
 			if Input.is_action_pressed("crouch"):
 				switch_motion_state(CROUCH)
-			if Input.is_action_pressed("jump") and grounded:
+			if Input.is_action_pressed("jump"):
 				switch_motion_state(JUMP)
 			if not is_on_floor():
 				switch_motion_state(FALL)
@@ -209,7 +208,7 @@ func motion_fsm(delta):
 				crouching_collision_shape.set_deferred("disabled", true)
 				jump_animation()
 				voice_audio.play()
-				velocity.y = JUMP_VELOCITY
+				velocity.y = JUMP_FORCE
 				motion_state_entered = true
 			head.position.y = lerp(head.position.y, STANDING_HEAD_HEIGHT, 0.3)
 			velocity.y -= gravity * delta
@@ -227,6 +226,8 @@ func motion_fsm(delta):
 			velocity.y -= gravity * delta
 			if  velocity.y < 0:
 				last_in_air_velocity = velocity.y
+			if Input.is_action_pressed("jump"):
+				switch_motion_state(JUMP)
 			velocity.x = move_toward(velocity.x, direction.x * current_speed, acceleraion)
 			velocity.z = move_toward(velocity.z, direction.z * current_speed, acceleraion)
 			if is_on_floor():
@@ -240,7 +241,7 @@ func motion_fsm(delta):
 				motion_state_entered = true
 			if Input.is_action_pressed("crouch"):
 				switch_motion_state(SLIDE)
-			if Input.is_action_pressed("jump") and grounded:
+			if Input.is_action_pressed("jump"):
 				switch_motion_state(JUMP)
 			if not is_on_floor():
 				switch_motion_state(FALL)
@@ -262,8 +263,6 @@ func motion_fsm(delta):
 				standing_collision_shape.set_deferred("disabled", true)
 				crouching_collision_shape.set_deferred("disabled", false)
 				motion_state_entered = true
-			if Input.is_action_pressed("jump") and grounded:
-				switch_motion_state(JUMP)
 			if not is_on_floor():
 				switch_motion_state(FALL)
 			if not Input.is_action_pressed("crouch") and not head_raycast.is_colliding():
@@ -281,7 +280,7 @@ func motion_fsm(delta):
 				standing_collision_shape.set_deferred("disabled", true)
 				crouching_collision_shape.set_deferred("disabled", false)
 				motion_state_entered = true
-			if Input.is_action_pressed("jump") and grounded:
+			if Input.is_action_pressed("jump"):
 				switch_motion_state(JUMP)
 			if not is_on_floor():
 				switch_motion_state(FALL)
@@ -360,7 +359,7 @@ func weapon_sway_and_pose():
 	right_hand.rotation_degrees.z = lerp(right_hand.rotation_degrees.z, hand_position.z, 0.3)
 
 	right_weapon_pivot.rotation_degrees.x = lerp(right_weapon_pivot.rotation_degrees.x, sign(hand_tilt.x) * weapon_sway_amount, 0.1)
-	right_weapon_pivot.rotation_degrees.y = lerp(right_weapon_pivot.rotation_degrees.y, sign(hand_tilt.y) * weapon_sway_amount, 0.1)
+	right_weapon_pivot.rotation_degrees.y = lerp(right_weapon_pivot.rotation_degrees.y, sign(-hand_tilt.y) * weapon_sway_amount, 0.1)
 	right_weapon_pivot.rotation_degrees.z = lerp(right_weapon_pivot.rotation_degrees.z, sign(hand_tilt.z) * weapon_sway_amount, 0.1)
 
 
@@ -437,19 +436,6 @@ func tilt_head():
 
 func tilt_upper_body():
 	upper_body.rotation_degrees.z = lerp(upper_body.rotation_degrees.z, UPPER_BODY_TILT_DEGREES * tilt, 0.3)
-
-
-func check_is_on_floor(delta):
-	grounded = false
-	if is_on_floor():
-		grounded = true
-	elif feet_raycast.is_colliding():
-		grounded = true
-	else:
-		time_since_grounded += delta
-		if time_since_grounded <= 0.1:
-			grounded = true
-			time_since_grounded = 0
 
 
 func jump_animation():

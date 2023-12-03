@@ -22,10 +22,10 @@ func load_settings():
 		settings_scene_loaded = true
 
 
-func load_scene(scene : PackedScene):
+func load_scene(scene : PackedScene, _main_menu : bool = false):
 	next_scene = scene
 	ResourceLoader.load_threaded_request(scene.get_path())
-	main_menu = false
+	main_menu = _main_menu
 
 
 func _process(_delta: float):

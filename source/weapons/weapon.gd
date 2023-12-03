@@ -1,4 +1,4 @@
-extends RigidBody3D
+extends Area3D
 
 
 @export var ammo : int = 30
@@ -28,9 +28,6 @@ func position_nodes():
 
 
 func _ready() -> void:
-	collision_shape.shape.size = Vector3(1, 1, 1)
-	freeze = true
-	collision_shape.disabled = true
 	position_nodes()
 	muzzle_flash.visible = false
 	rounds_per_second = 60 / rof

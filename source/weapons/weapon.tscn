@@ -16,8 +16,10 @@ uv1_world_triplanar = true
 disable_receive_shadows = true
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_jwut3"]
+size = Vector3(0.1, 0.1, 1)
 
-[node name="Weapon" type="RigidBody3D"]
+[node name="Weapon" type="Area3D"]
+monitoring = false
 script = ExtResource("1_nrns2")
 
 [node name="ReloadSound" type="AudioStreamPlayer3D" parent="."]

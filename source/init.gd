@@ -5,4 +5,4 @@ extends Node
 
 
 func _ready() -> void:
-	SceneManager.load_scene(main_menu_scene)
+	SceneManager.load_scene(main_menu_scene, true)
