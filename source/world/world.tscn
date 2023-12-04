@@ -7,6 +7,21 @@
 [ext_resource type="PackedScene" uid="uid://0b2vflaw6ptc" path="res://source/world/environment/box.tscn" id="4_ifetv"]
 [ext_resource type="PackedScene" uid="uid://do7naiytuc1cp" path="res://source/user_interface/user_interface.tscn" id="5_vpxmy"]
 
+[sub_resource type="Animation" id="Animation_5hw5p"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector3(2.59136, 3.23854, 1.90305)]
+}
+
 [sub_resource type="Animation" id="Animation_tv252"]
 resource_name = "new_animation"
 length = 10.0
@@ -22,21 +37,6 @@ tracks/0/keys = {
 "transitions": PackedFloat32Array(1, 1, 1),
 "update": 0,
 "values": [Vector3(2.59136, 3.23854, 1.90305), Vector3(2.591, 20, 1.903), Vector3(2.591, 3.239, 1.903)]
-}
-
-[sub_resource type="Animation" id="Animation_5hw5p"]
-length = 0.001
-tracks/0/type = "value"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath(".:position")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 0,
-"values": [Vector3(2.59136, 3.23854, 1.90305)]
 }
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_u057i"]
