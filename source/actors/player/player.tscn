@@ -35,10 +35,6 @@ emission_angle_enabled = true
 emission_angle_degrees = 90.0
 
 [node name="RayCast3D" type="RayCast3D" parent="."]
-target_position = Vector3(0, -0.1, 0)
-metadata/_edit_lock_ = true
-
-[node name="RayCast3D2" type="RayCast3D" parent="."]
 target_position = Vector3(0, 1.8, 0)
 metadata/_edit_lock_ = true
 
