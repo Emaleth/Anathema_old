@@ -19,12 +19,14 @@ var rounds_per_second : float = 0.0
 @onready var reload_audio := $ReloadSound
 @onready var muzzle_pivot := $MuzzlePivot
 @onready var collision_shape := $CollisionShape3D
+@onready var laser := $Marker3D/Laser
 
 
 func position_nodes():
 	muzzle_flash.position = muzzle_marker.position
 	shot_audio.position = muzzle_marker.position
 	muzzle_pivot.position = muzzle_marker.position
+
 
 
 func _ready() -> void:
@@ -100,6 +102,8 @@ func emit_initial_signals():
 
 func adjust_muzzle(c_point : Vector3, _c_normal : Vector3):
 	muzzle_pivot.look_at(c_point)
+	$MuzzlePivot/Laser.mesh.height = muzzle_pivot.global_position.distance_to(c_point)
+	$MuzzlePivot/Laser.position.z = -muzzle_pivot.global_position.distance_to(c_point) * 0.5
 
 
 func adjust_red_dot(c_point : Vector3, c_normal : Vector3):

@@ -45,4 +45,6 @@ enabled=PackedStringArray("res://addons/debug_menu/plugin.cfg")
 [rendering]
 
 textures/vram_compression/import_etc2_astc=true
+shading/overrides/force_vertex_shading=true
+shading/overrides/force_lambert_over_burley=true
 environment/defaults/default_environment="res://environment.tres"

@@ -78,7 +78,7 @@ func weapon_sway(right_weapon_pivot : Node3D, aim_state : int):
 			hand_tilt.y = sign(mouse_motion_event_relative.x)
 			hand_tilt.z = sign(mouse_motion_event_relative.x)
 
-	right_weapon_pivot.rotation_degrees.x = lerp(right_weapon_pivot.rotation_degrees.x, sign(hand_tilt.x) * weapon_sway_amount, 0.1)
+	right_weapon_pivot.rotation_degrees.x = lerp(right_weapon_pivot.rotation_degrees.x, sign(-hand_tilt.x) * weapon_sway_amount, 0.1)
 	right_weapon_pivot.rotation_degrees.y = lerp(right_weapon_pivot.rotation_degrees.y, sign(-hand_tilt.y) * weapon_sway_amount, 0.1)
 	right_weapon_pivot.rotation_degrees.z = lerp(right_weapon_pivot.rotation_degrees.z, sign(hand_tilt.z) * weapon_sway_amount, 0.1)
 

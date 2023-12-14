@@ -1,10 +1,25 @@
-[gd_scene load_steps=8 format=3 uid="uid://2waksyqjviqx"]
+[gd_scene load_steps=10 format=3 uid="uid://2waksyqjviqx"]
 
 [ext_resource type="Script" path="res://source/weapons/weapon.gd" id="1_nrns2"]
 [ext_resource type="AudioStream" uid="uid://bbd8iro4ii1wb" path="res://assets/sounds/footsteps/footstep09.ogg" id="2_md1tj"]
 [ext_resource type="AudioStream" uid="uid://bod86iabtvgge" path="res://assets/sounds/gunshots/riffle.wav" id="3_i5snk"]
 [ext_resource type="Texture2D" uid="uid://7eu8mii5j0nq" path="res://assets/textures/circle_05.png" id="4_eicrl"]
 [ext_resource type="PackedScene" uid="uid://c3nl2cmsbdod4" path="res://assets/models/muzzle_flash.glb" id="5_llldx"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_7ikuy"]
+transparency = 1
+shading_mode = 0
+disable_ambient_light = true
+albedo_color = Color(1, 0, 0, 0.776471)
+proximity_fade_distance = 0.0
+distance_fade_min_distance = 16.7
+distance_fade_max_distance = 15.0
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_1aywt"]
+material = SubResource("StandardMaterial3D_7ikuy")
+top_radius = 0.005
+bottom_radius = 0.005
+height = 100.0
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_kew6t"]
 blend_mode = 1
@@ -42,9 +57,15 @@ metadata/_edit_lock_ = true
 
 [node name="MuzzlePivot" type="Marker3D" parent="."]
 
+[node name="Laser" type="MeshInstance3D" parent="MuzzlePivot"]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0, -50)
+mesh = SubResource("CylinderMesh_1aywt")
+skeleton = NodePath("../../muzzle_flash")
+
 [node name="muzzle_flash" parent="." instance=ExtResource("5_llldx")]
 
 [node name="Cone" parent="muzzle_flash" index="0"]
+visible = false
 material_override = SubResource("StandardMaterial3D_kew6t")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="."]

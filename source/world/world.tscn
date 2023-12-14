@@ -84,10 +84,10 @@ use_collision = true
 size = Vector3(3, 0.1, 3)
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="Terrain/CSGBox3D4"]
-autoplay = "new_animation"
 libraries = {
 "": SubResource("AnimationLibrary_u057i")
 }
+autoplay = "new_animation"
 
 [node name="Ground" type="CSGBox3D" parent="Terrain"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1.25, 0)
@@ -100,6 +100,84 @@ metadata/_edit_lock_ = true
 
 [node name="box" parent="Props" instance=ExtResource("4_ifetv")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -3.975)
+
+[node name="box2" parent="Props" instance=ExtResource("4_ifetv")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -5.975)
+
+[node name="box3" parent="Props" instance=ExtResource("4_ifetv")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -7.975)
+
+[node name="box4" parent="Props" instance=ExtResource("4_ifetv")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2, 0, -3.975)
+
+[node name="box5" parent="Props" instance=ExtResource("4_ifetv")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2, 0, -5.975)
+
+[node name="box6" parent="Props" instance=ExtResource("4_ifetv")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2, 0, -7.975)
+
+[node name="box7" parent="Props" instance=ExtResource("4_ifetv")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4, 0, -3.975)
+
+[node name="box8" parent="Props" instance=ExtResource("4_ifetv")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4, 0, -5.975)
+
+[node name="box9" parent="Props" instance=ExtResource("4_ifetv")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4, 0, -7.975)
+
+[node name="box10" parent="Props" instance=ExtResource("4_ifetv")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2, -3.975)
+
+[node name="box11" parent="Props" instance=ExtResource("4_ifetv")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2, -5.975)
+
+[node name="box12" parent="Props" instance=ExtResource("4_ifetv")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2, -7.975)
+
+[node name="box13" parent="Props" instance=ExtResource("4_ifetv")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2, 2, -3.975)
+
+[node name="box14" parent="Props" instance=ExtResource("4_ifetv")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2, 2, -5.975)
+
+[node name="box15" parent="Props" instance=ExtResource("4_ifetv")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2, 2, -7.975)
+
+[node name="box16" parent="Props" instance=ExtResource("4_ifetv")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4, 2, -3.975)
+
+[node name="box17" parent="Props" instance=ExtResource("4_ifetv")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4, 2, -5.975)
+
+[node name="box18" parent="Props" instance=ExtResource("4_ifetv")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4, 2, -7.975)
+
+[node name="box19" parent="Props" instance=ExtResource("4_ifetv")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 4, -3.975)
+
+[node name="box20" parent="Props" instance=ExtResource("4_ifetv")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 4, -5.975)
+
+[node name="box21" parent="Props" instance=ExtResource("4_ifetv")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 4, -7.975)
+
+[node name="box22" parent="Props" instance=ExtResource("4_ifetv")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2, 4, -3.975)
+
+[node name="box23" parent="Props" instance=ExtResource("4_ifetv")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2, 4, -5.975)
+
+[node name="box24" parent="Props" instance=ExtResource("4_ifetv")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2, 4, -7.975)
+
+[node name="box25" parent="Props" instance=ExtResource("4_ifetv")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4, 4, -3.975)
+
+[node name="box26" parent="Props" instance=ExtResource("4_ifetv")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4, 4, -5.975)
+
+[node name="box27" parent="Props" instance=ExtResource("4_ifetv")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4, 4, -7.975)
 
 [node name="Environment" type="Node3D" parent="."]
 
