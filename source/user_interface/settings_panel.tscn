@@ -55,8 +55,10 @@ layout_mode = 2
 layout_mode = 2
 size_flags_vertical = 3
 tab_alignment = 1
+current_tab = 1
 
 [node name="Gameplay" type="PanelContainer" parent="MarginContainer/PanelContainer/MarginContainer/VBoxContainer/TabContainer"]
+visible = false
 layout_mode = 2
 
 [node name="MarginContainer" type="MarginContainer" parent="MarginContainer/PanelContainer/MarginContainer/VBoxContainer/TabContainer/Gameplay"]
@@ -126,7 +128,6 @@ horizontal_alignment = 2
 vertical_alignment = 1
 
 [node name="Controls" type="PanelContainer" parent="MarginContainer/PanelContainer/MarginContainer/VBoxContainer/TabContainer"]
-visible = false
 layout_mode = 2
 
 [node name="MarginContainer" type="MarginContainer" parent="MarginContainer/PanelContainer/MarginContainer/VBoxContainer/TabContainer/Controls"]
@@ -196,6 +197,14 @@ custom_minimum_size = Vector2(64, 0)
 layout_mode = 2
 horizontal_alignment = 2
 vertical_alignment = 1
+
+[node name="ScrollContainer" type="ScrollContainer" parent="MarginContainer/PanelContainer/MarginContainer/VBoxContainer/TabContainer/Controls/MarginContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="KeyBindings" type="VBoxContainer" parent="MarginContainer/PanelContainer/MarginContainer/VBoxContainer/TabContainer/Controls/MarginContainer/VBoxContainer/ScrollContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
 
 [node name="Audio" type="PanelContainer" parent="MarginContainer/PanelContainer/MarginContainer/VBoxContainer/TabContainer"]
 visible = false

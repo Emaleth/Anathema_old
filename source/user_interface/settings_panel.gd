@@ -38,6 +38,7 @@ func _ready() -> void:
 	process_mode = Node.PROCESS_MODE_ALWAYS
 	quit_button.pressed.connect(func(): get_tree().quit())
 	return_button.pressed.connect(func(): queue_free())
+	populate_keybindings()
 
 	crosshair_button.toggled.connect(func(value : bool): Settings.enable_crosshair = value; Signals.update_config_file.emit())
 	hitmarker_button.toggled.connect(func(value : bool): Settings.enable_hit_marker = value; Signals.update_config_file.emit())
@@ -100,3 +101,11 @@ func _on_resolution_option_button_item_selected(index: int) -> void:
 			scale_factor = 3.0
 
 	get_tree().root.content_scale_factor = scale_factor
+
+
+func populate_keybindings():
+	for i in Keybindings.key_bindings:
+		var new_row := preload("res://source/user_interface/key_binding_line.tscn").instantiate()
+		$MarginContainer/PanelContainer/MarginContainer/VBoxContainer/TabContainer/Controls/MarginContainer/VBoxContainer/ScrollContainer/KeyBindings.add_child(new_row)
+		new_row.get_node("Label").text = str(i)
+		new_row.get_node("Button").text = str(OS.get_keycode_string(Keybindings.key_bindings[i]))
