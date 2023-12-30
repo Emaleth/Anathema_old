@@ -24,6 +24,8 @@ func save_config():
 	config.set_value("Audio", "ui", AudioServer.get_bus_volume_db(AudioServer.get_bus_index("UI")))
 	config.set_value("Audio", "sfx", AudioServer.get_bus_volume_db(AudioServer.get_bus_index("SFX")))
 	config.set_value("Video", "resolution", get_tree().root.content_scale_factor)
+	config.set_value("Video", "window_mode", DisplayServer.window_get_mode())
+	config.set_value("Video", "borderless", DisplayServer.window_get_flag(DisplayServer.WINDOW_FLAG_BORDERLESS))
 	config.save("user://anathema.cfg")
 
 
@@ -92,8 +94,18 @@ func load_config():
 				get_tree().root.content_scale_factor = user_config.get_value("Video", "resolution")
 			else:
 				get_tree().root.content_scale_factor = default_config.get_value("Video", "resolution")
+			if user_config.has_section_key("Video", "window_mode"):
+				DisplayServer.window_set_mode(user_config.get_value("Video", "window_mode"))
+			else:
+				DisplayServer.window_set_mode(default_config.get_value("Video", "window_mode"))
+			if user_config.has_section_key("Video", "borderless"):
+				DisplayServer.window_set_flag(DisplayServer.WINDOW_FLAG_BORDERLESS, user_config.get_value("Video", "borderless"))
+			else:
+				DisplayServer.window_set_flag(DisplayServer.WINDOW_FLAG_BORDERLESS, default_config.get_value("Video", "borderless"))
 		else:
 			get_tree().root.content_scale_factor = default_config.get_value("Video", "resolution")
+			DisplayServer.window_set_mode(default_config.get_value("Video", "window_mode"))
+			DisplayServer.window_set_flag(DisplayServer.WINDOW_FLAG_BORDERLESS, default_config.get_value("Video", "borderless"))
 	else:
 		enable_crosshair = default_config.get_value("Gameplay", "enable_crosshair")
 		enable_hit_marker = default_config.get_value("Gameplay", "enable_hit_marker")
@@ -104,6 +116,8 @@ func load_config():
 		AudioServer.set_bus_volume_db(AudioServer.get_bus_index("UI"), default_config.get_value("Audio", "ui"))
 		AudioServer.set_bus_volume_db(AudioServer.get_bus_index("SFX"), default_config.get_value("Audio", "sfx"))
 		get_tree().root.content_scale_factor = default_config.get_value("Video", "resolution")
+		DisplayServer.window_set_mode(default_config.get_value("Video", "window_mode"))
+		DisplayServer.window_set_flag(DisplayServer.WINDOW_FLAG_BORDERLESS, default_config.get_value("Video", "borderless"))
 
 	Signals.update_mouse_sensitivity_setting.emit()
 	Signals.update_fov_setting.emit(field_of_view)

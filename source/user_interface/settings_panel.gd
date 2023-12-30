@@ -19,6 +19,7 @@ extends Control
 @onready var sfx_audio_slider := %SFXVolumeHSlider
 @onready var sfx_audio_label := %SFXVolumeLabel
 @onready var resolution_option_button := %ResolutionOptionButton
+@onready var window_option_button := %WindowOptionButton
 
 var resolutions := [
 	"1920:1080", # 1.0
@@ -28,10 +29,17 @@ var resolutions := [
 	"640:360", # 3.0
 ]
 
+var window_mode := [
+	"windowed",
+	"fullscreen",
+	"borderless windowed"
+]
 
 func _ready() -> void:
 	for i in resolutions:
 		resolution_option_button.add_item(i)
+	for i in window_mode:
+		window_option_button.add_item(i)
 	get_tree().paused = true
 	Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
 	read_values()
@@ -84,7 +92,15 @@ func read_values():
 			2.5: return 3
 			3.0: return 4
 	).call()
-
+	window_option_button.selected = (func():
+		var m := 0
+		match DisplayServer.window_get_mode():
+			DisplayServer.WINDOW_MODE_WINDOWED: m = 0
+			DisplayServer.WINDOW_MODE_FULLSCREEN: m = 1
+		if m == 0 and DisplayServer.window_get_flag(DisplayServer.WINDOW_FLAG_BORDERLESS):
+			m = 2
+		return m
+	).call()
 
 func _on_resolution_option_button_item_selected(index: int) -> void:
 	var scale_factor = 1.0
@@ -101,6 +117,7 @@ func _on_resolution_option_button_item_selected(index: int) -> void:
 			scale_factor = 3.0
 
 	get_tree().root.content_scale_factor = scale_factor
+	Signals.update_config_file.emit()
 
 
 func populate_keybindings():
@@ -109,3 +126,16 @@ func populate_keybindings():
 		$MarginContainer/PanelContainer/MarginContainer/VBoxContainer/TabContainer/Controls/MarginContainer/VBoxContainer/ScrollContainer/KeyBindings.add_child(new_row)
 		new_row.get_node("Label").text = str(i)
 		new_row.get_node("Button").text = str(OS.get_keycode_string(Keybindings.key_bindings[i]))
+
+
+func _on_window_option_button_item_selected(index):
+	match index:
+		0:
+			DisplayServer.window_set_mode(DisplayServer.WINDOW_MODE_WINDOWED)
+			DisplayServer.window_set_flag(DisplayServer.WINDOW_FLAG_BORDERLESS, false)
+		1:
+			DisplayServer.window_set_mode(DisplayServer.WINDOW_MODE_FULLSCREEN)
+		2:
+			DisplayServer.window_set_mode(DisplayServer.WINDOW_MODE_WINDOWED)
+			DisplayServer.window_set_flag(DisplayServer.WINDOW_FLAG_BORDERLESS, true)
+	Signals.update_config_file.emit()
