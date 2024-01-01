@@ -1,4 +1,6 @@
-[gd_scene format=3 uid="uid://drpvw2k7aww37"]
+[gd_scene load_steps=2 format=3 uid="uid://drpvw2k7aww37"]
+
+[ext_resource type="Script" path="res://source/custom_classes/ui_button.gd" id="1_4fc55"]
 
 [node name="HBoxContainer" type="HBoxContainer"]
 offset_right = 123.0
@@ -6,9 +8,13 @@ offset_bottom = 31.0
 
 [node name="Label" type="Label" parent="."]
 layout_mode = 2
+size_flags_horizontal = 3
+size_flags_stretch_ratio = 2.0
 text = "[action]"
 
 [node name="Button" type="Button" parent="."]
 layout_mode = 2
-size_flags_horizontal = 10
+size_flags_horizontal = 3
+size_flags_stretch_ratio = 3.0
 text = "[input]"
+script = ExtResource("1_4fc55")

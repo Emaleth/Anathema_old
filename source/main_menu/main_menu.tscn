@@ -37,7 +37,7 @@ grow_vertical = 2
 [node name="Label" type="Label" parent="MarginContainer"]
 layout_mode = 2
 size_flags_vertical = 8
-text = "Version: 0.0.4"
+text = "[version]"
 
 [node name="CenterContainer" type="CenterContainer" parent="MarginContainer"]
 layout_mode = 2
@@ -48,7 +48,7 @@ theme_override_constants/separation = 128
 
 [node name="Label" type="Label" parent="MarginContainer/CenterContainer/VBoxContainer2"]
 layout_mode = 2
-text = "ANATHEMA"
+text = "[name]"
 label_settings = SubResource("LabelSettings_2bq1q")
 horizontal_alignment = 1
 vertical_alignment = 1

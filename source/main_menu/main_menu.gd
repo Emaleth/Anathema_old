@@ -15,4 +15,7 @@ func _on_settings_button_pressed() -> void:
 func _on_quit_button_pressed() -> void:
 	get_tree().quit()
 
+func _ready():
+	$MarginContainer/CenterContainer/VBoxContainer2/Label.text = str(ProjectSettings.get_setting("application/config/name")).capitalize()
+	$MarginContainer/Label.text = "Version: %s" % ProjectSettings.get_setting("application/config/version")
 
