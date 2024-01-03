@@ -124,13 +124,15 @@ func populate_keybindings():
 	for i in Keybindings.key_bindings:
 		var new_row := preload("res://source/user_interface/key_binding_line.tscn").instantiate()
 		$MarginContainer/PanelContainer/MarginContainer/VBoxContainer/TabContainer/Controls/MarginContainer/VBoxContainer/ScrollContainer/KeyBindings.add_child(new_row)
+		new_row.action = i
 		new_row.get_node("Label").text = str(i)
-		new_row.get_node("Button").text = str(OS.get_keycode_string(Keybindings.key_bindings[i]))
+		new_row.get_node("Button").text = str(InputMap.action_get_events(i)[0].as_text())
 	for i in Keybindings.mouse_bindings:
 		var new_row := preload("res://source/user_interface/key_binding_line.tscn").instantiate()
+		new_row.action = i
 		$MarginContainer/PanelContainer/MarginContainer/VBoxContainer/TabContainer/Controls/MarginContainer/VBoxContainer/ScrollContainer/KeyBindings.add_child(new_row)
 		new_row.get_node("Label").text = str(i)
-		new_row.get_node("Button").text = str(OS.get_keycode_string(Keybindings.mouse_bindings[i]))
+		new_row.get_node("Button").text = str(InputMap.action_get_events(i)[0].as_text())
 
 
 func _on_window_option_button_item_selected(index):
