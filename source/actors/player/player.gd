@@ -2,8 +2,6 @@ extends CharacterBody3D
 
 enum {IDLE, RUN, JUMP, FALL, SPRINT, CROUCH, SLIDE, LAND}
 const motion_states_array := ["IDLE", "RUN", "JUMP", "FALL", "SPRINT", "CROUCH", "SLIDE", "LAND"]
-enum {HIPFIRE, ADS}
-const aim_states_array := ["HIPFIRE", "ADS"]
 
 const RUNNING_SPEED = 5.0
 const CROUCHING_SPEED = 2.0
@@ -16,17 +14,14 @@ const CROUCHING_HEAD_HEIGHT := 0.2
 const SLIDING_HEAD_HEIGHT := 0.0
 const UPPER_BODY_TILT_DEGREES := 27.0
 const STEP_LENGHT := 1.5
-const ADS_STANCE := Vector3(0.0, 0.0, -0.2)
 const HIPFIRE_STANCE := Vector3(0.25, -0.4, -0.6)
 
 var motion_state_entered := false
-var aim_state_entered := false
 var acceleraion := 0.9
 var current_speed := 0.0
 var gravity : float = ProjectSettings.get_setting("physics/3d/default_gravity")
 var last_step_position := Vector2.ZERO
 var mouse_sensitivity := 0.0
-var ads_position_offset := Vector3.ZERO
 
 @onready var head := $UpperBody/Head
 @onready var camera := $UpperBody/Head/Camera3D
@@ -59,11 +54,12 @@ var slide_max_distance := 10
 
 
 func _ready():
+	right_hand.position = HIPFIRE_STANCE
+	mouse_sensitivity = Settings.mouse_sensitivity
 	get_tree().process_frame.connect(reset_mouse_motion_event_relative)
 	Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
 	arms_ik_setup()
 	switch_motion_state(IDLE)
-	switch_aim_state(HIPFIRE)
 	camera.fov = Settings.field_of_view
 	weapon_camera.fov = Settings.field_of_view
 	Signals.update_fov_setting.connect(func(value : int): camera.fov = value; weapon_camera.fov = value)
@@ -81,7 +77,6 @@ func _physics_process(delta: float) -> void:
 	animations.tilt_head(head)
 	animations.head_bob()
 	motion_fsm(delta)
-	aim_fsm()
 	animations.arm_swing(chest, aim_state, delta)
 	rotate_camera()
 	rotate_player()
@@ -107,12 +102,6 @@ func emit_camera_ray_signal():
 
 func shoot():
 	if Input.is_action_pressed("primary_action"):
-		if motion_state == SPRINT:
-			switch_motion_state(RUN)
-		if (right_hand.rotation_degrees.x > -3.0 and right_hand.rotation_degrees.x < 3.0
-				and right_hand.rotation_degrees.y > -3.0 and right_hand.rotation_degrees.y < 3.0
-				and right_hand.rotation_degrees.z > -3.0 and right_hand.rotation_degrees.z < 3.0
-		):
 			Signals.primary_action.emit()
 
 
@@ -130,15 +119,6 @@ func switch_motion_state(_new_state : int):
 		motion_state_entered = false
 		motion_state = _new_state
 		Signals.update_motion_state.emit(motion_states_array[_new_state])
-
-
-func switch_aim_state(_new_state : int):
-	if _new_state == aim_state:
-		return
-	else:
-		aim_state_entered = false
-		aim_state = _new_state
-		Signals.update_aim_state.emit(aim_states_array[_new_state])
 
 
 func motion_fsm(delta):
@@ -275,22 +255,6 @@ func motion_fsm(delta):
 	velocity.z = move_toward(velocity.z, direction.z * current_speed, acceleraion)
 
 
-func aim_fsm():
-	match aim_state:
-		HIPFIRE:
-			if not aim_state_entered:
-				mouse_sensitivity = Settings.hipfire_mouse_sensitivity
-				aim_state_entered = true
-			hipfire_mode()
-		ADS:
-			if not aim_state_entered:
-				mouse_sensitivity = Settings.ads_mouse_sensitivity
-				aim_state_entered = true
-			if motion_state == SPRINT:
-				switch_motion_state(RUN)
-			ads_mode()
-
-
 func rotate_camera():
 	head.rotation.x += mouse_motion_event_relative.y * mouse_sensitivity * -1
 	head.rotation_degrees.x = clamp(head.rotation_degrees.x, -90, 90)
@@ -301,14 +265,6 @@ func rotate_player():
 	rotation_degrees.y = wrap(rotation_degrees.y, -180, 180)
 
 
-func ads_mode():
-	right_hand.position = lerp(right_hand.position, ADS_STANCE - ads_position_offset, 0.5)
-
-
-func hipfire_mode():
-	right_hand.position = lerp(right_hand.position, HIPFIRE_STANCE, 0.5)
-
-
 func weapon_pose():
 	right_hand.rotation_degrees.x = lerp(right_hand.rotation_degrees.x, hand_position.x, 0.3)
 	right_hand.rotation_degrees.y = lerp(right_hand.rotation_degrees.y, hand_position.y, 0.3)
@@ -317,8 +273,6 @@ func weapon_pose():
 
 func _on_weapon_pivot_child_entered_tree(node: Node) -> void:
 	set_visibility(node)
-	await node.ready
-	ads_position_offset = node.ads_marker.position
 
 
 func set_visibility(node : Node):
@@ -335,12 +289,6 @@ func _input(event):
 
 	if Input.is_action_just_pressed("reload"):
 		Signals.reload.emit()
-	if Input.is_action_just_pressed("secondary_action"):
-		switch_aim_state(ADS)
-		Signals.secondary_action.emit(true)
-	if Input.is_action_just_released("secondary_action"):
-		switch_aim_state(HIPFIRE)
-		Signals.secondary_action.emit(false)
 
 
 func get_direction():
@@ -381,15 +329,10 @@ func tilt_upper_body():
 
 func emit_initial_signals():
 	Signals.update_motion_state.emit(motion_states_array[motion_state])
-	Signals.update_aim_state.emit(aim_states_array[aim_state])
 
 
 func update_mouse_sensitivity():
-	match aim_state:
-		HIPFIRE:
-			mouse_sensitivity = Settings.hipfire_mouse_sensitivity
-		ADS:
-			mouse_sensitivity = Settings.ads_mouse_sensitivity
+	mouse_sensitivity = Settings.mouse_sensitivity
 
 
 

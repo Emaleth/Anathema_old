@@ -8,10 +8,8 @@ extends Control
 @onready var hitmarker_button := %HitmarkerCheckButton
 @onready var fov_slider := %FieldOfViewHSlider
 @onready var fov_label := %FieldOfViewLabel
-@onready var ads_mouse_sensitivity_slider := %AdsMouseSensitivityHSlider
-@onready var ads_mouse_sensitivity_label := %AdsMouseSensitivityLabel
-@onready var hipfire_mouse_sensitivity_slider := %HipfireMouseSensitivityHSlider
-@onready var hipfire_mouse_sensitivity_label := %HipfireMouseSensitivityLabel
+@onready var mouse_sensitivity_slider := %MouseSensitivityHSlider
+@onready var mouse_sensitivity_label := %MouseSensitivityLabel
 @onready var master_audio_slider := %MasterVolumeHSlider
 @onready var master_audio_label := %MasterVolumeLabel
 @onready var ui_audio_slider := %UIVolumeHSlider
@@ -51,8 +49,7 @@ func _ready() -> void:
 	crosshair_button.toggled.connect(func(value : bool): Settings.enable_crosshair = value; Signals.update_config_file.emit())
 	hitmarker_button.toggled.connect(func(value : bool): Settings.enable_hit_marker = value; Signals.update_config_file.emit())
 	fov_slider.value_changed.connect(func(value : int): Settings.field_of_view = value; Signals.update_fov_setting.emit(value); fov_label.text = str(value); Signals.update_config_file.emit())
-	ads_mouse_sensitivity_slider.value_changed.connect(func(value : float): Settings.ads_mouse_sensitivity = value; Signals.update_mouse_sensitivity_setting.emit(); ads_mouse_sensitivity_label.text = str(value); Signals.update_config_file.emit())
-	hipfire_mouse_sensitivity_slider.value_changed.connect(func(value : float): Settings.hipfire_mouse_sensitivity = value; Signals.update_mouse_sensitivity_setting.emit(); hipfire_mouse_sensitivity_label.text = str(value); Signals.update_config_file.emit())
+	mouse_sensitivity_slider.value_changed.connect(func(value : float): Settings.mouse_sensitivity = value; Signals.update_mouse_sensitivity_setting.emit(); mouse_sensitivity_label.text = str(value); Signals.update_config_file.emit())
 	master_audio_slider.value_changed.connect(func(value : int): AudioServer.set_bus_volume_db(AudioServer.get_bus_index("Master"), value); master_audio_label.text = str(value); Signals.update_config_file.emit())
 	ui_audio_slider.value_changed.connect(func(value : int): AudioServer.set_bus_volume_db(AudioServer.get_bus_index("UI"), value); ui_audio_label.text = str(value); Signals.update_config_file.emit())
 	sfx_audio_slider.value_changed.connect(func(value : int): AudioServer.set_bus_volume_db(AudioServer.get_bus_index("SFX"), value); sfx_audio_label.text = str(value); Signals.update_config_file.emit())
@@ -72,15 +69,13 @@ func read_values():
 	crosshair_button.button_pressed = Settings.enable_crosshair
 	hitmarker_button.button_pressed = Settings.enable_hit_marker
 	fov_slider.value = Settings.field_of_view
-	ads_mouse_sensitivity_slider.value = Settings.ads_mouse_sensitivity
-	hipfire_mouse_sensitivity_slider.value = Settings.hipfire_mouse_sensitivity
+	mouse_sensitivity_slider.value = Settings.mouse_sensitivity
 	master_audio_slider.value = AudioServer.get_bus_volume_db(AudioServer.get_bus_index("Master"))
 	ui_audio_slider.value = AudioServer.get_bus_volume_db(AudioServer.get_bus_index("UI"))
 	sfx_audio_slider.value = AudioServer.get_bus_volume_db(AudioServer.get_bus_index("SFX"))
 
 	fov_label.text = str(Settings.field_of_view)
-	ads_mouse_sensitivity_label.text = str(Settings.ads_mouse_sensitivity)
-	hipfire_mouse_sensitivity_label.text = str(Settings.hipfire_mouse_sensitivity)
+	mouse_sensitivity_label.text = str(Settings.mouse_sensitivity)
 	master_audio_label.text = str(AudioServer.get_bus_volume_db(AudioServer.get_bus_index("Master")))
 	ui_audio_label.text = str(AudioServer.get_bus_volume_db(AudioServer.get_bus_index("UI")))
 	sfx_audio_label.text = str(AudioServer.get_bus_volume_db(AudioServer.get_bus_index("SFX")))

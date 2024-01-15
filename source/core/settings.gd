@@ -1,7 +1,6 @@
 extends Node
 
-var hipfire_mouse_sensitivity := 0.007
-var ads_mouse_sensitivity := 0.003
+var mouse_sensitivity := 0.007
 var field_of_view := 75
 var enable_crosshair := true
 var enable_hit_marker := true
@@ -18,8 +17,7 @@ func save_config():
 	config.set_value("Gameplay", "enable_crosshair", enable_crosshair)
 	config.set_value("Gameplay", "enable_hit_marker", enable_hit_marker)
 	config.set_value("Gameplay", "field_of_view", field_of_view)
-	config.set_value("Controls", "hipfire_mouse_sensitivity", hipfire_mouse_sensitivity)
-	config.set_value("Controls", "ads_mouse_sensitivity", ads_mouse_sensitivity)
+	config.set_value("Controls", "mouse_sensitivity", mouse_sensitivity)
 	config.set_value("Audio", "master", AudioServer.get_bus_volume_db(AudioServer.get_bus_index("Master")))
 	config.set_value("Audio", "ui", AudioServer.get_bus_volume_db(AudioServer.get_bus_index("UI")))
 	config.set_value("Audio", "sfx", AudioServer.get_bus_volume_db(AudioServer.get_bus_index("SFX")))
@@ -59,17 +57,12 @@ func load_config():
 			field_of_view = default_config.get_value("Gameplay", "field_of_view")
 
 		if user_config.has_section("Controls"):
-			if user_config.has_section_key("Controls", "hipfire_mouse_sensitivity"):
-				hipfire_mouse_sensitivity = user_config.get_value("Controls", "hipfire_mouse_sensitivity")
+			if user_config.has_section_key("Controls", "mouse_sensitivity"):
+				mouse_sensitivity = user_config.get_value("Controls", "mouse_sensitivity")
 			else:
-				hipfire_mouse_sensitivity = default_config.get_value("Controls", "hipfire_mouse_sensitivity")
-			if user_config.has_section_key("Controls", "ads_mouse_sensitivity"):
-				ads_mouse_sensitivity = user_config.get_value("Controls", "ads_mouse_sensitivity")
-			else:
-				ads_mouse_sensitivity = default_config.get_value("Controls", "ads_mouse_sensitivity")
+				mouse_sensitivity = default_config.get_value("Controls", "mouse_sensitivity")
 		else:
-			hipfire_mouse_sensitivity = default_config.get_value("Controls", "hipfire_mouse_sensitivity")
-			ads_mouse_sensitivity = default_config.get_value("Controls", "ads_mouse_sensitivity")
+			mouse_sensitivity = default_config.get_value("Controls", "mouse_sensitivity")
 
 		if user_config.has_section("Audio"):
 			if user_config.has_section_key("Audio", "master"):
@@ -110,8 +103,7 @@ func load_config():
 		enable_crosshair = default_config.get_value("Gameplay", "enable_crosshair")
 		enable_hit_marker = default_config.get_value("Gameplay", "enable_hit_marker")
 		field_of_view = default_config.get_value("Gameplay", "field_of_view")
-		hipfire_mouse_sensitivity = default_config.get_value("Controls", "hipfire_mouse_sensitivity")
-		ads_mouse_sensitivity = default_config.get_value("Controls", "ads_mouse_sensitivity")
+		mouse_sensitivity = default_config.get_value("Controls", "mouse_sensitivity")
 		AudioServer.set_bus_volume_db(AudioServer.get_bus_index("Master"), default_config.get_value("Audio", "master"))
 		AudioServer.set_bus_volume_db(AudioServer.get_bus_index("UI"), default_config.get_value("Audio", "ui"))
 		AudioServer.set_bus_volume_db(AudioServer.get_bus_index("SFX"), default_config.get_value("Audio", "sfx"))

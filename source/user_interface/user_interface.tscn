@@ -35,9 +35,6 @@ layout_mode = 2
 layout_mode = 2
 text = "text"
 
-[node name="AimState" type="Label" parent="MarginContainer/DebugPanel/VBoxContainer"]
-layout_mode = 2
-
 [node name="Ammo" type="PanelContainer" parent="MarginContainer"]
 layout_mode = 2
 size_flags_horizontal = 8
