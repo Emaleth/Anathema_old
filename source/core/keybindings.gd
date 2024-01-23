@@ -8,8 +8,8 @@ var key_bindings : Dictionary = {
 	"tilt_left" : KEY_Q,
 	"tilt_right" : KEY_E,
 	"jump" : KEY_SPACE,
-	"crouch" : KEY_C,
-	"sprint" : KEY_SHIFT,
+	"crouch" : KEY_SHIFT,
+	"dash" : KEY_P,
 	"reload" : KEY_R,
 	"settings" : KEY_ESCAPE,
 }

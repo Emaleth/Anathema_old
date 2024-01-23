@@ -10,8 +10,6 @@ var head_tilt_deadzone := 0.05
 var hand_tilt_deadzone := 0.001
 var mouse_motion_event_relative := Vector2.ZERO
 var sin_time := 0.0
-var sin_frequency := 0.0
-var sin_amplitude := 0.0
 var weapon_sway_amount := 3.0
 
 @onready var viewport_size : Vector2 = get_viewport().size
@@ -56,27 +54,19 @@ func tilt_head(head : Node3D):
 	head.rotation_degrees.z = lerp(head.rotation_degrees.z, HEAD_TILT_DEGREES * sign(head_tilt), 0.1)
 
 
-func arm_swing(chest : Node3D, aim_state : int, delta : float):
-	match aim_state:
-		0:
-			sin_amplitude = HIPFIRE_SIN_AMPLITUDE
-			sin_frequency = HIPFIRE_SIN_FREQUENCY
-		1:
-			sin_amplitude = ADS_SIN_AMPLITUDE
-			sin_frequency = ADS_SIN_FREQUENCY
-	chest.position.y = cos(sin_time * sin_frequency) * sin_amplitude
-	chest.position.x = sin(sin_time * sin_frequency * 0.5) * sin_amplitude
+func arm_swing(chest : Node3D, delta : float):
+	chest.position.y = cos(sin_time * HIPFIRE_SIN_FREQUENCY) * HIPFIRE_SIN_AMPLITUDE
+	chest.position.x = sin(sin_time * HIPFIRE_SIN_FREQUENCY * 0.5) * HIPFIRE_SIN_AMPLITUDE
 	sin_time += delta
 
 
-func weapon_sway(right_weapon_pivot : Node3D, aim_state : int):
+func weapon_sway(right_weapon_pivot : Node3D):
 	var hand_tilt := Vector3.ZERO
-	if aim_state == 0:
-		if abs(mouse_motion_event_relative.y / viewport_size.y) > hand_tilt_deadzone:
-			hand_tilt.x = sign(mouse_motion_event_relative.y)
-		if abs(mouse_motion_event_relative.x / viewport_size.x) > hand_tilt_deadzone:
-			hand_tilt.y = sign(mouse_motion_event_relative.x)
-			hand_tilt.z = sign(mouse_motion_event_relative.x)
+	if abs(mouse_motion_event_relative.y / viewport_size.y) > hand_tilt_deadzone:
+		hand_tilt.x = sign(mouse_motion_event_relative.y)
+	if abs(mouse_motion_event_relative.x / viewport_size.x) > hand_tilt_deadzone:
+		hand_tilt.y = sign(mouse_motion_event_relative.x)
+		hand_tilt.z = sign(mouse_motion_event_relative.x)
 
 	right_weapon_pivot.rotation_degrees.x = lerp(right_weapon_pivot.rotation_degrees.x, sign(-hand_tilt.x) * weapon_sway_amount, 0.1)
 	right_weapon_pivot.rotation_degrees.y = lerp(right_weapon_pivot.rotation_degrees.y, sign(-hand_tilt.y) * weapon_sway_amount, 0.1)

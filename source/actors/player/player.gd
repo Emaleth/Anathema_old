@@ -1,12 +1,12 @@
 extends CharacterBody3D
 
-enum {IDLE, RUN, JUMP, FALL, SPRINT, CROUCH, SLIDE, LAND}
-const motion_states_array := ["IDLE", "RUN", "JUMP", "FALL", "SPRINT", "CROUCH", "SLIDE", "LAND"]
+enum {IDLE, RUN, JUMP, FALL, DASH, CROUCH, SLIDE, LAND}
+const states_array := ["IDLE", "RUN", "JUMP", "FALL", "DASH", "CROUCH", "SLIDE", "LAND"]
 
-const RUNNING_SPEED = 5.0
+const RUNNING_SPEED = 8.0
 const CROUCHING_SPEED = 2.0
 const SPRINTING_SPEED = 10.0
-const SLIDING_SPEED = 15.0
+const SLIDING_SPEED = 10.0
 const AIR_SPEED = 5.0
 const JUMP_FORCE = 5.0
 const STANDING_HEAD_HEIGHT := 0.75
@@ -15,6 +15,7 @@ const SLIDING_HEAD_HEIGHT := 0.0
 const UPPER_BODY_TILT_DEGREES := 27.0
 const STEP_LENGHT := 1.5
 const HIPFIRE_STANCE := Vector3(0.25, -0.4, -0.6)
+const SLIDE_MAX_DISTANCE := 5
 
 var motion_state_entered := false
 var acceleraion := 0.9
@@ -46,11 +47,8 @@ var mouse_sensitivity := 0.0
 var mouse_motion_event_relative := Vector2.ZERO
 var direction := Vector3.ZERO
 var tilt := 0.0
-var motion_state : int
-var aim_state : int
-var hand_position := Vector3.ZERO
+var state : int
 var slide_start_position := Vector3.ZERO
-var slide_max_distance := 10
 
 
 func _ready():
@@ -59,7 +57,7 @@ func _ready():
 	get_tree().process_frame.connect(reset_mouse_motion_event_relative)
 	Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
 	arms_ik_setup()
-	switch_motion_state(IDLE)
+	switch_state(IDLE)
 	camera.fov = Settings.field_of_view
 	weapon_camera.fov = Settings.field_of_view
 	Signals.update_fov_setting.connect(func(value : int): camera.fov = value; weapon_camera.fov = value)
@@ -76,12 +74,11 @@ func _physics_process(delta: float) -> void:
 	get_tilt()
 	animations.tilt_head(head)
 	animations.head_bob()
-	motion_fsm(delta)
-	animations.arm_swing(chest, aim_state, delta)
+	fsm(delta)
+	animations.arm_swing(chest, delta)
 	rotate_camera()
 	rotate_player()
-	animations.weapon_sway(right_weapon_pivot, aim_state)
-	weapon_pose()
+	animations.weapon_sway(right_weapon_pivot)
 	shoot()
 	move_and_slide()
 
@@ -102,7 +99,7 @@ func emit_camera_ray_signal():
 
 func shoot():
 	if Input.is_action_pressed("primary_action"):
-			Signals.primary_action.emit()
+		Signals.primary_action.emit()
 
 
 func arms_ik_setup():
@@ -112,60 +109,57 @@ func arms_ik_setup():
 	fps_arms.left_arm_ik.start()
 
 
-func switch_motion_state(_new_state : int):
-	if _new_state == motion_state:
+func switch_state(_new_state : int):
+	if _new_state == state:
 		return
 	else:
 		motion_state_entered = false
-		motion_state = _new_state
-		Signals.update_motion_state.emit(motion_states_array[_new_state])
+		state = _new_state
+		Signals.update_motion_state.emit(states_array[_new_state])
 
 
-func motion_fsm(delta):
-	match motion_state:
+func fsm(delta):
+	match state:
 		IDLE:
 			if not motion_state_entered:
 				current_speed = 0
-				hand_position = Vector3.ZERO
 				standing_collision_shape.set_deferred("disabled", false)
 				crouching_collision_shape.set_deferred("disabled", true)
 				motion_state_entered = true
 			if not is_on_floor():
-				switch_motion_state(FALL)
+				switch_state(FALL)
 			tilt_upper_body()
 			if head_raycast.is_colliding():
-				switch_motion_state(CROUCH)
+				switch_state(CROUCH)
 			head.position.y = lerp(head.position.y, STANDING_HEAD_HEIGHT, 0.3)
 			if direction != Vector3.ZERO:
-				switch_motion_state(RUN)
+				switch_state(RUN)
 			if Input.is_action_pressed("jump"):
-				switch_motion_state(JUMP)
+				switch_state(JUMP)
 			if Input.is_action_pressed("crouch"):
-				switch_motion_state(CROUCH)
+				switch_state(CROUCH)
 		RUN:
 			if not motion_state_entered:
 				current_speed = RUNNING_SPEED
-				hand_position = Vector3.ZERO
 				standing_collision_shape.set_deferred("disabled", false)
 				crouching_collision_shape.set_deferred("disabled", true)
 				motion_state_entered = true
 			if Input.is_action_pressed("crouch"):
-				switch_motion_state(CROUCH)
+				switch_state(SLIDE)
 			if Input.is_action_pressed("jump"):
-				switch_motion_state(JUMP)
+				switch_state(JUMP)
 			if not is_on_floor():
-				switch_motion_state(FALL)
+				switch_state(FALL)
 			if direction == Vector3.ZERO:
-				switch_motion_state(IDLE)
+				switch_state(IDLE)
 			if head_raycast.is_colliding():
-				switch_motion_state(CROUCH)
+				switch_state(CROUCH)
 			footsteps()
 			head.position.y = lerp(head.position.y, STANDING_HEAD_HEIGHT, 0.3)
-			if Input.is_action_pressed("sprint"):
-				switch_motion_state(SPRINT)
+			if Input.is_action_pressed("dash"):
+				switch_state(DASH)
 		JUMP:
 			if not motion_state_entered:
-				hand_position = Vector3.ZERO
 				current_speed = AIR_SPEED
 				standing_collision_shape.set_deferred("disabled", false)
 				crouching_collision_shape.set_deferred("disabled", true)
@@ -176,80 +170,76 @@ func motion_fsm(delta):
 			head.position.y = lerp(head.position.y, STANDING_HEAD_HEIGHT, 0.3)
 			velocity.y -= gravity * delta
 			if velocity.y <= 0:
-				switch_motion_state(FALL)
+				switch_state(FALL)
 		FALL:
 			if not motion_state_entered:
 				standing_collision_shape.set_deferred("disabled", false)
 				crouching_collision_shape.set_deferred("disabled", true)
-				hand_position = Vector3.ZERO
 				current_speed = AIR_SPEED
 				motion_state_entered = true
 			head.position.y = lerp(head.position.y, STANDING_HEAD_HEIGHT, 0.3)
 			velocity.y -= gravity * delta
 			if Input.is_action_pressed("jump"):
-				switch_motion_state(JUMP)
+				switch_state(JUMP)
 			if is_on_floor():
-				switch_motion_state(LAND)
-		SPRINT:
+				switch_state(LAND)
+		DASH:
 			if not motion_state_entered:
 				current_speed = SPRINTING_SPEED
-				hand_position = Vector3(65.0, 15.0, 15.0)
 				standing_collision_shape.set_deferred("disabled", false)
 				crouching_collision_shape.set_deferred("disabled", true)
 				motion_state_entered = true
 			if Input.is_action_pressed("crouch"):
-				switch_motion_state(SLIDE)
+				switch_state(SLIDE)
 			if Input.is_action_pressed("jump"):
-				switch_motion_state(JUMP)
+				switch_state(JUMP)
 			if not is_on_floor():
-				switch_motion_state(FALL)
+				switch_state(FALL)
 			if direction == Vector3.ZERO:
-				switch_motion_state(IDLE)
+				switch_state(IDLE)
 			else:
-				if not Input.is_action_pressed("sprint"):
-					switch_motion_state(RUN)
+				if not Input.is_action_pressed("dash"):
+					switch_state(RUN)
 			if head_raycast.is_colliding():
-				switch_motion_state(CROUCH)
+				switch_state(CROUCH)
 			footsteps()
 			head.position.y = lerp(head.position.y, STANDING_HEAD_HEIGHT, 0.3)
 		CROUCH:
 			if not motion_state_entered:
-				hand_position = Vector3.ZERO
 				current_speed = CROUCHING_SPEED
 				standing_collision_shape.set_deferred("disabled", true)
 				crouching_collision_shape.set_deferred("disabled", false)
 				motion_state_entered = true
 			if not is_on_floor():
-				switch_motion_state(FALL)
+				switch_state(FALL)
 			if not Input.is_action_pressed("crouch") and not head_raycast.is_colliding():
-				switch_motion_state(IDLE)
+				switch_state(IDLE)
 			footsteps()
 			tilt_upper_body()
 			head.position.y = lerp(head.position.y, CROUCHING_HEAD_HEIGHT, 0.3)
 		SLIDE:
 			if not motion_state_entered:
 				slide_start_position = position
-				hand_position = Vector3.ZERO
 				current_speed = SLIDING_SPEED
 				standing_collision_shape.set_deferred("disabled", true)
 				crouching_collision_shape.set_deferred("disabled", false)
 				motion_state_entered = true
 			if Input.is_action_pressed("jump"):
-				switch_motion_state(JUMP)
+				switch_state(JUMP)
 			if not is_on_floor():
-				switch_motion_state(FALL)
+				switch_state(FALL)
 			sliding_audio.play()
+			direction = (transform.basis * Vector3.FORWARD).normalized()
 			head.position.y = lerp(head.position.y, SLIDING_HEAD_HEIGHT, 0.3)
-			if slide_start_position.distance_squared_to(position) > pow(slide_max_distance, 2) or is_on_wall():
-				switch_motion_state(IDLE)
+			if slide_start_position.distance_squared_to(position) > pow(SLIDE_MAX_DISTANCE, 2) or is_on_wall():
+				switch_state(IDLE)
 		LAND:
 			if not motion_state_entered:
-				hand_position = Vector3.ZERO
 				current_speed = 0
 				animations.land_animation(camera)
 				motion_state_entered = true
 			head.position.y = lerp(head.position.y, STANDING_HEAD_HEIGHT, 0.3)
-			switch_motion_state(IDLE)
+			switch_state(IDLE)
 
 	velocity.x = move_toward(velocity.x, direction.x * current_speed, acceleraion)
 	velocity.z = move_toward(velocity.z, direction.z * current_speed, acceleraion)
@@ -263,12 +253,6 @@ func rotate_camera():
 func rotate_player():
 	rotation.y += mouse_motion_event_relative.x * mouse_sensitivity * -1
 	rotation_degrees.y = wrap(rotation_degrees.y, -180, 180)
-
-
-func weapon_pose():
-	right_hand.rotation_degrees.x = lerp(right_hand.rotation_degrees.x, hand_position.x, 0.3)
-	right_hand.rotation_degrees.y = lerp(right_hand.rotation_degrees.y, hand_position.y, 0.3)
-	right_hand.rotation_degrees.z = lerp(right_hand.rotation_degrees.z, hand_position.z, 0.3)
 
 
 func _on_weapon_pivot_child_entered_tree(node: Node) -> void:
@@ -328,7 +312,7 @@ func tilt_upper_body():
 
 
 func emit_initial_signals():
-	Signals.update_motion_state.emit(motion_states_array[motion_state])
+	Signals.update_motion_state.emit(states_array[state])
 
 
 func update_mouse_sensitivity():
